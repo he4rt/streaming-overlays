@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import type { TweakConfig } from "@/shared/types";
-import { SAMPLE_CHAT } from "./sample-messages";
+import { useChatMessages } from "@/hooks/ChatProvider";
 
 interface DiscreteChatPanelProps {
   config: TweakConfig;
@@ -8,18 +8,8 @@ interface DiscreteChatPanelProps {
 
 export function DiscreteChatPanel({ config }: DiscreteChatPanelProps) {
   const { primary, accent } = config;
-  const [messages, setMessages] = useState(SAMPLE_CHAT.slice(0, 6));
+  const messages = useChatMessages();
   const listRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setMessages((prev) => {
-        const next = SAMPLE_CHAT[prev.length % SAMPLE_CHAT.length]!;
-        return [...prev.slice(-6), { ...next, key: Date.now() }];
-      });
-    }, 2800);
-    return () => clearInterval(id);
-  }, []);
 
   useEffect(() => {
     if (listRef.current) listRef.current.scrollTop = listRef.current.scrollHeight;

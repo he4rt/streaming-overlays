@@ -65,4 +65,5 @@ export const DEFAULTS: TweakConfig = {
   tickerText:
     "PRÓXIMO BLOCO · pergunte ao vivo em discord.app/he4rt   ●   Use #he4rttalks no X   ●   Inscreva-se no canal pra não perder",
   chatTitle: "CHAT AO VIVO",
+  useLiveChat: false,
 };

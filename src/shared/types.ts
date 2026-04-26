@@ -60,6 +60,7 @@ export interface TweakConfig {
   time: string;
   tickerText: string;
   chatTitle: string;
+  useLiveChat: boolean;
 }
 
 export interface PollOption {

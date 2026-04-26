@@ -1,5 +1,5 @@
 import type { TweakConfig } from "@/shared/types";
-import { SAMPLE_CHAT } from "./sample-messages";
+import { useChatMessages } from "@/hooks/ChatProvider";
 
 interface MarqueeChatProps {
   config: TweakConfig;
@@ -7,7 +7,8 @@ interface MarqueeChatProps {
 
 export function MarqueeChat({ config }: MarqueeChatProps) {
   const { accent, primary } = config;
-  const items = SAMPLE_CHAT.concat(SAMPLE_CHAT);
+  const messages = useChatMessages();
+  const items = messages.concat(messages);
 
   return (
     <div style={{

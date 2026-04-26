@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
 import type { TweakConfig } from "@/shared/types";
-import { SAMPLE_CHAT } from "./sample-messages";
+import { useChatMessages } from "@/hooks/ChatProvider";
 
 interface BubbleChatStripProps {
   config: TweakConfig;
@@ -9,17 +8,7 @@ interface BubbleChatStripProps {
 
 export function BubbleChatStrip({ config, side = "right" }: BubbleChatStripProps) {
   const { accent, primary } = config;
-  const [messages, setMessages] = useState(SAMPLE_CHAT.slice(0, 4));
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setMessages((prev) => {
-        const next = SAMPLE_CHAT[prev.length % SAMPLE_CHAT.length]!;
-        return [...prev.slice(-3), { ...next, key: Date.now() }];
-      });
-    }, 3200);
-    return () => clearInterval(id);
-  }, []);
+  const messages = useChatMessages().slice(-4);
 
   return (
     <div style={{

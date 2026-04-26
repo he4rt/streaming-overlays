@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
 import type { TweakConfig } from "@/shared/types";
-import { SAMPLE_CHAT } from "./sample-messages";
+import { useChatMessages } from "@/hooks/ChatProvider";
 
 interface BigChatFeedProps {
   config: TweakConfig;
@@ -8,17 +7,7 @@ interface BigChatFeedProps {
 
 export function BigChatFeed({ config }: BigChatFeedProps) {
   const { accent, primary } = config;
-  const [messages, setMessages] = useState(SAMPLE_CHAT.slice(0, 7));
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setMessages((prev) => {
-        const next = SAMPLE_CHAT[prev.length % SAMPLE_CHAT.length]!;
-        return [...prev.slice(-9), { ...next, key: Date.now() }];
-      });
-    }, 2400);
-    return () => clearInterval(id);
-  }, []);
+  const messages = useChatMessages();
 
   return (
     <div style={{

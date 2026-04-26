@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import type { TweakConfig } from "@/shared/types";
-import { SAMPLE_CHAT } from "./sample-messages";
+import { useChatMessages } from "@/hooks/ChatProvider";
 
 interface TerminalChatProps {
   config: TweakConfig;
@@ -12,18 +12,8 @@ interface TerminalChatProps {
 
 export function TerminalChat({ config, x = 60, y = null, w = 460, h = 540 }: TerminalChatProps) {
   const { accent, primary } = config;
-  const [messages, setMessages] = useState(SAMPLE_CHAT.slice(0, 8));
+  const messages = useChatMessages();
   const listRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setMessages((prev) => {
-        const next = SAMPLE_CHAT[prev.length % SAMPLE_CHAT.length]!;
-        return [...prev.slice(-9), { ...next, key: Date.now() }];
-      });
-    }, 2200);
-    return () => clearInterval(id);
-  }, []);
 
   useEffect(() => {
     if (listRef.current) listRef.current.scrollTop = listRef.current.scrollHeight;

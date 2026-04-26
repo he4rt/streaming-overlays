@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ChatProvider } from "@/hooks/ChatProvider";
 import { TwoCamsScene } from "@/features/two-cams/TwoCamsScene";
 import { ScreenShareScene } from "@/features/screen-share/ScreenShareScene";
 import { StartingScene } from "@/features/starting/StartingScene";
@@ -12,6 +13,7 @@ import { AdminPanel } from "@/features/admin/AdminPanel";
 export function App() {
   return (
     <BrowserRouter>
+      <ChatProvider>
       <Routes>
         <Route path="/" element={<TwoCamsScene />} />
         <Route path="/two-cams" element={<TwoCamsScene />} />
@@ -24,6 +26,7 @@ export function App() {
         <Route path="/quote" element={<QuoteScene />} />
         <Route path="/admin" element={<AdminPanel />} />
       </Routes>
+      </ChatProvider>
     </BrowserRouter>
   );
 }
