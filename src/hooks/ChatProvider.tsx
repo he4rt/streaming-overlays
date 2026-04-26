@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import type { ChatMessage } from "@/shared/types";
 import { useOverlayConfig } from "./useOverlayConfig";
@@ -27,12 +27,63 @@ function useSampleChat(maxMessages = 12): ChatMessage[] {
   return messages;
 }
 
+function useChatApi(maxMessages: number, enabled: boolean): ChatMessage[] {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+
+  useEffect(() => {
+    if (!enabled) return;
+    let active = true;
+
+    const poll = async () => {
+      try {
+        const res = await fetch("/api/chat");
+        if (!res.ok || !active) return;
+        const data = await res.json();
+        if (!active || !Array.isArray(data)) return;
+        setMessages(data.slice(-maxMessages));
+      } catch {
+        // server not ready
+      }
+    };
+
+    poll();
+    const id = setInterval(poll, 500);
+    return () => { active = false; clearInterval(id); };
+  }, [maxMessages, enabled]);
+
+  return messages;
+}
+
 export function ChatProvider({ children }: { children: ReactNode }) {
   const config = useOverlayConfig();
   const liveMessages = useRestreamChat(20);
   const sampleMessages = useSampleChat(20);
+  const apiMessages = useChatApi(20, config.useLiveChat);
+  const lastPushed = useRef("");
 
-  const messages = config.useLiveChat ? liveMessages : sampleMessages;
+  // Push messages to API when WebSocket is producing them (Chrome/admin)
+  useEffect(() => {
+    if (!config.useLiveChat || liveMessages.length === 0) return;
+    const serialized = JSON.stringify(liveMessages);
+    if (serialized === lastPushed.current) return;
+    lastPushed.current = serialized;
+    fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: serialized,
+    }).catch(() => {});
+  }, [liveMessages, config.useLiveChat]);
+
+  let messages: ChatMessage[];
+  if (!config.useLiveChat) {
+    messages = sampleMessages;
+  } else if (liveMessages.length > 0) {
+    // WebSocket working (Chrome) — use directly
+    messages = liveMessages;
+  } else {
+    // WebSocket not working (OBS) — fall back to API polling
+    messages = apiMessages;
+  }
 
   return (
     <ChatContext.Provider value={messages}>

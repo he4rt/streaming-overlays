@@ -86,7 +86,3 @@ export function useRestreamChat(maxMessages = 12) {
 
   return messages;
 }
-
-export function saveOverlayConfig(config: unknown): void {
-  localStorage.setItem("he4rt-overlay-config", JSON.stringify(config));
-}

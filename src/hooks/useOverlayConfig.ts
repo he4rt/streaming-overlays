@@ -2,44 +2,47 @@ import { useState, useEffect } from "react";
 import type { TweakConfig } from "@/shared/types";
 import { DEFAULTS } from "@/config/defaults";
 
-const STORAGE_KEY = "he4rt-overlay-config";
 const POLL_INTERVAL = 200;
+const API_URL = "/api/config";
 
 export function useOverlayConfig(): TweakConfig {
-  const [config, setConfig] = useState<TweakConfig>(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        return { ...DEFAULTS, ...JSON.parse(stored) };
-      } catch {
-        return DEFAULTS;
-      }
-    }
-    return DEFAULTS;
-  });
+  const [config, setConfig] = useState<TweakConfig>(DEFAULTS);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored) as Partial<TweakConfig>;
-          setConfig((prev) => {
-            const next = { ...DEFAULTS, ...parsed };
-            if (JSON.stringify(prev) === JSON.stringify(next)) return prev;
-            return next;
-          });
-        } catch {
-          // ignore malformed JSON
-        }
+    let active = true;
+
+    async function poll() {
+      try {
+        const res = await fetch(API_URL);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!active) return;
+        if (Object.keys(data).length === 0) return;
+        setConfig((prev) => {
+          const next = { ...DEFAULTS, ...data };
+          if (JSON.stringify(prev) === JSON.stringify(next)) return prev;
+          return next;
+        });
+      } catch {
+        // server not ready yet
       }
-    }, POLL_INTERVAL);
-    return () => clearInterval(id);
+    }
+
+    poll();
+    const id = setInterval(poll, POLL_INTERVAL);
+    return () => {
+      active = false;
+      clearInterval(id);
+    };
   }, []);
 
   return config;
 }
 
-export function saveOverlayConfig(config: TweakConfig): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+export async function saveOverlayConfig(config: TweakConfig): Promise<void> {
+  await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(config),
+  });
 }

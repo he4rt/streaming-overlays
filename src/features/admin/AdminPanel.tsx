@@ -98,17 +98,20 @@ export function AdminPanel() {
     };
   }, []);
 
-  const [config, setConfig] = useState<TweakConfig>(() => {
-    const stored = localStorage.getItem("he4rt-overlay-config");
-    if (stored) {
-      try {
-        return { ...DEFAULTS, ...JSON.parse(stored) };
-      } catch {
-        /* ignore */
-      }
-    }
-    return DEFAULTS;
-  });
+  const [config, setConfig] = useState<TweakConfig>(DEFAULTS);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/config")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data && Object.keys(data).length > 0) {
+          setConfig({ ...DEFAULTS, ...data });
+        }
+        setLoaded(true);
+      })
+      .catch(() => setLoaded(true));
+  }, []);
 
   const [activeTab, setActiveTab] = useState<"config" | "episode" | "guests" | "visuals">(
     "config"
@@ -131,8 +134,8 @@ export function AdminPanel() {
   }, []);
 
   useEffect(() => {
-    saveOverlayConfig(config);
-  }, []);
+    if (loaded) saveOverlayConfig(config);
+  }, [loaded]);
 
   const currentScene = SCENES.find((s) => s.value === config.scene) ?? SCENES[0];
 
