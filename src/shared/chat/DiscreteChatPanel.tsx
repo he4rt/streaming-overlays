@@ -7,7 +7,7 @@ interface DiscreteChatPanelProps {
 }
 
 export function DiscreteChatPanel({ config }: DiscreteChatPanelProps) {
-  const { accent } = config;
+  const { primary, accent } = config;
   const [messages, setMessages] = useState(SAMPLE_CHAT.slice(0, 6));
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -26,29 +26,65 @@ export function DiscreteChatPanel({ config }: DiscreteChatPanelProps) {
   }, [messages]);
 
   return (
-    <div className="absolute bottom-10 right-10 flex h-[380px] w-[360px] flex-col overflow-hidden rounded-2xl backdrop-blur-[20px]"
-      style={{
-        background: "rgba(11,4,24,0.55)",
-        border: `1px solid ${accent}33`,
-        boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
-      }}>
+    <div style={{
+      position: 'absolute',
+      right: 40, bottom: 40,
+      width: 360, height: 380,
+      background: 'rgba(11,4,24,0.55)',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
+      border: `1px solid ${accent}33`,
+      borderRadius: 16,
+      boxShadow: `0 20px 60px rgba(0,0,0,0.4)`,
+      overflow: 'hidden',
+      display: 'flex', flexDirection: 'column',
+    }}>
       {/* header */}
-      <div className="flex items-center justify-between border-b px-[18px] py-3" style={{ borderColor: `${accent}22` }}>
-        <div className="inline-flex items-center gap-2 font-body text-[11px] font-bold uppercase tracking-[0.15em] text-white/85">
-          <span className="h-[7px] w-[7px] animate-[pulse_1.4s_ease-in-out_infinite] rounded-full" style={{ background: accent }} />
+      <div style={{
+        padding: '12px 18px',
+        borderBottom: `1px solid ${accent}22`,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      }}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 8,
+          fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 700,
+          color: 'rgba(255,255,255,0.85)', letterSpacing: '0.15em',
+          textTransform: 'uppercase',
+        }}>
+          <span style={{
+            width: 7, height: 7, borderRadius: '50%', background: accent,
+            animation: 'pulse 1.4s ease-in-out infinite',
+          }} />
           chat ao vivo
         </div>
-        <div className="font-body text-[11px] text-white/40">discord.app/he4rt</div>
+        <div style={{
+          fontFamily: 'Inter, sans-serif', fontSize: 11,
+          color: 'rgba(255,255,255,0.4)',
+        }}>discord.app/he4rt</div>
       </div>
 
       {/* messages */}
-      <div ref={listRef} className="flex flex-1 flex-col gap-2.5 overflow-hidden px-[18px] py-3.5"
-        style={{ maskImage: "linear-gradient(180deg, transparent 0%, black 12%, black 100%)", WebkitMaskImage: "linear-gradient(180deg, transparent 0%, black 12%, black 100%)" }}>
+      <div ref={listRef} style={{
+        flex: 1, overflow: 'hidden', padding: '14px 18px',
+        display: 'flex', flexDirection: 'column', gap: 10,
+        maskImage: 'linear-gradient(180deg, transparent 0%, black 12%, black 100%)',
+        WebkitMaskImage: 'linear-gradient(180deg, transparent 0%, black 12%, black 100%)',
+      }}>
         {messages.map((m, i) => (
-          <div key={(m.key ?? 0) + "-" + i} className="flex items-start gap-2 opacity-[0.92]"
-            style={{ animation: i === messages.length - 1 ? "slideIn 0.4s ease-out" : "none" }}>
-            <span className="shrink-0 font-body text-xs font-bold" style={{ color: m.color }}>{m.user}</span>
-            <span className="break-words font-body text-[12.5px] leading-[1.4] text-white/[0.78]">{m.msg}</span>
+          <div key={(m.key ?? 0) + '-' + i} style={{
+            display: 'flex', gap: 8, alignItems: 'flex-start',
+            animation: i === messages.length - 1 ? 'slideIn 0.4s ease-out' : 'none',
+            opacity: 0.92,
+          }}>
+            <span style={{
+              fontFamily: 'Inter, sans-serif', fontSize: 12, fontWeight: 700,
+              color: m.color, flexShrink: 0,
+            }}>{m.user}</span>
+            <span style={{
+              fontFamily: 'Inter, sans-serif', fontSize: 12.5,
+              color: 'rgba(255,255,255,0.78)', lineHeight: 1.4,
+              wordBreak: 'break-word',
+            }}>{m.msg}</span>
           </div>
         ))}
       </div>

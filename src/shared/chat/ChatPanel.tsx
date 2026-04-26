@@ -28,49 +28,103 @@ export function ChatPanel({ config }: ChatPanelProps) {
   }, [messages]);
 
   return (
-    <div className="absolute right-[30px] top-[30px] flex h-[760px] w-[420px] flex-col overflow-hidden rounded-[20px] border border-accent/35 backdrop-blur-[14px]"
-      style={{
-        background: `linear-gradient(180deg, ${bgPanel}E6 0%, ${bgPanel}${Math.floor(panelOpacity * 255).toString(16).padStart(2, "0")} 100%)`,
-        boxShadow: `0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(168,85,247,0.15) inset, 0 0 60px rgba(124,58,237,0.15)`,
-      }}>
+    <div style={{
+      position: 'absolute',
+      right: 30, top: 30,
+      width: 420, height: 760,
+      background: `linear-gradient(180deg, ${bgPanel}E6 0%, ${bgPanel}${Math.floor(panelOpacity * 255).toString(16).padStart(2, '0')} 100%)`,
+      backdropFilter: 'blur(14px)',
+      WebkitBackdropFilter: 'blur(14px)',
+      border: `1px solid rgba(168,85,247,0.35)`,
+      borderRadius: 20,
+      boxShadow: `0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(168,85,247,0.15) inset, 0 0 60px rgba(124,58,237,0.15)`,
+      overflow: 'hidden',
+      display: 'flex', flexDirection: 'column',
+    }}>
       {/* corner accent */}
-      <div className="absolute -right-px -top-px h-[70px] w-[70px] rounded-tr-[20px] opacity-95"
-        style={{
-          background: `linear-gradient(135deg, ${primary} 0%, ${accent} 100%)`,
-          clipPath: "polygon(40% 0, 100% 0, 100% 60%, 100% 100%, 60% 100%, 100% 60%, 40% 0)",
+      <div style={{
+        position: 'absolute', top: -1, right: -1, width: 70, height: 70,
+        background: `linear-gradient(135deg, ${primary} 0%, ${accent} 100%)`,
+        borderTopRightRadius: 20,
+        clipPath: 'polygon(40% 0, 100% 0, 100% 60%, 100% 100%, 60% 100%, 100% 60%, 40% 0)',
+        opacity: 0.95,
+      }}>
+        <div style={{
+          position: 'absolute', top: 12, right: 12, color: '#fff',
         }}>
-        <div className="absolute right-3 top-3">
           <HeartMark size={26} color="#fff" />
         </div>
       </div>
 
       {/* header */}
-      <div className="border-b border-accent/[0.22] px-[26px] pb-[18px] pt-6">
-        <div className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 font-body text-xs font-bold tracking-[0.1em] text-white"
-          style={{ background: primary }}>
-          <span className="h-2 w-2 animate-[pulse_1.4s_ease-in-out_infinite] rounded-full bg-white" />
+      <div style={{
+        padding: '24px 26px 18px', borderBottom: `1px solid rgba(168,85,247,0.22)`,
+      }}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 8,
+          background: primary, padding: '6px 14px', borderRadius: 99,
+          fontFamily: 'Inter, sans-serif', fontSize: 12, fontWeight: 700,
+          color: '#fff', letterSpacing: '0.1em',
+        }}>
+          <span style={{
+            width: 8, height: 8, borderRadius: '50%', background: '#fff',
+            animation: 'pulse 1.4s ease-in-out infinite',
+          }} />
           AO VIVO
         </div>
-        <div className="mt-3.5 font-heading text-[28px] leading-[1.05] text-white tracking-[0.02em]">{chatTitle}</div>
-        <div className="mt-1.5 font-body text-[13px] tracking-[0.05em] text-white/55">discord.app/he4rt · #live-chat</div>
+        <div style={{
+          marginTop: 14,
+          fontFamily: "'Russo One', sans-serif",
+          fontSize: 28, color: '#fff', letterSpacing: '0.02em',
+          lineHeight: 1.05,
+        }}>
+          {chatTitle}
+        </div>
+        <div style={{
+          marginTop: 6, fontFamily: 'Inter, sans-serif', fontSize: 13,
+          color: 'rgba(255,255,255,0.55)', letterSpacing: '0.05em',
+        }}>
+          discord.app/he4rt · #live-chat
+        </div>
       </div>
 
       {/* messages */}
-      <div ref={listRef} className="flex flex-1 flex-col gap-3.5 overflow-hidden px-[22px] py-[18px]"
-        style={{ maskImage: "linear-gradient(180deg, transparent 0%, black 8%, black 100%)", WebkitMaskImage: "linear-gradient(180deg, transparent 0%, black 8%, black 100%)" }}>
+      <div ref={listRef} style={{
+        flex: 1, overflow: 'hidden', padding: '18px 22px',
+        display: 'flex', flexDirection: 'column', gap: 14,
+        maskImage: 'linear-gradient(180deg, transparent 0%, black 8%, black 100%)',
+        WebkitMaskImage: 'linear-gradient(180deg, transparent 0%, black 8%, black 100%)',
+      }}>
         {messages.map((m, i) => (
-          <ChatRow key={(m.key ?? 0) + "-" + i} msg={m} accent={accent} primary={primary} entering={i === messages.length - 1} />
+          <ChatRow key={(m.key ?? 0) + '-' + i} msg={m} accent={accent} primary={primary} entering={i === messages.length - 1} />
         ))}
       </div>
 
       {/* input bar */}
-      <div className="flex items-center gap-2.5 border-t border-accent/[0.22] bg-black/25 px-[18px] py-3.5">
-        <div className="flex-1 rounded-[10px] border border-accent/25 bg-white/5 px-3.5 py-2.5 font-body text-[13px] text-white/40">
+      <div style={{
+        padding: '14px 18px',
+        borderTop: `1px solid rgba(168,85,247,0.22)`,
+        background: 'rgba(0,0,0,0.25)',
+        display: 'flex', alignItems: 'center', gap: 10,
+      }}>
+        <div style={{
+          flex: 1,
+          background: 'rgba(255,255,255,0.05)',
+          border: '1px solid rgba(168,85,247,0.25)',
+          borderRadius: 10, padding: '10px 14px',
+          fontFamily: 'Inter, sans-serif', fontSize: 13,
+          color: 'rgba(255,255,255,0.4)',
+        }}>
           envie sua mensagem…
         </div>
-        <div className="flex h-10 w-10 items-center justify-center rounded-[10px]"
-          style={{ background: `linear-gradient(135deg, ${primary}, ${accent})` }}>
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="#fff"><path d="M2 21l21-9L2 3v7l15 2-15 2z" /></svg>
+        <div style={{
+          background: `linear-gradient(135deg, ${primary}, ${accent})`,
+          width: 40, height: 40, borderRadius: 10,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="#fff">
+            <path d="M2 21l21-9L2 3v7l15 2-15 2z" />
+          </svg>
         </div>
       </div>
     </div>
