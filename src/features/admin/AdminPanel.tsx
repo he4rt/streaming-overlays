@@ -186,9 +186,25 @@ export function AdminPanel() {
             </button>
           );
         })}
-        <div className="ml-auto flex items-center gap-2 rounded-lg bg-accent/10 px-3 py-1.5">
-          <span className="text-sm">{currentScene.icon}</span>
-          <span className="font-body text-xs font-bold text-accent">{currentScene.label}</span>
+        <div className="ml-auto flex items-center gap-3">
+          <div className="flex items-center gap-2 rounded-lg bg-accent/10 px-3 py-1.5">
+            <span className="text-sm">{currentScene.icon}</span>
+            <span className="font-body text-xs font-bold text-accent">{currentScene.label}</span>
+          </div>
+          <button
+            onClick={() => {
+              const url = `/${config.scene === "two-cams" ? "" : config.scene}`;
+              window.open(url, `scene-${config.scene}`, "width=1920,height=1080,menubar=no,toolbar=no,location=no,status=no");
+            }}
+            className="flex items-center gap-1.5 rounded-lg border border-accent/30 bg-accent/10 px-3 py-1.5 font-body text-xs font-bold text-accent transition hover:bg-accent/20"
+          >
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            Abrir Scene
+          </button>
         </div>
       </div>
 
