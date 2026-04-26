@@ -8,6 +8,7 @@ import { BrbScene } from "@/features/brb/BrbScene";
 import { QuestionScene } from "@/features/question/QuestionScene";
 import { PollScene } from "@/features/poll/PollScene";
 import { QuoteScene } from "@/features/quote/QuoteScene";
+import { PreShowScene } from "@/features/preshow/PreShowScene";
 import { AdminPanel } from "@/features/admin/AdminPanel";
 
 export function App() {
@@ -24,6 +25,7 @@ export function App() {
         <Route path="/question" element={<QuestionScene />} />
         <Route path="/poll" element={<PollScene />} />
         <Route path="/quote" element={<QuoteScene />} />
+        <Route path="/preshow" element={<PreShowScene />} />
         <Route path="/admin" element={<AdminPanel />} />
       </Routes>
       </ChatProvider>

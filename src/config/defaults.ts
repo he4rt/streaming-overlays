@@ -67,4 +67,14 @@ export const DEFAULTS: TweakConfig = {
   chatTitle: "CHAT AO VIVO",
   useLiveChat: false,
   showCameraPlaceholders: true,
+  preshowHostName: "Daniel He4rt",
+  preshowHostHandle: "@danielhe4rt",
+  preshowAgenda: [
+    "Carreira e mercado de trabalho pra devs",
+    "Open source: como contribuir e crescer",
+    "Perguntas da audiência ao vivo",
+  ],
+  preshowOnlineStart: 1247,
+  preshowHashtag: "#HE4RTTALKS",
+  preshowGuestTeaser: "Daqui a pouco nosso convidado entra ao vivo…",
 };

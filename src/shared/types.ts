@@ -62,6 +62,12 @@ export interface TweakConfig {
   chatTitle: string;
   useLiveChat: boolean;
   showCameraPlaceholders: boolean;
+  preshowHostName: string;
+  preshowHostHandle: string;
+  preshowAgenda: string[];
+  preshowOnlineStart: number;
+  preshowHashtag: string;
+  preshowGuestTeaser: string;
 }
 
 export interface PollOption {

@@ -17,6 +17,7 @@ import { SAMPLE_CHAT } from "@/shared/chat/sample-messages";
 import type { ChatMessage } from "@/shared/types";
 
 const SCENES = [
+  { value: "preshow", label: "Pré-Show", icon: "🎙" },
   { value: "two-cams", label: "2 Cams", icon: "👥" },
   { value: "screen-share", label: "Screen", icon: "🖥" },
   { value: "starting", label: "Starting", icon: "⏳" },
