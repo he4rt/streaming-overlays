@@ -12,12 +12,6 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 html,
 body {
   width: 100%;
@@ -30,6 +24,11 @@ body {
 #root {
   width: 100%;
   height: 100%;
+}
+
+select option {
+  background: #160A2A;
+  color: #fff;
 }
 
 @keyframes pulse {
