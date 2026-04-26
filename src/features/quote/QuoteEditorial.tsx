@@ -1,155 +1,169 @@
 import type { TweakConfig } from "@/shared/types";
 import { HeartMark } from "@/shared/components/HeartMark";
-import { CornerBrackets } from "@/shared/components/CornerBrackets";
 
 interface QuoteEditorialProps {
   config: TweakConfig;
 }
 
 export function QuoteEditorial({ config }: QuoteEditorialProps) {
-  const { primary, accent, bgPanel, quoteText, quoteAuthor, quoteAuthorRole, quoteContext, guest1Name } = config;
-
-  const initials = (name: string) =>
-    name
-      .split(" ")
-      .map((w) => w[0])
-      .join("")
-      .slice(0, 2);
+  const { primary, accent, quoteText, quoteAuthor, quoteAuthorRole, quoteContext, episodeNumber } = config;
 
   return (
-    <div className="absolute inset-0 flex">
-      {/* LEFT — 65% */}
-      <div className="relative flex flex-col justify-between px-16 py-14" style={{ width: "65%" }}>
-        {/* Brand row */}
-        <div className="flex items-center gap-3">
-          <HeartMark size={28} color={accent} />
-          <span className="font-heading text-xs tracking-[0.25em] text-white/40" style={{ letterSpacing: "0.25em" }}>
-            HE4RT TALKS
-          </span>
-        </div>
-
-        {/* Center block */}
-        <div className="flex flex-col gap-8">
-          {/* "Momento marcante" pill */}
-          <div
-            className="flex w-fit items-center gap-2 rounded-full px-5 py-2"
-            style={{
-              background: `${primary}22`,
-              border: `1px solid ${accent}44`,
-            }}
-          >
-            <span className="h-2 w-2 rounded-full" style={{ background: accent }} />
-            <span className="font-heading text-xs tracking-[0.2em] text-white/70">Momento marcante</span>
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", display: "flex" }}>
+      {/* LEFT — quote (65%) */}
+      <div style={{
+        flex: "0 0 65%", position: "relative",
+        background: `linear-gradient(160deg, ${primary} 0%, #1a0530 60%, #0b0418 100%)`,
+        padding: "90px 100px",
+        display: "flex", flexDirection: "column", justifyContent: "space-between",
+      }}>
+        {/* top: brand + context */}
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 30 }}>
+            <HeartMark size={32} color={accent} />
+            <span style={{
+              fontFamily: "Inter, sans-serif", fontSize: 13,
+              color: "#fff", letterSpacing: "0.28em", fontWeight: 800,
+            }}>HE4RT TALKS · {episodeNumber}</span>
           </div>
-
-          {/* Quote text */}
-          <div className="relative">
-            {/* Decorative opening quote mark */}
-            <div
-              className="pointer-events-none select-none absolute -top-6 -left-2"
-              style={{
-                fontSize: 120,
-                fontFamily: "Georgia, serif",
-                color: `${accent}33`,
-                lineHeight: 1,
-              }}
-            >
-              "
-            </div>
-            <blockquote
-              className="relative leading-snug text-white"
-              style={{
-                fontSize: 72,
-                fontFamily: "'Russo One', sans-serif",
-                textShadow: `0 0 40px ${primary}33`,
-              }}
-            >
-              {quoteText}
-            </blockquote>
-            {/* Closing quote mark */}
-            <div
-              className="pointer-events-none select-none absolute -bottom-8 right-0"
-              style={{
-                fontSize: 120,
-                fontFamily: "Georgia, serif",
-                color: `${accent}33`,
-                lineHeight: 1,
-              }}
-            >
-              "
-            </div>
-          </div>
-
-          {/* Author attribution */}
-          <div className="flex items-center gap-4 mt-4">
-            <div
-              className="h-px flex-1"
-              style={{ background: `linear-gradient(90deg, ${accent}55, transparent)`, maxWidth: 60 }}
-            />
-            <div className="flex flex-col gap-0.5">
-              <span className="font-heading text-base text-white">{quoteAuthor}</span>
-              <span className="font-body text-sm" style={{ color: `${accent}99` }}>{quoteAuthorRole}</span>
-            </div>
-            <span className="font-body text-xs text-white/30">{quoteContext}</span>
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 10,
+            padding: "6px 14px", borderRadius: 4,
+            background: `${accent}22`, border: `1px solid ${accent}66`,
+            fontFamily: "Inter, sans-serif", fontSize: 12,
+            color: accent, letterSpacing: "0.25em", fontWeight: 800,
+            textTransform: "uppercase",
+          }}>
+            ★ Momento marcante
+            {quoteContext && (<><span style={{ color: `${accent}66` }}>·</span><span>{quoteContext}</span></>)}
           </div>
         </div>
 
-        {/* Bottom spacer */}
-        <div />
+        {/* center: huge quote */}
+        <div style={{ position: "relative", flex: 1, display: "flex", alignItems: "center", marginTop: 40 }}>
+          {/* watermark quote mark */}
+          <div style={{
+            position: "absolute", top: -60, left: -40,
+            fontFamily: "'Russo One', sans-serif",
+            fontSize: 360, color: `${accent}22`, lineHeight: 0.8,
+            pointerEvents: "none", userSelect: "none",
+          }}>"</div>
+          <div style={{
+            position: "relative",
+            fontFamily: "'Russo One', sans-serif",
+            fontSize: 72, color: "#fff", lineHeight: 1.1,
+            letterSpacing: "-0.02em",
+          }}>
+            <span style={{ color: accent, marginRight: 4 }}>"</span>
+            <span style={{
+              background: `linear-gradient(135deg, #fff 0%, #fff 60%, ${accent} 100%)`,
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            }}>{quoteText}</span>
+            <span style={{ color: accent, marginLeft: 4 }}>"</span>
+          </div>
+        </div>
+
+        {/* bottom: attribution */}
+        <div style={{
+          display: "flex", alignItems: "center", gap: 18, marginTop: 30,
+        }}>
+          <div style={{ width: 60, height: 1, background: accent }} />
+          <div>
+            <div style={{
+              fontFamily: "'Russo One', sans-serif", fontSize: 32,
+              color: "#fff", lineHeight: 1.1,
+            }}>{quoteAuthor}</div>
+            <div style={{
+              fontFamily: "Inter, sans-serif", fontSize: 14,
+              color: accent, letterSpacing: "0.18em", fontWeight: 700,
+              marginTop: 4, textTransform: "uppercase",
+            }}>{quoteAuthorRole}</div>
+          </div>
+        </div>
       </div>
 
-      {/* Vertical divider */}
-      <div
-        className="shrink-0 self-stretch"
-        style={{ width: 1, background: `linear-gradient(180deg, transparent, ${accent}44, transparent)` }}
-      />
-
-      {/* RIGHT — 35% */}
-      <div className="relative flex flex-1 flex-col items-center justify-center gap-4 px-10 py-14">
-        {/* Portrait placeholder card */}
-        <div
-          className="relative flex w-full flex-1 items-center justify-center rounded-2xl overflow-hidden"
-          style={{
-            background: `${bgPanel}88`,
-            border: `1px solid ${accent}22`,
-            maxHeight: 460,
-          }}
-        >
-          <CornerBrackets color={`${accent}77`} size={20} inset={12} />
-          {/* Placeholder avatar */}
-          <div className="flex flex-col items-center gap-3">
-            <div
-              className="flex h-24 w-24 items-center justify-center rounded-full font-heading text-2xl text-white"
-              style={{ background: `linear-gradient(135deg, ${primary}, ${accent})` }}
-            >
-              {initials(guest1Name)}
-            </div>
-            <span className="font-body text-sm text-white/40">{guest1Name}</span>
+      {/* RIGHT — portrait card (35%) */}
+      <div style={{
+        flex: 1, position: "relative",
+        background: `radial-gradient(ellipse at center, ${accent}22 0%, #0b0418 80%)`,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: 60,
+      }}>
+        {/* portrait placeholder */}
+        <div style={{
+          width: "100%", maxWidth: 480, aspectRatio: "3/4",
+          background: `linear-gradient(160deg, ${primary}66 0%, ${accent}33 100%)`,
+          borderRadius: 24, position: "relative", overflow: "hidden",
+          border: `1px solid ${accent}44`,
+          boxShadow: "0 30px 80px rgba(0,0,0,0.5)",
+        }}>
+          {/* portrait blob */}
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "radial-gradient(circle at 50% 45%, rgba(255,255,255,0.25) 0%, transparent 55%)",
+          }} />
+          {/* corner brackets */}
+          {(["tl", "tr", "br", "bl"] as const).map((c) => {
+            const posMap: Record<string, React.CSSProperties> = {
+              tl: { top: 14, left: 14, borderTop: `2px solid ${accent}`, borderLeft: `2px solid ${accent}` },
+              tr: { top: 14, right: 14, borderTop: `2px solid ${accent}`, borderRight: `2px solid ${accent}` },
+              br: { bottom: 14, right: 14, borderBottom: `2px solid ${accent}`, borderRight: `2px solid ${accent}` },
+              bl: { bottom: 14, left: 14, borderBottom: `2px solid ${accent}`, borderLeft: `2px solid ${accent}` },
+            };
+            return (
+              <div key={c} style={{
+                position: "absolute", ...posMap[c],
+                width: 26, height: 26,
+              }} />
+            );
+          })}
+          {/* speaker label at bottom */}
+          <div style={{
+            position: "absolute", left: 24, right: 24, bottom: 24,
+            padding: "14px 18px", borderRadius: 12,
+            background: "rgba(11,4,24,0.85)", backdropFilter: "blur(10px)",
+            border: `1px solid ${accent}44`,
+          }}>
+            <div style={{
+              fontFamily: "Inter, sans-serif", fontSize: 11,
+              color: accent, letterSpacing: "0.22em", fontWeight: 700,
+              textTransform: "uppercase",
+            }}>Falando agora</div>
+            <div style={{
+              fontFamily: "'Russo One', sans-serif", fontSize: 22,
+              color: "#fff", lineHeight: 1.1, marginTop: 4,
+            }}>{quoteAuthor}</div>
           </div>
-          {/* "Falando agora" label */}
-          <div
-            className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full px-4 py-1.5 whitespace-nowrap"
-            style={{ background: `${bgPanel}CC`, border: `1px solid ${accent}33` }}
-          >
-            <span
-              className="h-1.5 w-1.5 rounded-full"
-              style={{ background: "#22C55E", animation: "pulse 1.4s ease-in-out infinite" }}
-            />
-            <span className="font-body text-xs text-white/60">Falando agora</span>
+          {/* live dot */}
+          <div style={{
+            position: "absolute", top: 20, right: 20,
+            display: "inline-flex", alignItems: "center", gap: 6,
+            padding: "4px 10px", borderRadius: 4,
+            background: "#EF4444", color: "#fff",
+            fontFamily: "Inter, sans-serif", fontSize: 10, fontWeight: 800,
+            letterSpacing: "0.18em",
+          }}>
+            <span style={{
+              width: 6, height: 6, borderRadius: "50%", background: "#fff",
+              animation: "pulse 1.4s ease-in-out infinite",
+            }} />
+            LIVE
           </div>
         </div>
+      </div>
 
-        {/* "clipa esse momento" pill */}
-        <div
-          className="flex items-center gap-2 rounded-full px-5 py-2"
-          style={{
-            background: `${accent}18`,
-            border: `1px solid ${accent}33`,
-          }}
-        >
-          <span className="text-sm">✂️</span>
-          <span className="font-body text-sm text-white/50">clipa esse momento</span>
-        </div>
+      {/* clip CTA (bottom-right strip) */}
+      <div style={{
+        position: "absolute", bottom: 30, right: 30,
+        display: "inline-flex", alignItems: "center", gap: 10,
+        padding: "8px 14px", borderRadius: 99,
+        background: "rgba(11,4,24,0.7)", backdropFilter: "blur(10px)",
+        border: `1px solid ${accent}44`,
+        fontFamily: "Inter, sans-serif", fontSize: 11,
+        color: "rgba(255,255,255,0.6)", letterSpacing: "0.2em", fontWeight: 700,
+        textTransform: "uppercase",
+      }}>
+        <span style={{ color: accent }}>✂</span> clipa esse momento
       </div>
     </div>
   );

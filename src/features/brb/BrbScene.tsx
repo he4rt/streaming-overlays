@@ -6,7 +6,7 @@ import { BigChatFeed } from "@/shared/chat/BigChatFeed";
 
 export function BrbScene() {
   const t = useOverlayConfig();
-  const { primary, accent, bgDeep, bgPanel, brbTrack } = t;
+  const { primary, accent, bgDeep, brbTrack } = t;
 
   const [elapsed, setElapsed] = useState(0);
 
@@ -18,176 +18,159 @@ export function BrbScene() {
   const mm = String(Math.floor(elapsed / 60)).padStart(2, "0");
   const ss = String(elapsed % 60).padStart(2, "0");
 
-  // SVG timer circle
-  const radius = 44;
-  const circumference = 2 * Math.PI * radius;
-  const maxSeconds = 300;
-  const progress = Math.min(elapsed / maxSeconds, 1);
-  const dashOffset = circumference * (1 - progress);
-
   return (
     <Stage>
-      <div className="absolute inset-0 overflow-hidden flex" style={{ background: bgDeep }}>
-        {/* PAUSA badge — top right */}
-        <div
-          className="absolute right-10 top-10 z-10 flex items-center gap-2 rounded-full px-5 py-2"
-          style={{ background: accent, boxShadow: `0 4px 20px ${accent}55` }}
-        >
-          <span className="h-1.5 w-1.5 rounded-full bg-white/80" />
-          <span className="font-heading text-xs tracking-[0.2em] text-white">PAUSA</span>
-        </div>
-
-        {/* LEFT — 60% */}
-        <div className="relative flex flex-col items-center justify-center" style={{ width: "60%", flexShrink: 0 }}>
-          {/* Radial glow */}
-          <div
-            className="pointer-events-none absolute"
-            style={{
-              width: 800,
-              height: 800,
-              borderRadius: "50%",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              background: `radial-gradient(circle, ${primary}1A 0%, transparent 70%)`,
-              filter: "blur(60px)",
-            }}
-          />
-
-          {/* HeartMark + label */}
-          <div className="relative flex flex-col items-center gap-3" style={{ animation: "floatY 4s ease-in-out infinite" }}>
-            <HeartMark size={72} color={accent} />
-            <span
-              className="font-heading tracking-[0.3em] text-white/60"
-              style={{ fontSize: 13, letterSpacing: "0.3em" }}
-            >
-              HE4RT TALKS
-            </span>
+      <div style={{ position: "absolute", inset: 0, overflow: "hidden", display: "flex", background: bgDeep }}>
+        {/* LEFT — large BRB visual */}
+        <div style={{
+          flex: "0 0 60%",
+          position: "relative",
+          background: `radial-gradient(ellipse at 30% 50%, ${primary}66 0%, transparent 60%), linear-gradient(160deg, #1a0530 0%, #0b0418 100%)`,
+          display: "flex", flexDirection: "column", justifyContent: "center",
+          padding: "80px 100px", gap: 32,
+        }}>
+          {/* logo */}
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <HeartMark size={36} color={accent} />
+            <span style={{
+              fontFamily: "Inter, sans-serif", fontSize: 14,
+              color: "#fff", letterSpacing: "0.28em", fontWeight: 800,
+            }}>HE4RT TALKS</span>
           </div>
 
-          {/* Main text */}
-          <div className="relative mt-8 flex flex-col items-center gap-2 text-center">
-            <div
-              className="leading-none"
-              style={{
-                fontFamily: "'Russo One', sans-serif",
-                fontSize: 200,
-                lineHeight: 0.9,
-              }}
-            >
-              <span
-                style={{
-                  background: `linear-gradient(135deg, ${accent}, ${primary})`,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                JÁ
-              </span>
-              <br />
-              <span className="text-white">VOLTAMOS!</span>
-            </div>
+          {/* huge "JÁ VOLTAMOS" */}
+          <div style={{
+            fontFamily: "'Russo One', sans-serif",
+            fontSize: 200, color: "#fff", lineHeight: 0.9,
+            letterSpacing: "-0.03em",
+          }}>
+            <span style={{
+              background: `linear-gradient(135deg, #fff 0%, ${accent} 100%)`,
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            }}>JÁ</span>
+            <br />
+            VOLTAMOS<span style={{ color: accent }}>!</span>
           </div>
 
-          {/* Coffee message */}
-          <p className="relative mt-6 font-body text-white/50" style={{ fontSize: 18 }}>
-            Buscando um café ☕ — já já a gente volta
-          </p>
+          {/* coffee/break message */}
+          <div style={{
+            fontFamily: "Inter, sans-serif", fontSize: 26,
+            color: "rgba(255,255,255,0.75)", maxWidth: 680, fontWeight: 500,
+            lineHeight: 1.4,
+          }}>
+            <span style={{ fontSize: 32, marginRight: 8 }}>☕</span>
+            Pausa rápida pra esticar as pernas. Manda sua pergunta no chat enquanto isso!
+          </div>
 
-          {/* Timer pill with circular SVG */}
-          <div
-            className="relative mt-8 flex items-center gap-5 rounded-full px-8 py-4"
-            style={{
-              background: `${bgPanel}CC`,
-              border: `1px solid ${accent}33`,
-              backdropFilter: "blur(16px)",
-            }}
-          >
-            {/* Circular SVG progress */}
-            <div className="relative flex items-center justify-center" style={{ width: 100, height: 100 }}>
-              <svg width="100" height="100" viewBox="0 0 100 100">
-                {/* Track */}
-                <circle
-                  cx="50"
-                  cy="50"
-                  r={radius}
-                  fill="none"
-                  stroke={`${accent}22`}
-                  strokeWidth="3"
-                />
-                {/* Progress */}
-                <circle
-                  cx="50"
-                  cy="50"
-                  r={radius}
-                  fill="none"
-                  stroke={accent}
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeDasharray={circumference}
-                  strokeDashoffset={dashOffset}
-                  transform="rotate(-90 50 50)"
-                  style={{ transition: "stroke-dashoffset 1s linear" }}
-                />
+          {/* timer pill */}
+          <div style={{
+            marginTop: 12,
+            display: "inline-flex", alignSelf: "flex-start", alignItems: "center", gap: 18,
+            padding: "14px 26px",
+            background: "rgba(11,4,24,0.6)", backdropFilter: "blur(14px)",
+            border: `1px solid ${accent}66`, borderRadius: 99,
+          }}>
+            <div style={{ position: "relative", width: 48, height: 48 }}>
+              <svg viewBox="0 0 50 50" style={{ width: "100%", height: "100%" }}>
+                <circle cx="25" cy="25" r="22" fill="none" stroke={`${accent}33`} strokeWidth="3" />
+                <circle cx="25" cy="25" r="22" fill="none" stroke={accent} strokeWidth="3"
+                  strokeDasharray={`${(elapsed % 60) * 2.3} 138`}
+                  transform="rotate(-90 25 25)" strokeLinecap="round" />
               </svg>
-              <div className="absolute flex flex-col items-center">
-                <span
-                  className="font-heading text-white leading-none"
-                  style={{ fontFamily: "'Russo One', sans-serif", fontSize: 22 }}
-                >
-                  {mm}:{ss}
-                </span>
-                <span className="font-body text-white/40 text-xs mt-0.5">pausa</span>
+              <div style={{
+                position: "absolute", inset: 0, display: "flex",
+                alignItems: "center", justifyContent: "center",
+              }}>
+                <span style={{
+                  width: 8, height: 8, borderRadius: "50%", background: accent,
+                  animation: "pulse 1.4s ease-in-out infinite",
+                }} />
               </div>
             </div>
-
-            <div className="flex flex-col gap-1">
-              <span className="font-body text-xs text-white/40 tracking-[0.12em] uppercase">
-                Tocando agora
-              </span>
-              <span className="font-body text-sm text-white/80">{brbTrack}</span>
+            <div>
+              <div style={{
+                fontFamily: "Inter, sans-serif", fontSize: 11,
+                color: accent, letterSpacing: "0.25em", fontWeight: 700,
+                textTransform: "uppercase",
+              }}>Tempo de pausa</div>
+              <div style={{
+                fontFamily: "'Russo One', sans-serif", fontSize: 36,
+                color: "#fff", lineHeight: 1, marginTop: 4,
+              }}>{mm}:{ss}</div>
             </div>
           </div>
+
+          {/* now-playing strip */}
+          {brbTrack && (
+            <div style={{
+              display: "flex", alignItems: "center", gap: 14,
+              fontFamily: "Inter, sans-serif", fontSize: 14,
+              color: "rgba(255,255,255,0.55)",
+            }}>
+              <span style={{
+                display: "inline-flex", alignItems: "center", gap: 4,
+                color: accent, fontWeight: 700, letterSpacing: "0.18em",
+                textTransform: "uppercase", fontSize: 12,
+              }}>
+                ♪ TOCANDO
+              </span>
+              <span>{brbTrack}</span>
+            </div>
+          )}
         </div>
 
-        {/* RIGHT — 40% chat area */}
-        <div
-          className="relative flex flex-col"
-          style={{
-            width: "40%",
-            background: `${bgPanel}88`,
-            borderLeft: `1px solid ${accent}1A`,
-          }}
-        >
-          {/* Chat header */}
-          <div
-            className="flex shrink-0 flex-col gap-2 px-8 pt-8 pb-4"
-            style={{ borderBottom: `1px solid ${accent}1A` }}
-          >
-            <div className="flex items-center gap-3">
-              <div
-                className="flex items-center gap-2 rounded-full px-3 py-1"
-                style={{ background: `${accent}22`, border: `1px solid ${accent}44` }}
-              >
-                <span
-                  className="h-1.5 w-1.5 rounded-full"
-                  style={{ background: "#22C55E", animation: "pulse 1.4s ease-in-out infinite" }}
-                />
-                <span className="font-body text-xs text-white/70">Chat ativo</span>
-              </div>
+        {/* RIGHT — prominent chat with header */}
+        <div style={{
+          flex: 1, position: "relative",
+          background: `linear-gradient(180deg, #0b0418 0%, ${primary}22 100%)`,
+          borderLeft: `1px solid ${accent}22`,
+          display: "flex", flexDirection: "column",
+        }}>
+          <div style={{
+            padding: "40px 40px 20px",
+            borderBottom: `1px solid ${accent}22`,
+          }}>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              padding: "6px 14px", borderRadius: 99,
+              background: `${primary}33`, border: `1px solid ${accent}66`,
+              fontFamily: "Inter, sans-serif", fontSize: 11,
+              color: accent, letterSpacing: "0.2em", fontWeight: 700,
+              textTransform: "uppercase",
+            }}>
+              <span style={{
+                width: 7, height: 7, borderRadius: "50%", background: accent,
+                animation: "pulse 1.4s ease-in-out infinite",
+              }} />
+              Chat ativo
             </div>
-            <h2
-              className="font-heading text-white"
-              style={{ fontFamily: "'Russo One', sans-serif", fontSize: 26 }}
-            >
-              Continue na conversa
-            </h2>
+            <div style={{
+              fontFamily: "'Russo One', sans-serif", fontSize: 38,
+              color: "#fff", lineHeight: 1.1, marginTop: 14,
+            }}>Continue na conversa</div>
+            <div style={{
+              fontFamily: "Inter, sans-serif", fontSize: 14,
+              color: "rgba(255,255,255,0.55)", marginTop: 6,
+            }}>discord.app/he4rt · #live-chat</div>
           </div>
-
-          {/* Chat feed */}
-          <div className="relative flex-1 overflow-hidden">
+          <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
             <BigChatFeed config={t} />
           </div>
+        </div>
+
+        {/* corner standby badge */}
+        <div style={{
+          position: "absolute", top: 40, right: 40,
+          display: "inline-flex", alignItems: "center", gap: 8,
+          background: accent, padding: "8px 16px", borderRadius: 6,
+          fontFamily: "Inter, sans-serif", fontSize: 13, fontWeight: 800,
+          color: "#fff", letterSpacing: "0.2em",
+        }}>
+          <span style={{
+            width: 8, height: 8, borderRadius: "50%", background: "#fff",
+            animation: "pulse 1.4s ease-in-out infinite",
+          }} />
+          PAUSA
         </div>
       </div>
     </Stage>

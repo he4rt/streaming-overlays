@@ -2,7 +2,6 @@ import type { TweakConfig } from "@/shared/types";
 import { useCountdown } from "@/hooks/useCountdown";
 import { HeartLogo } from "@/shared/components/HeartLogo";
 import { HeartMark } from "@/shared/components/HeartMark";
-import { EpisodeCard } from "@/shared/components/EpisodeCard";
 import { SocialIcon } from "@/shared/components/SocialIcon";
 import { DiscreteChatPanel } from "@/shared/chat/DiscreteChatPanel";
 import { Clock } from "@/shared/components/Clock";
@@ -14,7 +13,6 @@ interface StartingV1Props {
 export function StartingV1({ config }: StartingV1Props) {
   const {
     primary,
-    primaryDeep,
     accent,
     startingTitle,
     startingSubtitle,
@@ -29,169 +27,156 @@ export function StartingV1({ config }: StartingV1Props) {
   const { mm, ss } = useCountdown(startingCountdownSeconds);
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center">
-      {/* Concentric rings */}
-      <div
-        className="pointer-events-none absolute"
-        style={{
-          width: 1200,
-          height: 1200,
-          borderRadius: "50%",
-          border: `1px solid ${accent}33`,
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          background: `radial-gradient(circle, ${primary}11 0%, transparent 70%)`,
-          animation: "startingPulse 6s ease-in-out infinite",
-        }}
-      />
-      <div
-        className="pointer-events-none absolute"
-        style={{
-          width: 900,
-          height: 900,
-          borderRadius: "50%",
-          border: `1px solid ${accent}44`,
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          background: `radial-gradient(circle, ${primary}18 0%, transparent 70%)`,
-          animation: "startingPulse 6s ease-in-out infinite 1s",
-        }}
-      />
-      <div
-        className="pointer-events-none absolute"
-        style={{
-          width: 600,
-          height: 600,
-          borderRadius: "50%",
-          border: `1px solid ${accent}55`,
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          background: `radial-gradient(circle, ${primary}22 0%, transparent 70%)`,
-          animation: "startingPulse 6s ease-in-out infinite 2s",
-        }}
-      />
+    <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+      {/* large central glowing ring */}
+      <div style={{
+        position: "absolute", width: 1200, height: 1200, borderRadius: "50%",
+        border: `2px solid ${accent}33`,
+        animation: "startingPulse 4s ease-in-out infinite",
+      }} />
+      <div style={{
+        position: "absolute", width: 900, height: 900, borderRadius: "50%",
+        border: `1px solid ${accent}55`,
+        animation: "startingPulse 4s ease-in-out 0.5s infinite",
+      }} />
+      <div style={{
+        position: "absolute", width: 600, height: 600, borderRadius: "50%",
+        background: `radial-gradient(circle, ${primary}55 0%, transparent 70%)`,
+        filter: "blur(40px)",
+      }} />
 
-      {/* Center content */}
-      <div className="relative flex flex-col items-center gap-8 text-center">
-        {/* Logo with glow */}
+      {/* central content */}
+      <div style={{
+        position: "relative", textAlign: "center",
+        display: "flex", flexDirection: "column", alignItems: "center", gap: 20,
+        maxWidth: 1100,
+      }}>
+        {/* logo */}
         <div style={{ animation: "glow 3s ease-in-out infinite" }}>
-          <HeartLogo size={1.6} white="#FFFFFF" purple={accent} />
+          <HeartLogo size={1.6} purple={accent} />
         </div>
 
-        {/* Title pill */}
-        <div
-          className="flex items-center gap-3 rounded-full px-7 py-3"
-          style={{
-            background: `${primary}22`,
-            border: `1px solid ${accent}44`,
-            backdropFilter: "blur(12px)",
-          }}
-        >
-          <span
-            className="h-2 w-2 rounded-full"
-            style={{
-              background: accent,
-              animation: "pulse 1.4s ease-in-out infinite",
-            }}
-          />
-          <span
-            className="font-heading text-sm tracking-[0.25em] text-white/90"
-            style={{ letterSpacing: "0.25em" }}
-          >
-            {startingTitle}
-          </span>
+        {/* tagline */}
+        <div style={{
+          marginTop: 12,
+          display: "inline-flex", alignItems: "center", gap: 12,
+          padding: "10px 22px",
+          background: `${primary}26`,
+          border: `1px solid ${accent}66`,
+          borderRadius: 99,
+          fontFamily: "Inter, sans-serif", fontSize: 16, color: "#fff",
+          letterSpacing: "0.18em", fontWeight: 700,
+        }}>
+          <span style={{
+            width: 9, height: 9, borderRadius: "50%", background: accent,
+            animation: "pulse 1.4s ease-in-out infinite",
+          }} />
+          {startingTitle}
         </div>
 
-        {/* Countdown */}
-        <div
-          className="font-heading leading-none text-white"
-          style={{
-            fontSize: 220,
+        {/* countdown */}
+        <div style={{
+          fontFamily: "'Russo One', sans-serif",
+          fontSize: 220, color: "#fff", lineHeight: 1,
+          letterSpacing: "0.04em",
+          textShadow: `0 0 60px ${accent}88, 0 0 120px ${primary}55`,
+          display: "flex", alignItems: "center", gap: 30,
+        }}>
+          <span>{mm}</span>
+          <span style={{ color: accent, animation: "pulse 1s ease-in-out infinite" }}>:</span>
+          <span>{ss}</span>
+        </div>
+
+        {/* episode info card */}
+        <div style={{
+          marginTop: 8,
+          display: "flex", alignItems: "center", gap: 18,
+          background: "rgba(11,4,24,0.7)",
+          backdropFilter: "blur(14px)",
+          border: `1px solid ${accent}44`,
+          borderRadius: 16,
+          padding: "18px 28px",
+        }}>
+          <div style={{
+            background: `linear-gradient(135deg, ${primary}, ${accent})`,
+            padding: "8px 16px", borderRadius: 8,
             fontFamily: "'Russo One', sans-serif",
-            textShadow: `0 0 80px ${primary}88, 0 0 160px ${primary}44`,
-            letterSpacing: "-0.02em",
-          }}
-        >
-          {mm}:{ss}
+            fontSize: 18, color: "#fff", letterSpacing: "0.06em",
+          }}>{episodeNumber}</div>
+          <div style={{ textAlign: "left" }}>
+            <div style={{
+              fontFamily: "'Russo One', sans-serif",
+              fontSize: 30, color: "#fff", lineHeight: 1.1,
+            }}>{episodeTitle}</div>
+            <div style={{
+              fontFamily: "Inter, sans-serif", fontSize: 14, color: accent,
+              letterSpacing: "0.12em", marginTop: 6, fontWeight: 600,
+              textTransform: "uppercase",
+            }}>{topic}</div>
+          </div>
+          <div style={{ width: 1, height: 50, background: `${accent}33`, margin: "0 8px" }} />
+          <div style={{
+            fontFamily: "Inter, sans-serif", fontSize: 14, color: "#fff",
+            display: "flex", flexDirection: "column", gap: 4,
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}><Clock /> {date}</div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}><Clock /> {time}</div>
+          </div>
         </div>
 
-        {/* Episode card */}
-        <EpisodeCard
-          episodeNumber={episodeNumber}
-          episodeTitle={episodeTitle}
-          topic={topic}
-          date={date}
-          time={time}
-          primary={primary}
-          accent={accent}
-        />
-
-        {/* Subtitle */}
-        <p className="font-body text-lg text-white/60" style={{ letterSpacing: "0.04em" }}>
+        {/* subtitle */}
+        <div style={{
+          marginTop: 18,
+          fontFamily: "Inter, sans-serif", fontSize: 22, color: "rgba(255,255,255,0.75)",
+          fontWeight: 500,
+        }}>
           {startingSubtitle}
-        </p>
+        </div>
 
-        {/* Social row */}
-        <div className="flex items-center gap-6">
-          {(["x", "ig", "yt", "gh"] as const).map((kind) => (
-            <div
-              key={kind}
-              className="flex h-10 w-10 items-center justify-center rounded-full"
-              style={{
-                background: `${accent}18`,
-                border: `1px solid ${accent}33`,
-              }}
-            >
-              <SocialIcon kind={kind} color={`${accent}CC`} />
-            </div>
-          ))}
-          <span className="ml-2 font-body text-sm text-white/40 tracking-[0.08em]">
-            @he4rttalks
-          </span>
+        {/* social row */}
+        <div style={{
+          marginTop: 18, display: "flex", gap: 14, alignItems: "center",
+          fontFamily: "Inter, sans-serif", fontSize: 14, color: "rgba(255,255,255,0.65)",
+        }}>
+          <span style={{ letterSpacing: "0.15em", fontWeight: 700, textTransform: "uppercase" }}>Siga</span>
+          <SocialIcon kind="ig" color={accent} /><span>@he4rtdevs</span>
+          <span style={{ color: `${accent}55` }}>·</span>
+          <SocialIcon kind="x" color={accent} /><span>@he4rtdevs</span>
+          <span style={{ color: `${accent}55` }}>·</span>
+          <SocialIcon kind="yt" color={accent} /><span>/@he4rtdevs</span>
+          <span style={{ color: `${accent}55` }}>·</span>
+          <SocialIcon kind="gh" color={accent} /><span>/he4rt-developers</span>
         </div>
       </div>
 
-      {/* Corner brand — top left */}
-      <div className="absolute left-10 top-10 flex items-center gap-3">
-        <HeartMark size={32} color={accent} />
-        <span
-          className="font-heading text-xs tracking-[0.2em] text-white/50"
-          style={{ letterSpacing: "0.2em" }}
-        >
-          HE4RT TALKS
-        </span>
+      {/* corner brand marks */}
+      <div style={{
+        position: "absolute", top: 40, left: 40,
+        display: "flex", alignItems: "center", gap: 12,
+        background: "rgba(11,4,24,0.6)", backdropFilter: "blur(10px)",
+        padding: "10px 16px", borderRadius: 10,
+        border: `1px solid ${accent}33`,
+      }}>
+        <HeartMark size={24} color={accent} />
+        <span style={{
+          fontFamily: "Inter, sans-serif", fontSize: 12,
+          color: "#fff", letterSpacing: "0.2em", fontWeight: 700,
+        }}>HE4RT TALKS</span>
       </div>
-
-      {/* "EM BREVE" badge — top right */}
-      <div
-        className="absolute right-10 top-10 flex items-center gap-2 rounded-full px-5 py-2"
-        style={{
-          background: `linear-gradient(135deg, ${primary}, ${primaryDeep})`,
-          boxShadow: `0 4px 20px ${primary}55`,
-        }}
-      >
-        <span className="h-1.5 w-1.5 rounded-full bg-white/80" />
-        <span className="font-heading text-xs tracking-[0.2em] text-white">EM BREVE</span>
+      <div style={{
+        position: "absolute", top: 40, right: 40,
+        display: "inline-flex", alignItems: "center", gap: 8,
+        background: "#EF4444", padding: "8px 16px", borderRadius: 6,
+        fontFamily: "Inter, sans-serif", fontSize: 13, fontWeight: 800,
+        color: "#fff", letterSpacing: "0.15em",
+      }}>
+        <span style={{
+          width: 8, height: 8, borderRadius: "50%", background: "#fff",
+          animation: "pulse 1.4s ease-in-out infinite",
+        }} />
+        EM BREVE
       </div>
-
-      {/* Date/time — bottom left */}
-      <div className="absolute bottom-10 left-10 flex flex-col gap-1">
-        <div className="flex items-center gap-2 font-body text-sm text-white/50">
-          <Clock />
-          {date} · {time}
-        </div>
-        <div
-          className="font-body text-xs tracking-[0.1em]"
-          style={{ color: `${accent}88` }}
-        >
-          twitch.tv/he4rttalks
-        </div>
-      </div>
-
-      {/* Discrete chat — bottom right */}
+      {/* Discrete chat panel for starting scene */}
       <DiscreteChatPanel config={config} />
     </div>
   );

@@ -1,9 +1,7 @@
 import type { TweakConfig } from "@/shared/types";
 import { useCountdown } from "@/hooks/useCountdown";
-import { HeartLogo } from "@/shared/components/HeartLogo";
 import { HeartMark } from "@/shared/components/HeartMark";
 import { TerminalChat } from "@/shared/chat/TerminalChat";
-import { Clock } from "@/shared/components/Clock";
 
 interface StartingV2Props {
   config: TweakConfig;
@@ -12,7 +10,6 @@ interface StartingV2Props {
 export function StartingV2({ config }: StartingV2Props) {
   const {
     primary,
-    primaryDeep,
     accent,
     startingTitle,
     startingSubtitle,
@@ -27,153 +24,122 @@ export function StartingV2({ config }: StartingV2Props) {
   const { mm, ss } = useCountdown(startingCountdownSeconds);
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      {/* Neon grid background */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: `
-            linear-gradient(${accent}18 1px, transparent 1px),
-            linear-gradient(90deg, ${accent}18 1px, transparent 1px)
-          `,
-          backgroundSize: "80px 80px",
-          animation: "gridDrift 8s linear infinite",
-          maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)",
-          WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)",
-        }}
-      />
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+      {/* neon grid */}
+      <div style={{
+        position: "absolute", inset: 0,
+        backgroundImage: `linear-gradient(${accent}22 1px, transparent 1px), linear-gradient(90deg, ${accent}22 1px, transparent 1px)`,
+        backgroundSize: "80px 80px, 80px 80px",
+        animation: "gridDrift 8s linear infinite",
+        maskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+        WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+      }} />
+      {/* horizon glow */}
+      <div style={{
+        position: "absolute", left: 0, right: 0, bottom: 0, height: "40%",
+        background: `linear-gradient(180deg, transparent 0%, ${primary}55 60%, ${accent}88 100%)`,
+        filter: "blur(60px)", pointerEvents: "none",
+      }} />
 
-      {/* Horizon glow */}
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0"
-        style={{
-          height: 320,
-          background: `linear-gradient(0deg, ${primary}33 0%, transparent 100%)`,
-        }}
-      />
-
-      {/* Top accent line */}
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0"
-        style={{ height: 2, background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }}
-      />
-
-      {/* Terminal chat — left */}
+      {/* terminal chat (left) */}
       <TerminalChat config={config} x={60} y={300} w={520} h={620} />
 
-      {/* Right side content */}
-      <div
-        className="absolute flex flex-col justify-center gap-8"
-        style={{ right: 80, top: 0, bottom: 0, width: 1100 }}
-      >
-        {/* Eyebrow pill */}
-        <div
-          className="inline-flex self-start items-center gap-3 rounded-full px-5 py-2.5"
-          style={{
-            background: `${accent}18`,
-            border: `1px solid ${accent}44`,
-            fontFamily: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
-          }}
-        >
-          <span
-            className="h-2 w-2 rounded-full"
-            style={{ background: accent, animation: "pulse 1.2s ease-in-out infinite" }}
-          />
-          <span className="text-xs tracking-[0.25em] text-white/80 uppercase">
-            {startingTitle}
-          </span>
-          <span
-            className="ml-2 rounded px-2 py-0.5 text-xs font-bold tracking-[0.1em]"
-            style={{ background: `${primary}44`, color: accent }}
-          >
-            {episodeNumber}
-          </span>
+      {/* main stage (right side, big typo) */}
+      <div style={{
+        position: "absolute", right: 80, top: "50%", transform: "translateY(-50%)",
+        width: 1100, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 18,
+      }}>
+        {/* eyebrow */}
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: 12,
+          padding: "8px 18px",
+          background: `${primary}33`,
+          border: `1px solid ${accent}88`,
+          borderRadius: 4,
+          fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 13,
+          color: accent, letterSpacing: "0.3em", fontWeight: 700,
+          textTransform: "uppercase",
+        }}>
+          <span style={{
+            width: 8, height: 8, background: accent,
+            animation: "pulse 1.4s ease-in-out infinite",
+          }} />
+          {startingTitle} · {episodeNumber}
         </div>
 
-        {/* Episode title */}
-        <div>
-          <h1
-            className="font-heading leading-[1.05] text-white"
-            style={{ fontSize: 76, letterSpacing: "-0.01em" }}
-          >
-            {episodeTitle}
-          </h1>
-          <p
-            className="mt-3 font-body text-lg tracking-[0.12em] uppercase"
-            style={{ color: accent }}
-          >
-            {topic}
-          </p>
+        {/* episode title */}
+        <div style={{
+          fontFamily: "'Russo One', sans-serif",
+          fontSize: 76, color: "#fff", lineHeight: 0.95,
+          letterSpacing: "-0.02em",
+          textShadow: `0 0 40px ${accent}66`,
+        }}>{episodeTitle}</div>
+
+        <div style={{
+          fontFamily: "Inter, sans-serif", fontSize: 18, color: accent,
+          letterSpacing: "0.18em", fontWeight: 600,
+          textTransform: "uppercase",
+        }}>{topic}</div>
+
+        {/* big countdown */}
+        <div style={{ marginTop: 24, position: "relative" }}>
+          <div style={{
+            position: "absolute", inset: 0,
+            fontFamily: "'Russo One', sans-serif",
+            fontSize: 320, lineHeight: 0.9, letterSpacing: "-0.02em",
+            color: "transparent", WebkitTextStroke: `2px ${accent}55`,
+            transform: "translate(8px, 8px)",
+          }}>{mm}:{ss}</div>
+          <div style={{
+            fontFamily: "'Russo One', sans-serif",
+            fontSize: 320, lineHeight: 0.9, letterSpacing: "-0.02em",
+            color: "#fff",
+            background: `linear-gradient(180deg, #fff 0%, ${accent} 100%)`,
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            position: "relative",
+          }}>{mm}:{ss}</div>
         </div>
 
-        {/* Giant countdown */}
-        <div className="relative">
-          <div
-            className="font-heading leading-none"
-            style={{
-              fontSize: 320,
-              fontFamily: "'Russo One', sans-serif",
-              background: `linear-gradient(135deg, ${accent}, ${primary}, ${primaryDeep})`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              textShadow: "none",
-              filter: `drop-shadow(0 0 40px ${primary}88)`,
-              letterSpacing: "-0.03em",
-            }}
-          >
-            {mm}:{ss}
-          </div>
-          {/* Outline layer for depth */}
-          <div
-            className="pointer-events-none absolute inset-0 font-heading leading-none"
-            style={{
-              fontSize: 320,
-              fontFamily: "'Russo One', sans-serif",
-              WebkitTextStroke: `2px ${accent}22`,
-              WebkitTextFillColor: "transparent",
-              letterSpacing: "-0.03em",
-            }}
-          >
-            {mm}:{ss}
-          </div>
-        </div>
-
-        {/* Meta row */}
-        <div
-          className="flex items-center gap-8"
-          style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" }}
-        >
-          <div className="flex items-center gap-2 text-sm text-white/55">
-            <Clock />
-            <span>{date}</span>
-          </div>
-          <div className="h-4 w-px" style={{ background: `${accent}33` }} />
-          <div className="flex items-center gap-2 text-sm text-white/55">
-            <Clock />
-            <span>{time}</span>
-          </div>
-          <div className="h-4 w-px" style={{ background: `${accent}33` }} />
-          <span className="text-sm" style={{ color: `${accent}88` }}>
-            {startingSubtitle}
-          </span>
+        {/* meta row */}
+        <div style={{
+          marginTop: 8,
+          display: "flex", alignItems: "center", gap: 24,
+          fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+          fontSize: 14, color: "rgba(255,255,255,0.7)",
+          letterSpacing: "0.1em", textTransform: "uppercase",
+        }}>
+          <span><span style={{ color: accent }}>›</span> {date}</span>
+          <span style={{ color: `${accent}55` }}>│</span>
+          <span><span style={{ color: accent }}>›</span> {time}</span>
+          <span style={{ color: `${accent}55` }}>│</span>
+          <span><span style={{ color: accent }}>›</span> {startingSubtitle}</span>
         </div>
       </div>
 
-      {/* Corner brand — top left */}
-      <div className="absolute left-10 top-10 flex items-center gap-3">
+      {/* corner brand */}
+      <div style={{
+        position: "absolute", top: 40, left: 40,
+        display: "flex", alignItems: "center", gap: 12,
+      }}>
         <HeartMark size={28} color={accent} />
-        <HeartLogo size={0.9} white="#FFFFFF" purple={accent} />
+        <span style={{
+          fontFamily: "Inter, sans-serif", fontSize: 13,
+          color: "#fff", letterSpacing: "0.25em", fontWeight: 800,
+        }}>HE4RT TALKS</span>
       </div>
-
-      {/* Corner brand — bottom right */}
-      <div className="absolute bottom-10 right-10">
-        <span
-          className="font-body text-xs tracking-[0.15em] text-white/30 uppercase"
-          style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" }}
-        >
-          twitch.tv/he4rttalks
-        </span>
+      <div style={{
+        position: "absolute", top: 40, right: 40,
+        display: "inline-flex", alignItems: "center", gap: 8,
+        background: "transparent", border: `1px solid ${accent}88`,
+        padding: "8px 16px", borderRadius: 4,
+        fontFamily: "ui-monospace, monospace", fontSize: 12, fontWeight: 700,
+        color: accent, letterSpacing: "0.2em",
+      }}>
+        <span style={{
+          width: 8, height: 8, borderRadius: "50%", background: accent,
+          animation: "pulse 1.4s ease-in-out infinite",
+        }} />
+        STANDBY
       </div>
     </div>
   );

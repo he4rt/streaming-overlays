@@ -5,65 +5,62 @@ interface QuoteMinimalProps {
 }
 
 export function QuoteMinimal({ config }: QuoteMinimalProps) {
-  const { primary, accent, quoteText, quoteAuthor, quoteAuthorRole } = config;
-
-  const initials = (name: string) =>
-    name
-      .split(" ")
-      .map((w) => w[0])
-      .join("")
-      .slice(0, 2);
+  const { primary, accent, quoteText, quoteAuthor, quoteAuthorRole, quoteContext } = config;
 
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center px-20 py-14">
-      {/* Subtle grid background */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: `linear-gradient(${accent}08 1px, transparent 1px), linear-gradient(90deg, ${accent}08 1px, transparent 1px)`,
-          backgroundSize: "60px 60px",
-        }}
-      />
+    <div style={{ position: "absolute", inset: 0, background: "#0b0418", overflow: "hidden" }}>
+      {/* subtle grid */}
+      <div style={{
+        position: "absolute", inset: 0,
+        backgroundImage: `linear-gradient(${accent}11 1px, transparent 1px), linear-gradient(90deg, ${accent}11 1px, transparent 1px)`,
+        backgroundSize: "120px 120px",
+        maskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+        WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+      }} />
 
-      {/* Content */}
-      <div className="relative flex flex-col items-start gap-10 max-w-5xl w-full">
-        {/* Monospace label */}
-        <div
-          className="font-mono text-sm tracking-[0.3em] uppercase"
-          style={{ color: `${accent}77` }}
-        >
-          ── Highlight
+      <div style={{
+        position: "absolute", left: 100, top: 100, right: 100, bottom: 100,
+        display: "flex", flexDirection: "column", justifyContent: "center", gap: 60,
+      }}>
+        <div style={{
+          display: "inline-flex", alignSelf: "flex-start", alignItems: "center", gap: 14,
+          fontFamily: "ui-monospace, monospace", fontSize: 13,
+          color: accent, letterSpacing: "0.3em", fontWeight: 700,
+          textTransform: "uppercase",
+        }}>
+          <span style={{ width: 40, height: 1, background: accent }} />
+          Highlight {quoteContext && `· ${quoteContext}`}
         </div>
 
-        {/* Huge quote text */}
-        <div
-          className="leading-tight text-white"
-          style={{
-            fontSize: 96,
-            fontFamily: "'Russo One', sans-serif",
-            textShadow: `0 0 60px ${primary}33`,
-          }}
-        >
+        <div style={{
+          fontFamily: "'Russo One', sans-serif",
+          fontSize: 96, color: "#fff", lineHeight: 1.05,
+          letterSpacing: "-0.025em",
+          maxWidth: 1700,
+        }}>
           {quoteText}
         </div>
 
-        {/* Author row */}
-        <div className="flex items-center gap-5">
-          {/* Avatar circle */}
-          <div
-            className="flex h-14 w-14 items-center justify-center rounded-full font-heading text-lg text-white"
-            style={{
-              background: `linear-gradient(135deg, ${primary}, ${accent})`,
-              boxShadow: `0 0 20px ${primary}44`,
-            }}
-          >
-            {initials(quoteAuthor)}
-          </div>
-          <div className="flex flex-col gap-0.5">
-            <span className="font-heading text-base text-white">{quoteAuthor}</span>
-            <span className="font-body text-sm" style={{ color: `${accent}99` }}>
-              {quoteAuthorRole}
-            </span>
+        <div style={{
+          display: "flex", alignItems: "center", gap: 24,
+        }}>
+          <div style={{
+            width: 80, height: 80, borderRadius: "50%",
+            background: `linear-gradient(135deg, ${primary}, ${accent})`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontFamily: "'Russo One', sans-serif", fontSize: 30,
+            color: "#fff", textTransform: "uppercase",
+          }}>{quoteAuthor[0]}</div>
+          <div>
+            <div style={{
+              fontFamily: "'Russo One', sans-serif", fontSize: 36,
+              color: "#fff", lineHeight: 1.1,
+            }}>{quoteAuthor}</div>
+            <div style={{
+              fontFamily: "Inter, sans-serif", fontSize: 16,
+              color: "rgba(255,255,255,0.55)", letterSpacing: "0.1em", fontWeight: 600,
+              marginTop: 6, textTransform: "uppercase",
+            }}>{quoteAuthorRole}</div>
           </div>
         </div>
       </div>

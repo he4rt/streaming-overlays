@@ -18,7 +18,7 @@ export function QuoteScene() {
 
   return (
     <Stage>
-      <div className="absolute inset-0 overflow-hidden" style={{ background: t.bgDeep }}>
+      <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: t.bgDeep }}>
         <ParticleField enabled={t.showHeartParticles} color={t.accent} />
         <Variant config={t} />
       </div>

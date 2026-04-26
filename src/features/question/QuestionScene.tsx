@@ -1,7 +1,5 @@
 import { Stage } from "@/features/stage/Stage";
 import { useOverlayConfig } from "@/hooks/useOverlayConfig";
-import { ParticleField } from "@/shared/components/ParticleField";
-import { CornerBrackets } from "@/shared/components/CornerBrackets";
 
 export function QuestionScene() {
   const t = useOverlayConfig();
@@ -9,221 +7,211 @@ export function QuestionScene() {
     primary,
     accent,
     bgDeep,
-    bgPanel,
     questionAuthor,
     questionAuthorBadge,
     questionText,
     questionFrom,
     questionQueue,
     guest1Name,
+    guest1Role,
     guest2Name,
+    guest2Role,
+    episodeNumber,
+    episodeTitle,
   } = t;
-
-  const initials = (name: string) =>
-    name
-      .split(" ")
-      .map((w) => w[0])
-      .join("")
-      .slice(0, 2);
 
   return (
     <Stage>
-      <div className="absolute inset-0 overflow-hidden" style={{ background: bgDeep }}>
-        {/* Ambient radial blobs */}
-        <div
-          className="pointer-events-none absolute"
-          style={{
-            width: 900,
-            height: 900,
-            borderRadius: "50%",
-            top: "30%",
-            left: "20%",
-            transform: "translate(-50%, -50%)",
-            background: `radial-gradient(circle, ${primary}18 0%, transparent 70%)`,
-            filter: "blur(80px)",
-          }}
-        />
-        <div
-          className="pointer-events-none absolute"
-          style={{
-            width: 600,
-            height: 600,
-            borderRadius: "50%",
-            top: "70%",
-            left: "75%",
-            transform: "translate(-50%, -50%)",
-            background: `radial-gradient(circle, ${accent}0F 0%, transparent 70%)`,
-            filter: "blur(60px)",
-          }}
-        />
+      <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: bgDeep }}>
+        {/* ambient bg */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: `radial-gradient(ellipse at 20% 30%, ${primary}55 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, ${accent}33 0%, transparent 50%)`,
+        }} />
 
-        {/* Particle field */}
-        <ParticleField enabled={t.showHeartParticles} color={accent} />
+        {/* top eyebrow */}
+        <div style={{
+          position: "absolute", top: 50, left: "50%", transform: "translateX(-50%)",
+          display: "inline-flex", alignItems: "center", gap: 12,
+          padding: "10px 22px",
+          background: "rgba(11,4,24,0.7)", backdropFilter: "blur(14px)",
+          border: `1px solid ${accent}66`, borderRadius: 99,
+          fontFamily: "Inter, sans-serif", fontSize: 13,
+          color: accent, letterSpacing: "0.3em", fontWeight: 800,
+          textTransform: "uppercase",
+        }}>
+          <span style={{
+            width: 8, height: 8, borderRadius: "50%", background: accent,
+            animation: "pulse 1.4s ease-in-out infinite",
+          }} />
+          Pergunta da Audiência
+          <span style={{ color: `${accent}55` }}>·</span>
+          <span style={{ color: "rgba(255,255,255,0.7)", letterSpacing: "0.15em" }}>{questionFrom}</span>
+        </div>
 
-        {/* Huge quote watermark */}
-        <div
-          className="pointer-events-none absolute select-none"
-          style={{
-            fontSize: 720,
+        {/* HUGE quote mark watermark */}
+        <div style={{
+          position: "absolute", top: 100, left: 80,
+          fontFamily: "'Russo One', sans-serif", fontSize: 720,
+          color: `${accent}11`, lineHeight: 0.7,
+          pointerEvents: "none", userSelect: "none",
+        }}>"</div>
+
+        {/* MAIN — question card centered */}
+        <div style={{
+          position: "absolute", left: 140, right: 140, top: 160, bottom: 280,
+          display: "flex", flexDirection: "column", justifyContent: "center",
+          gap: 32,
+        }}>
+          {/* author row */}
+          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+            <div style={{
+              width: 72, height: 72, borderRadius: "50%",
+              background: `linear-gradient(135deg, ${primary}, ${accent})`,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontFamily: "'Russo One', sans-serif", fontSize: 28,
+              color: "#fff", textTransform: "uppercase",
+              boxShadow: `0 8px 24px ${primary}66`,
+            }}>{questionAuthor[0]}</div>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                {questionAuthorBadge && (
+                  <span style={{
+                    padding: "3px 10px", borderRadius: 4,
+                    background: accent,
+                    fontFamily: "Inter, sans-serif", fontSize: 11, fontWeight: 800,
+                    color: "#0b0418", letterSpacing: "0.15em",
+                  }}>{questionAuthorBadge}</span>
+                )}
+                <span style={{
+                  fontFamily: "'Russo One', sans-serif", fontSize: 28,
+                  color: "#fff", letterSpacing: "0.01em",
+                }}>{questionAuthor}</span>
+              </div>
+              <div style={{
+                marginTop: 4,
+                fontFamily: "Inter, sans-serif", fontSize: 14,
+                color: accent, letterSpacing: "0.18em", fontWeight: 700,
+                textTransform: "uppercase",
+              }}>perguntou ao vivo</div>
+            </div>
+          </div>
+
+          {/* the question */}
+          <div style={{
             fontFamily: "'Russo One', sans-serif",
-            color: `${accent}06`,
-            lineHeight: 1,
-            top: -80,
-            left: -40,
-          }}
-        >
-          "
-        </div>
-
-        {/* Top eyebrow */}
-        <div className="absolute left-1/2 top-12 flex -translate-x-1/2 items-center gap-3">
-          <div
-            className="flex items-center gap-2 rounded-full px-5 py-2"
-            style={{
-              background: `${primary}22`,
-              border: `1px solid ${accent}44`,
-              backdropFilter: "blur(12px)",
-            }}
-          >
-            <span
-              className="h-2 w-2 rounded-full"
-              style={{ background: accent, animation: "pulse 1.4s ease-in-out infinite" }}
-            />
-            <span className="font-heading text-sm tracking-[0.2em] text-white/80">
-              Pergunta da Audiência
-            </span>
-            <span className="font-body text-xs text-white/40 ml-2">{questionFrom}</span>
-          </div>
-        </div>
-
-        {/* Center: author + question */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-8 px-24">
-          {/* Author row */}
-          <div className="flex items-center gap-4">
-            <div
-              className="flex h-16 w-16 items-center justify-center rounded-full font-heading text-xl font-bold text-white"
-              style={{
-                background: `linear-gradient(135deg, ${primary}, ${accent})`,
-                boxShadow: `0 0 28px ${primary}55`,
-              }}
-            >
-              {questionAuthor.slice(0, 2).toUpperCase()}
-            </div>
-            {/* Badge */}
-            <div
-              className="rounded px-2 py-0.5 font-heading text-xs text-white"
-              style={{ background: accent, letterSpacing: "0.12em" }}
-            >
-              {questionAuthorBadge}
-            </div>
-            <span className="font-heading text-base text-white/80">{questionAuthor}</span>
-          </div>
-
-          {/* Question text */}
-          <div
-            className="max-w-5xl text-center leading-tight text-white"
-            style={{
-              fontSize: 76,
-              fontFamily: "'Russo One', sans-serif",
-              textShadow: `0 0 40px ${primary}44`,
-            }}
-          >
+            fontSize: 76, color: "#fff", lineHeight: 1.05,
+            letterSpacing: "-0.02em",
+            maxWidth: 1500,
+          }}>
             {questionText}
           </div>
 
-          {/* "respondendo agora" tag */}
-          <div
-            className="flex items-center gap-2 rounded-full px-5 py-2"
-            style={{
-              background: `${accent}18`,
-              border: `1px solid ${accent}33`,
-            }}
-          >
-            <span className="h-2 w-2 rounded-full bg-green-400" style={{ animation: "pulse 1.4s ease-in-out infinite" }} />
-            <span className="font-body text-sm text-white/70 tracking-[0.08em]">respondendo agora</span>
+          {/* tag row */}
+          <div style={{
+            display: "flex", alignItems: "center", gap: 12,
+            fontFamily: "Inter, sans-serif", fontSize: 14,
+            color: "rgba(255,255,255,0.5)", letterSpacing: "0.15em", fontWeight: 700,
+            textTransform: "uppercase",
+          }}>
+            <span style={{
+              padding: "6px 12px", borderRadius: 4,
+              background: `${primary}33`, border: `1px solid ${accent}33`,
+              color: "#fff",
+            }}>respondendo agora</span>
+            <span style={{ color: `${accent}55` }}>·</span>
+            <span>{episodeNumber} · {episodeTitle}</span>
           </div>
         </div>
 
-        {/* Bottom strip — 240px */}
-        <div
-          className="absolute bottom-0 left-0 right-0 flex items-stretch gap-6 px-10 py-6"
-          style={{
-            height: 240,
-            background: `linear-gradient(180deg, transparent, ${bgPanel}CC)`,
-            borderTop: `1px solid ${accent}18`,
-          }}
-        >
-          {/* Camera card 1 */}
-          <div
-            className="relative flex flex-1 items-center justify-center rounded-xl overflow-hidden"
-            style={{
-              background: `${bgPanel}88`,
-              border: `1px solid ${accent}22`,
-            }}
-          >
-            <CornerBrackets color={`${accent}88`} size={16} inset={8} />
-            <div className="flex flex-col items-center gap-2">
-              <div
-                className="flex h-14 w-14 items-center justify-center rounded-full font-heading text-lg text-white"
-                style={{ background: `${primary}44` }}
-              >
-                {initials(guest1Name)}
+        {/* BOTTOM — small camera strip with hosts */}
+        <div style={{
+          position: "absolute", left: 0, right: 0, bottom: 0, height: 240,
+          background: "linear-gradient(180deg, transparent 0%, rgba(11,4,24,0.85) 50%)",
+          padding: "40px 60px",
+          display: "flex", alignItems: "flex-end", gap: 24,
+        }}>
+          {[
+            { name: guest1Name, role: guest1Role, label: "CAM 01" },
+            { name: guest2Name, role: guest2Role, label: "CAM 02" },
+          ].map((g, i) => (
+            <div key={i} style={{
+              flex: 1, height: 160,
+              background: `linear-gradient(160deg, ${primary}33 0%, ${primary}11 100%)`,
+              borderRadius: 12,
+              border: `1px solid ${accent}44`,
+              position: "relative", overflow: "hidden",
+              padding: 16,
+              display: "flex", flexDirection: "column", justifyContent: "flex-end",
+            }}>
+              {/* corner brackets */}
+              {[
+                { top: 6, left: 6, rotate: 0 },
+                { top: 6, right: 6, rotate: 90 },
+                { bottom: 6, right: 6, rotate: 180 },
+                { bottom: 6, left: 6, rotate: 270 },
+              ].map((c, j) => (
+                <div key={j} style={{
+                  position: "absolute",
+                  top: c.top !== undefined ? c.top : undefined,
+                  left: (c as any).left !== undefined ? (c as any).left : undefined,
+                  right: (c as any).right !== undefined ? (c as any).right : undefined,
+                  bottom: c.bottom !== undefined ? c.bottom : undefined,
+                  width: 14, height: 14,
+                  borderTop: `2px solid ${accent}`, borderLeft: `2px solid ${accent}`,
+                  transform: `rotate(${c.rotate}deg)`,
+                }} />
+              ))}
+              <div style={{
+                fontFamily: "'Russo One', sans-serif", fontSize: 22,
+                color: "#fff", lineHeight: 1.1,
+              }}>{g.name}</div>
+              <div style={{
+                fontFamily: "Inter, sans-serif", fontSize: 12,
+                color: accent, letterSpacing: "0.15em", marginTop: 4,
+                fontWeight: 700, textTransform: "uppercase",
+              }}>{g.role}</div>
+              {/* live dot */}
+              <div style={{
+                position: "absolute", top: 14, right: 14,
+                display: "inline-flex", alignItems: "center", gap: 6,
+                padding: "3px 10px", borderRadius: 4,
+                background: "#EF4444", color: "#fff",
+                fontFamily: "Inter, sans-serif", fontSize: 10, fontWeight: 800,
+                letterSpacing: "0.18em",
+              }}>
+                <span style={{
+                  width: 6, height: 6, borderRadius: "50%", background: "#fff",
+                  animation: "pulse 1.4s ease-in-out infinite",
+                }} />
+                LIVE
               </div>
-              <span className="font-body text-xs text-white/50">{guest1Name}</span>
             </div>
-            {/* LIVE dot */}
-            <div
-              className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full px-2.5 py-1"
-              style={{ background: "#DC2626" }}
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-white" style={{ animation: "pulse 1.4s ease-in-out infinite" }} />
-              <span className="font-heading text-xs text-white" style={{ letterSpacing: "0.1em" }}>LIVE</span>
-            </div>
-          </div>
+          ))}
 
-          {/* Camera card 2 */}
-          <div
-            className="relative flex flex-1 items-center justify-center rounded-xl overflow-hidden"
-            style={{
-              background: `${bgPanel}88`,
-              border: `1px solid ${accent}22`,
-            }}
-          >
-            <CornerBrackets color={`${accent}88`} size={16} inset={8} />
-            <div className="flex flex-col items-center gap-2">
-              <div
-                className="flex h-14 w-14 items-center justify-center rounded-full font-heading text-lg text-white"
-                style={{ background: `${primary}44` }}
-              >
-                {initials(guest2Name)}
-              </div>
-              <span className="font-body text-xs text-white/50">{guest2Name}</span>
+          {/* counter */}
+          <div style={{
+            flex: "0 0 auto", width: 200, height: 160,
+            background: "rgba(11,4,24,0.6)", backdropFilter: "blur(14px)",
+            border: `1px solid ${accent}33`, borderRadius: 12,
+            padding: 18,
+            display: "flex", flexDirection: "column", justifyContent: "space-between",
+          }}>
+            <div style={{
+              fontFamily: "Inter, sans-serif", fontSize: 11,
+              color: accent, letterSpacing: "0.25em", fontWeight: 700,
+              textTransform: "uppercase",
+            }}>Perguntas na fila</div>
+            <div>
+              <div style={{
+                fontFamily: "'Russo One', sans-serif", fontSize: 56,
+                color: "#fff", lineHeight: 1,
+              }}>{questionQueue}</div>
+              <div style={{
+                fontFamily: "Inter, sans-serif", fontSize: 12,
+                color: "rgba(255,255,255,0.5)", marginTop: 4,
+              }}>aguardando</div>
             </div>
-            {/* LIVE dot */}
-            <div
-              className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full px-2.5 py-1"
-              style={{ background: "#DC2626" }}
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-white" style={{ animation: "pulse 1.4s ease-in-out infinite" }} />
-              <span className="font-heading text-xs text-white" style={{ letterSpacing: "0.1em" }}>LIVE</span>
-            </div>
-          </div>
-
-          {/* Queue counter card */}
-          <div
-            className="relative flex w-48 shrink-0 flex-col items-center justify-center gap-1 rounded-xl"
-            style={{
-              background: `${bgPanel}88`,
-              border: `1px solid ${accent}22`,
-            }}
-          >
-            <span
-              className="font-heading leading-none text-white"
-              style={{ fontFamily: "'Russo One', sans-serif", fontSize: 52 }}
-            >
-              {questionQueue}
-            </span>
-            <span className="font-body text-xs text-white/40 tracking-[0.1em]">na fila</span>
           </div>
         </div>
       </div>
