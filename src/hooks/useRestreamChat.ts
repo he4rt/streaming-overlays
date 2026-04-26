@@ -4,6 +4,22 @@ import type { ChatMessage } from "@/shared/types";
 const WS_URL =
   "wss://backend.chat.restream.io/ws/embed?token=54eceb28-9f1a-4117-bcfd-a84876a526d5";
 
+const TWITCH_SOURCE_ID = 2;
+const KICK_SOURCE_ID = 29;
+
+const PROVIDER_COLORS = [
+  "#A855F7", "#EC4899", "#22D3EE", "#34D399",
+  "#F97316", "#3B82F6", "#FACC15", "#06B6D4",
+];
+
+function pickColor(username: string): string {
+  let hash = 0;
+  for (let i = 0; i < username.length; i++) {
+    hash = username.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return PROVIDER_COLORS[Math.abs(hash) % PROVIDER_COLORS.length]!;
+}
+
 export function useRestreamChat(maxMessages = 12) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const wsRef = useRef<WebSocket | null>(null);
@@ -15,16 +31,30 @@ export function useRestreamChat(maxMessages = 12) {
     ws.onmessage = (event) => {
       try {
         const parsed = JSON.parse(event.data as string);
-        if (parsed.action === "event" && parsed.payload?.eventPayload) {
-          const ep = parsed.payload.eventPayload;
-          const msg: ChatMessage = {
-            user: ep.author?.displayName ?? "anon",
-            color: "#A855F7",
-            msg: ep.text ?? "",
-            key: Date.now(),
-          };
-          setMessages((prev) => [...prev.slice(-(maxMessages - 1)), msg]);
-        }
+        if (parsed.action !== "event") return;
+
+        const { eventSourceId, eventPayload } = parsed.payload;
+        if (!eventPayload?.text) return;
+
+        const isTwitch = eventSourceId === TWITCH_SOURCE_ID;
+        const isKick = eventSourceId === KICK_SOURCE_ID;
+        if (!isTwitch && !isKick) return;
+
+        const author = eventPayload.author;
+        const username = author?.displayName ?? author?.username ?? "anon";
+        const color = isTwitch
+          ? (author?.color || pickColor(username))
+          : pickColor(username);
+
+        const msg: ChatMessage = {
+          user: username,
+          color,
+          msg: eventPayload.text,
+          key: Date.now(),
+          provider: isTwitch ? "twitch" : "kick",
+        };
+
+        setMessages((prev) => [...prev.slice(-(maxMessages - 1)), msg]);
       } catch {
         // ignore non-JSON frames
       }
@@ -47,4 +77,8 @@ export function useRestreamChat(maxMessages = 12) {
   }, [connect]);
 
   return messages;
+}
+
+export function saveOverlayConfig(config: unknown): void {
+  localStorage.setItem("he4rt-overlay-config", JSON.stringify(config));
 }

@@ -74,4 +74,5 @@ export interface ChatMessage {
   msg: string;
   badge?: string;
   key?: number;
+  provider?: "twitch" | "kick";
 }
