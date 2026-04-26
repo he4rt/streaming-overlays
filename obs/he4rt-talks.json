@@ -1,0 +1,286 @@
+{
+  "name": "He4rt Talks",
+  "scene_order": [
+    { "name": "[HT] Pre-Show" },
+    { "name": "[HT] Two Cams" },
+    { "name": "[HT] Screen Share" },
+    { "name": "[HT] Starting" },
+    { "name": "[HT] Ending" },
+    { "name": "[HT] BRB" },
+    { "name": "[HT] Question" },
+    { "name": "[HT] Poll" },
+    { "name": "[HT] Quote" }
+  ],
+  "sources": [
+    {
+      "name": "[HT] Pre-Show Overlay",
+      "versioned_id": "browser_source",
+      "id": "browser_source",
+      "settings": {
+        "url": "http://localhost:5173/preshow",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }"
+      }
+    },
+    {
+      "name": "[HT] Two Cams Overlay",
+      "versioned_id": "browser_source",
+      "id": "browser_source",
+      "settings": {
+        "url": "http://localhost:5173/two-cams",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }"
+      }
+    },
+    {
+      "name": "[HT] Screen Share Overlay",
+      "versioned_id": "browser_source",
+      "id": "browser_source",
+      "settings": {
+        "url": "http://localhost:5173/screen-share",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }"
+      }
+    },
+    {
+      "name": "[HT] Starting Overlay",
+      "versioned_id": "browser_source",
+      "id": "browser_source",
+      "settings": {
+        "url": "http://localhost:5173/starting",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }"
+      }
+    },
+    {
+      "name": "[HT] Ending Overlay",
+      "versioned_id": "browser_source",
+      "id": "browser_source",
+      "settings": {
+        "url": "http://localhost:5173/ending",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }"
+      }
+    },
+    {
+      "name": "[HT] BRB Overlay",
+      "versioned_id": "browser_source",
+      "id": "browser_source",
+      "settings": {
+        "url": "http://localhost:5173/brb",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }"
+      }
+    },
+    {
+      "name": "[HT] Question Overlay",
+      "versioned_id": "browser_source",
+      "id": "browser_source",
+      "settings": {
+        "url": "http://localhost:5173/question",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }"
+      }
+    },
+    {
+      "name": "[HT] Poll Overlay",
+      "versioned_id": "browser_source",
+      "id": "browser_source",
+      "settings": {
+        "url": "http://localhost:5173/poll",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }"
+      }
+    },
+    {
+      "name": "[HT] Quote Overlay",
+      "versioned_id": "browser_source",
+      "id": "browser_source",
+      "settings": {
+        "url": "http://localhost:5173/quote",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }"
+      }
+    },
+    {
+      "name": "[HT] Pre-Show",
+      "versioned_id": "scene",
+      "id": "scene",
+      "settings": {
+        "id_counter": 1,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "[HT] Pre-Show Overlay",
+            "id": 1,
+            "visible": true,
+            "pos": { "x": 0.0, "y": 0.0 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[HT] Two Cams",
+      "versioned_id": "scene",
+      "id": "scene",
+      "settings": {
+        "id_counter": 1,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "[HT] Two Cams Overlay",
+            "id": 1,
+            "visible": true,
+            "pos": { "x": 0.0, "y": 0.0 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[HT] Screen Share",
+      "versioned_id": "scene",
+      "id": "scene",
+      "settings": {
+        "id_counter": 1,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "[HT] Screen Share Overlay",
+            "id": 1,
+            "visible": true,
+            "pos": { "x": 0.0, "y": 0.0 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[HT] Starting",
+      "versioned_id": "scene",
+      "id": "scene",
+      "settings": {
+        "id_counter": 1,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "[HT] Starting Overlay",
+            "id": 1,
+            "visible": true,
+            "pos": { "x": 0.0, "y": 0.0 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[HT] Ending",
+      "versioned_id": "scene",
+      "id": "scene",
+      "settings": {
+        "id_counter": 1,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "[HT] Ending Overlay",
+            "id": 1,
+            "visible": true,
+            "pos": { "x": 0.0, "y": 0.0 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[HT] BRB",
+      "versioned_id": "scene",
+      "id": "scene",
+      "settings": {
+        "id_counter": 1,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "[HT] BRB Overlay",
+            "id": 1,
+            "visible": true,
+            "pos": { "x": 0.0, "y": 0.0 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[HT] Question",
+      "versioned_id": "scene",
+      "id": "scene",
+      "settings": {
+        "id_counter": 1,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "[HT] Question Overlay",
+            "id": 1,
+            "visible": true,
+            "pos": { "x": 0.0, "y": 0.0 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[HT] Poll",
+      "versioned_id": "scene",
+      "id": "scene",
+      "settings": {
+        "id_counter": 1,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "[HT] Poll Overlay",
+            "id": 1,
+            "visible": true,
+            "pos": { "x": 0.0, "y": 0.0 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[HT] Quote",
+      "versioned_id": "scene",
+      "id": "scene",
+      "settings": {
+        "id_counter": 1,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "[HT] Quote Overlay",
+            "id": 1,
+            "visible": true,
+            "pos": { "x": 0.0, "y": 0.0 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        ]
+      }
+    }
+  ]
+}
