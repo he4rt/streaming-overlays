@@ -89,6 +89,15 @@ function LiveChatSidebar() {
 }
 
 export function AdminPanel() {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, []);
+
   const [config, setConfig] = useState<TweakConfig>(() => {
     const stored = localStorage.getItem("he4rt-overlay-config");
     if (stored) {
