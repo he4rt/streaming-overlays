@@ -14,7 +14,6 @@ export function StartingV2({ config }: StartingV2Props) {
     primary,
     primaryDeep,
     accent,
-    bgDeep,
     startingTitle,
     startingSubtitle,
     episodeTitle,

@@ -3,7 +3,7 @@ interface SlidesMockProps {
   primary: string;
 }
 
-export function SlidesMock({ accent }: SlidesMockProps) {
+export function SlidesMock({ accent, primary }: SlidesMockProps) {
   return (
     <div className="relative flex flex-1 items-center justify-center bg-bg-deep p-[60px]">
       <div className="absolute left-6 top-6 font-body text-xs font-bold uppercase tracking-[0.2em]" style={{ color: accent }}>SLIDE 04 / 12</div>
