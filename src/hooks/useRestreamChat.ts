@@ -24,6 +24,7 @@ export function useRestreamChat(maxMessages = 12) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const seenIds = useRef<Set<string>>(new Set());
 
   const connect = useCallback(() => {
     const ws = new WebSocket(WS_URL);
@@ -33,8 +34,15 @@ export function useRestreamChat(maxMessages = 12) {
         const parsed = JSON.parse(event.data as string);
         if (parsed.action !== "event") return;
 
-        const { eventSourceId, eventPayload } = parsed.payload;
+        const { eventSourceId, eventPayload, eventIdentifier } = parsed.payload;
         if (!eventPayload?.text) return;
+
+        if (seenIds.current.has(eventIdentifier)) return;
+        seenIds.current.add(eventIdentifier);
+        if (seenIds.current.size > 200) {
+          const arr = Array.from(seenIds.current);
+          seenIds.current = new Set(arr.slice(-100));
+        }
 
         const isTwitch = eventSourceId === TWITCH_SOURCE_ID;
         const isKick = eventSourceId === KICK_SOURCE_ID;
