@@ -41,7 +41,7 @@ export function AdminPanel() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-bg-deep p-6 text-white">
+    <div className="h-screen overflow-y-auto bg-bg-deep p-6 text-white">
       <div className="mx-auto max-w-2xl">
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
