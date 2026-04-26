@@ -7,6 +7,7 @@ import { BrbScene } from "@/features/brb/BrbScene";
 import { QuestionScene } from "@/features/question/QuestionScene";
 import { PollScene } from "@/features/poll/PollScene";
 import { QuoteScene } from "@/features/quote/QuoteScene";
+import { AdminPanel } from "@/features/admin/AdminPanel";
 
 export function App() {
   return (
@@ -21,6 +22,7 @@ export function App() {
         <Route path="/question" element={<QuestionScene />} />
         <Route path="/poll" element={<PollScene />} />
         <Route path="/quote" element={<QuoteScene />} />
+        <Route path="/admin" element={<AdminPanel />} />
       </Routes>
     </BrowserRouter>
   );
