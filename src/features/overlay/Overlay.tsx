@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import { DEFAULTS } from "@/config/defaults";
+import { useOverlayConfig } from "@/hooks/useOverlayConfig";
 import { ParticleField } from "@/shared/components/ParticleField";
 import { GradientBackground } from "@/shared/components/GradientBackground";
 import { TopBar } from "./TopBar";
@@ -12,7 +12,7 @@ interface OverlayProps {
 }
 
 export function Overlay({ children }: OverlayProps) {
-  const t = DEFAULTS;
+  const t = useOverlayConfig();
   return (
     <GradientBackground primary={t.primary} primaryDeep={t.primaryDeep} accent={t.accent} bgDeep={t.bgDeep}>
       <ParticleField enabled={t.showHeartParticles} color={t.accent} />

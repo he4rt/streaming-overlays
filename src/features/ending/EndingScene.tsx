@@ -1,12 +1,12 @@
 import { Stage } from "@/features/stage/Stage";
-import { DEFAULTS } from "@/config/defaults";
+import { useOverlayConfig } from "@/hooks/useOverlayConfig";
 import { ParticleField } from "@/shared/components/ParticleField";
 import { HeartLogo } from "@/shared/components/HeartLogo";
 import { HeartMark } from "@/shared/components/HeartMark";
 import { SocialIcon } from "@/shared/components/SocialIcon";
 
 export function EndingScene() {
-  const t = DEFAULTS;
+  const t = useOverlayConfig();
   const { primary, accent, bgDeep, endingTitle, endingSubtitle, guest1Name, guest1Handle, guest2Name, guest2Handle } = t;
 
   return (

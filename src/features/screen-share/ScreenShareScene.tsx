@@ -2,10 +2,10 @@ import { Stage } from "@/features/stage/Stage";
 import { Overlay } from "@/features/overlay/Overlay";
 import { ScreenShare } from "./ScreenShare";
 import { MiniCamera } from "@/shared/components/MiniCamera";
-import { DEFAULTS } from "@/config/defaults";
+import { useOverlayConfig } from "@/hooks/useOverlayConfig";
 
 export function ScreenShareScene() {
-  const t = DEFAULTS;
+  const t = useOverlayConfig();
   const camAreaLeft = 30;
   const camAreaTop = 130;
   const camAreaRight = t.showChat ? 480 : 30;

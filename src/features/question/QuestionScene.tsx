@@ -1,10 +1,10 @@
 import { Stage } from "@/features/stage/Stage";
-import { DEFAULTS } from "@/config/defaults";
+import { useOverlayConfig } from "@/hooks/useOverlayConfig";
 import { ParticleField } from "@/shared/components/ParticleField";
 import { CornerBrackets } from "@/shared/components/CornerBrackets";
 
 export function QuestionScene() {
-  const t = DEFAULTS;
+  const t = useOverlayConfig();
   const {
     primary,
     accent,

@@ -1,15 +1,13 @@
-import { useSearchParams } from "react-router-dom";
 import { Stage } from "@/features/stage/Stage";
-import { DEFAULTS } from "@/config/defaults";
+import { useOverlayConfig } from "@/hooks/useOverlayConfig";
 import { ParticleField } from "@/shared/components/ParticleField";
 import { QuoteEditorial } from "./QuoteEditorial";
 import { QuoteSerif } from "./QuoteSerif";
 import { QuoteMinimal } from "./QuoteMinimal";
 
 export function QuoteScene() {
-  const [params] = useSearchParams();
-  const variant = params.get("variant") ?? DEFAULTS.quoteVariant ?? "editorial";
-  const t = DEFAULTS;
+  const t = useOverlayConfig();
+  const variant = t.quoteVariant;
 
   const Variant =
     variant === "serif"

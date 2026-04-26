@@ -1,6 +1,5 @@
-import { useSearchParams } from "react-router-dom";
 import { Stage } from "@/features/stage/Stage";
-import { DEFAULTS } from "@/config/defaults";
+import { useOverlayConfig } from "@/hooks/useOverlayConfig";
 import { ParticleField } from "@/shared/components/ParticleField";
 import { StartingV1 } from "./StartingV1";
 import { StartingV2 } from "./StartingV2";
@@ -8,9 +7,8 @@ import { StartingV3 } from "./StartingV3";
 import { StartingV4 } from "./StartingV4";
 
 export function StartingScene() {
-  const [params] = useSearchParams();
-  const variant = params.get("variant") ?? "v1";
-  const t = DEFAULTS;
+  const t = useOverlayConfig();
+  const variant = t.startingVariant;
 
   const Scene =
     variant === "v2"

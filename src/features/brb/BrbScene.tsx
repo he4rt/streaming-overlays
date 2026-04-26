@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { Stage } from "@/features/stage/Stage";
-import { DEFAULTS } from "@/config/defaults";
+import { useOverlayConfig } from "@/hooks/useOverlayConfig";
 import { HeartMark } from "@/shared/components/HeartMark";
 import { BigChatFeed } from "@/shared/chat/BigChatFeed";
 
 export function BrbScene() {
-  const t = DEFAULTS;
+  const t = useOverlayConfig();
   const { primary, accent, bgDeep, bgPanel, brbTrack } = t;
 
   const [elapsed, setElapsed] = useState(0);
