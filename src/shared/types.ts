@@ -61,6 +61,7 @@ export interface TweakConfig {
   tickerText: string;
   chatTitle: string;
   useLiveChat: boolean;
+  showCameraPlaceholders: boolean;
 }
 
 export interface PollOption {

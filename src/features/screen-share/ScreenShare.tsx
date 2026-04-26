@@ -12,7 +12,7 @@ interface ScreenShareProps {
 }
 
 export function ScreenShare({ config, x, y, w, h }: ScreenShareProps) {
-  const { accent, primary, screenContent, screenTitle } = config;
+  const { accent, primary, screenContent, screenTitle, showCameraPlaceholders } = config;
   return (
     <div style={{ position: 'absolute', left: x, top: y, width: w, height: h }}>
       <div style={{
@@ -23,10 +23,11 @@ export function ScreenShare({ config, x, y, w, h }: ScreenShareProps) {
       }} />
       <div style={{
         position: 'absolute', inset: 0, borderRadius: 16, overflow: 'hidden',
-        background: '#0d1117',
+        background: showCameraPlaceholders ? '#0d1117' : '#00FF00',
         boxShadow: '0 30px 80px rgba(0,0,0,0.6)',
         display: 'flex', flexDirection: 'column',
       }}>
+        {showCameraPlaceholders && (<>
         {/* window chrome */}
         <div style={{
           height: 38, background: '#161b22',
@@ -65,6 +66,7 @@ export function ScreenShare({ config, x, y, w, h }: ScreenShareProps) {
         {screenContent === 'code' && <CodeMock accent={accent} primary={primary} />}
         {screenContent === 'browser' && <BrowserMock accent={accent} primary={primary} />}
         {screenContent === 'slides' && <SlidesMock accent={accent} primary={primary} />}
+        </>)}
       </div>
     </div>
   );

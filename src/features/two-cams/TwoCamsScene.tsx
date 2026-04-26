@@ -19,9 +19,9 @@ export function TwoCamsScene() {
     <Stage>
       <Overlay>
         <CameraFrame x={camAreaLeft} y={camAreaTop} w={camW} h={camH}
-          name={t.guest1Name} role={t.guest1Role} handle={t.guest1Handle} side="left" primary={t.primary} accent={t.accent} />
+          name={t.guest1Name} role={t.guest1Role} handle={t.guest1Handle} side="left" primary={t.primary} accent={t.accent} showPlaceholder={t.showCameraPlaceholders} />
         <CameraFrame x={camAreaLeft + camW + gap} y={camAreaTop} w={camW} h={camH}
-          name={t.guest2Name} role={t.guest2Role} handle={t.guest2Handle} side="right" primary={t.primary} accent={t.accent} />
+          name={t.guest2Name} role={t.guest2Role} handle={t.guest2Handle} side="right" primary={t.primary} accent={t.accent} showPlaceholder={t.showCameraPlaceholders} />
       </Overlay>
     </Stage>
   );

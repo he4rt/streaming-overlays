@@ -9,9 +9,10 @@ interface CameraFrameProps {
   side: "left" | "right";
   primary: string;
   accent: string;
+  showPlaceholder?: boolean;
 }
 
-export function CameraFrame({ x, y, w, h, name, role, handle, side, primary, accent }: CameraFrameProps) {
+export function CameraFrame({ x, y, w, h, name, role, handle, side, primary, accent, showPlaceholder = true }: CameraFrameProps) {
   return (
     <div style={{
       position: 'absolute', left: x, top: y, width: w, height: h,
@@ -26,9 +27,10 @@ export function CameraFrame({ x, y, w, h, name, role, handle, side, primary, acc
       {/* camera content (placeholder) */}
       <div style={{
         position: 'absolute', inset: 0, borderRadius: 16, overflow: 'hidden',
-        background: `linear-gradient(135deg, #2a1850 0%, #0b0418 100%)`,
+        background: showPlaceholder ? `linear-gradient(135deg, #2a1850 0%, #0b0418 100%)` : '#00FF00',
         boxShadow: `0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(168,85,247,0.25) inset`,
       }}>
+        {showPlaceholder && (<>
         {/* simulated camera feed gradient + soft circle */}
         <div style={{
           position: 'absolute', inset: 0,
@@ -52,6 +54,7 @@ export function CameraFrame({ x, y, w, h, name, role, handle, side, primary, acc
             CAM {side === 'left' ? '01' : '02'}
           </div>
         </div>
+        </>)}
         {/* corner brackets */}
         {[
           { top: 14, left: 14, borders: ['top', 'left'] },

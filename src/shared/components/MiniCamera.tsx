@@ -4,9 +4,10 @@ interface MiniCameraProps {
   side: "left" | "right";
   primary: string;
   accent: string;
+  showPlaceholder?: boolean;
 }
 
-export function MiniCamera({ name, role, side, primary, accent }: MiniCameraProps) {
+export function MiniCamera({ name, role, side, primary, accent, showPlaceholder = true }: MiniCameraProps) {
   return (
     <div style={{
       width: 280, height: 200, position: 'relative',
@@ -18,9 +19,10 @@ export function MiniCamera({ name, role, side, primary, accent }: MiniCameraProp
       }} />
       <div style={{
         position: 'absolute', inset: 0, borderRadius: 12, overflow: 'hidden',
-        background: `linear-gradient(135deg, #2a1850 0%, #0b0418 100%)`,
+        background: showPlaceholder ? `linear-gradient(135deg, #2a1850 0%, #0b0418 100%)` : '#00FF00',
         boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
       }}>
+        {showPlaceholder && (<>
         <div style={{
           position: 'absolute', inset: 0,
           background: side === 'left'
@@ -34,6 +36,7 @@ export function MiniCamera({ name, role, side, primary, accent }: MiniCameraProp
         }}>
           CAM {side === 'left' ? '01' : '02'}
         </div>
+        </>)}
         {/* corner brackets */}
         {[
           { top: 8, left: 8, borders: ['top', 'left'] },

@@ -9,7 +9,7 @@ export const DEFAULTS: TweakConfig = {
   showLiveBadge: true,
   showHeartParticles: true,
   scene: "two-cams",
-  startingVariant: "v1",
+  startingVariant: "v2",
   quoteVariant: "editorial",
   quoteText:
     "A melhor tecnologia é aquela que some — você só percebe que ela existe quando para de funcionar.",
@@ -66,4 +66,5 @@ export const DEFAULTS: TweakConfig = {
     "PRÓXIMO BLOCO · pergunte ao vivo em discord.app/he4rt   ●   Use #he4rttalks no X   ●   Inscreva-se no canal pra não perder",
   chatTitle: "CHAT AO VIVO",
   useLiveChat: false,
+  showCameraPlaceholders: true,
 };

@@ -22,6 +22,7 @@ export function StartingV3({ config }: StartingV3Props) {
     guest1Role,
     guest2Name,
     guest2Role,
+    showCameraPlaceholders,
   } = config;
 
   const { mm, ss } = useCountdown(startingCountdownSeconds);
@@ -76,7 +77,7 @@ export function StartingV3({ config }: StartingV3Props) {
           <div style={{
             fontFamily: "'Russo One', sans-serif",
             fontSize: 180, color: "#fff", lineHeight: 1,
-            letterSpacing: "-0.02em",
+            letterSpacing: "-0.02em", fontVariantNumeric: "tabular-nums",
             display: "flex", alignItems: "baseline", gap: 8,
           }}>
             <span>{mm}</span>
@@ -118,17 +119,19 @@ export function StartingV3({ config }: StartingV3Props) {
           {[{ name: guest1Name, role: guest1Role, color: accent }, { name: guest2Name, role: guest2Role, color: primary }].map((g, i) => (
             <div key={i} style={{
               aspectRatio: "3/4",
-              background: `linear-gradient(160deg, ${g.color}88 0%, ${g.color}33 100%)`,
+              background: showCameraPlaceholders ? `linear-gradient(160deg, ${g.color}88 0%, ${g.color}33 100%)` : '#00FF00',
               borderRadius: 16, border: `1px solid ${accent}44`,
               padding: 20, display: "flex", flexDirection: "column", justifyContent: "flex-end",
               position: "relative", overflow: "hidden",
               animation: `floatY 5s ease-in-out ${i * 0.6}s infinite`,
             }}>
               {/* placeholder portrait blob */}
+              {showCameraPlaceholders && (
               <div style={{
                 position: "absolute", top: 0, left: 0, right: 0, bottom: 80,
                 background: `radial-gradient(circle at 50% 60%, rgba(255,255,255,0.2) 0%, transparent 60%)`,
               }} />
+              )}
               <div style={{
                 position: "absolute", top: 16, right: 16,
                 width: 32, height: 32, borderRadius: "50%",

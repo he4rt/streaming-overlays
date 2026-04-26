@@ -18,6 +18,7 @@ export function QuestionScene() {
     guest2Role,
     episodeNumber,
     episodeTitle,
+    showCameraPlaceholders,
   } = t;
 
   return (
@@ -137,7 +138,7 @@ export function QuestionScene() {
           ].map((g, i) => (
             <div key={i} style={{
               flex: 1, height: 160,
-              background: `linear-gradient(160deg, ${primary}33 0%, ${primary}11 100%)`,
+              background: showCameraPlaceholders ? `linear-gradient(160deg, ${primary}33 0%, ${primary}11 100%)` : '#00FF00',
               borderRadius: 12,
               border: `1px solid ${accent}44`,
               position: "relative", overflow: "hidden",

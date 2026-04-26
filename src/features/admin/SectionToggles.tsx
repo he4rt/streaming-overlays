@@ -12,6 +12,7 @@ const toggleFields: { key: keyof TweakConfig; label: string }[] = [
   { key: "showTicker", label: "Ticker" },
   { key: "showLiveBadge", label: "Live Badge" },
   { key: "showHeartParticles", label: "Heart Particles" },
+  { key: "showCameraPlaceholders", label: "Camera Placeholders" },
 ];
 
 export function SectionToggles({ config, update }: SectionProps) {

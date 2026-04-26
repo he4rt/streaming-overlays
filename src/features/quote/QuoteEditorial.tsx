@@ -6,7 +6,7 @@ interface QuoteEditorialProps {
 }
 
 export function QuoteEditorial({ config }: QuoteEditorialProps) {
-  const { primary, accent, quoteText, quoteAuthor, quoteAuthorRole, quoteContext, episodeNumber } = config;
+  const { primary, accent, quoteText, quoteAuthor, quoteAuthorRole, quoteContext, episodeNumber, showCameraPlaceholders } = config;
 
   return (
     <div style={{ position: "absolute", inset: 0, overflow: "hidden", display: "flex" }}>
@@ -92,16 +92,18 @@ export function QuoteEditorial({ config }: QuoteEditorialProps) {
         {/* portrait placeholder */}
         <div style={{
           width: "100%", maxWidth: 480, aspectRatio: "3/4",
-          background: `linear-gradient(160deg, ${primary}66 0%, ${accent}33 100%)`,
+          background: showCameraPlaceholders ? `linear-gradient(160deg, ${primary}66 0%, ${accent}33 100%)` : '#00FF00',
           borderRadius: 24, position: "relative", overflow: "hidden",
           border: `1px solid ${accent}44`,
           boxShadow: "0 30px 80px rgba(0,0,0,0.5)",
         }}>
           {/* portrait blob */}
+          {showCameraPlaceholders && (
           <div style={{
             position: "absolute", inset: 0,
             background: "radial-gradient(circle at 50% 45%, rgba(255,255,255,0.25) 0%, transparent 55%)",
           }} />
+          )}
           {/* corner brackets */}
           {(["tl", "tr", "br", "bl"] as const).map((c) => {
             const posMap: Record<string, React.CSSProperties> = {
