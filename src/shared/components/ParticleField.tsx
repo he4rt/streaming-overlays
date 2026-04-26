@@ -27,18 +27,17 @@ export function ParticleField({ enabled = true, color = "#A855F7" }: ParticleFie
     const draw = () => {
       ctx.clearRect(0, 0, 1920, 1080);
       ctx.fillStyle = color;
-      for (const p of particles) {
+      particles.forEach((p) => {
         p.x += p.vx;
         p.y += p.vy;
-        if (p.x < 0) p.x = 1920;
-        if (p.x > 1920) p.x = 0;
-        if (p.y < 0) p.y = 1080;
-        if (p.y > 1080) p.y = 0;
+        if (p.x < 0) p.x = 1920; if (p.x > 1920) p.x = 0;
+        if (p.y < 0) p.y = 1080; if (p.y > 1080) p.y = 0;
         ctx.globalAlpha = p.a;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
-      }
+      });
+      // connecting lines
       ctx.lineWidth = 0.5;
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -62,5 +61,13 @@ export function ParticleField({ enabled = true, color = "#A855F7" }: ParticleFie
   }, [enabled, color]);
 
   if (!enabled) return null;
-  return <canvas ref={canvasRef} className="pointer-events-none absolute inset-0 h-full w-full opacity-55" />;
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'absolute', inset: 0, width: '100%', height: '100%',
+        opacity: 0.55, pointerEvents: 'none',
+      }}
+    />
+  );
 }

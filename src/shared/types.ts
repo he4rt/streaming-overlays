@@ -33,6 +33,14 @@ export interface TweakConfig {
   startingCountdownSeconds: number;
   endingTitle: string;
   endingSubtitle: string;
+  nextEpisodeNumber: string;
+  nextEpisodeTitle: string;
+  nextEpisodeGuest: string;
+  nextEpisodeDate: string;
+  endStatViewers: number;
+  endStatMessages: number;
+  endStatSubs: number;
+  endStatQuestions: number;
   primary: string;
   primaryDeep: string;
   accent: string;

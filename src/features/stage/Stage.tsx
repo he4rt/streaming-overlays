@@ -8,8 +8,16 @@ interface StageProps {
 export function Stage({ children }: StageProps) {
   const scale = useStageScale();
   return (
-    <div className="fixed inset-0 flex items-center justify-center overflow-hidden bg-black">
-      <div className="relative shrink-0" style={{ width: 1920, height: 1080, transform: `scale(${scale})`, transformOrigin: "center center" }}>
+    <div style={{
+      position: 'fixed', inset: 0, background: '#000',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      overflow: 'hidden',
+    }}>
+      <div style={{
+        width: 1920, height: 1080, position: 'relative',
+        transform: `scale(${scale})`, transformOrigin: 'center center',
+        flexShrink: 0,
+      }}>
         {children}
       </div>
     </div>

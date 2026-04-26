@@ -14,9 +14,19 @@ interface SocialBarProps {
 
 export function SocialBar({ accent }: SocialBarProps) {
   return (
-    <div className="flex gap-3.5">
+    <div style={{ display: 'flex', gap: 14 }}>
       {SOCIALS.map((s, i) => (
-        <div key={i} className="flex items-center gap-2.5 rounded-[10px] border border-accent/25 bg-bg-deep/[0.78] px-3.5 py-2.5 font-body text-[13px] font-semibold text-white backdrop-blur-[10px]">
+        <div key={i} style={{
+          display: 'flex', alignItems: 'center', gap: 10,
+          background: 'rgba(11,4,24,0.78)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          border: `1px solid rgba(168,85,247,0.25)`,
+          borderRadius: 10,
+          padding: '10px 14px',
+          fontFamily: 'Inter, sans-serif', fontSize: 13,
+          color: '#fff', fontWeight: 600,
+        }}>
           <SocialIcon kind={s.icon} color={accent} />
           <span>{s.label}</span>
         </div>

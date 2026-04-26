@@ -5,19 +5,30 @@ interface BrowserMockProps {
 
 export function BrowserMock({ primary }: BrowserMockProps) {
   return (
-    <div className="flex flex-1 flex-col bg-white">
-      <div className="flex h-[42px] items-center gap-3 border-b border-[#d0d7de] bg-[#f6f8fa] px-4">
-        <div className="flex gap-1 text-[#8b949e]"><span>←</span><span>→</span><span>⟳</span></div>
-        <div className="flex-1 rounded-md border border-[#d0d7de] bg-white px-3 py-1.5 font-body text-xs text-[#57606a]">🔒 he4rtdevs.com.br/comunidade</div>
-      </div>
-      <div className="flex flex-1 flex-col gap-6 p-[60px] font-body">
-        <div className="font-heading text-[56px] leading-[1.05] text-[#1f2328]">
-          A maior comunidade<br /><span style={{ color: primary }}>dev do Brasil</span>
+    <div style={{ flex: 1, background: '#fff', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ height: 42, background: '#f6f8fa', borderBottom: '1px solid #d0d7de', display: 'flex', alignItems: 'center', padding: '0 16px', gap: 12 }}>
+        <div style={{ display: 'flex', gap: 4, color: '#8b949e' }}>
+          <span>←</span><span>→</span><span>⟳</span>
         </div>
-        <div className="max-w-[600px] text-lg text-[#57606a]">Mais de 80 mil devs trocando código, carreira e cervejas no nosso Discord.</div>
-        <div className="flex gap-3">
-          <div className="rounded-[10px] px-7 py-3.5 text-base font-bold text-white" style={{ background: primary }}>Entrar no Discord</div>
-          <div className="rounded-[10px] border-2 px-[26px] py-3 text-base font-bold" style={{ borderColor: primary, color: primary }}>GitHub</div>
+        <div style={{ flex: 1, background: '#fff', border: '1px solid #d0d7de', borderRadius: 6, padding: '6px 12px', fontSize: 12, color: '#57606a', fontFamily: 'Inter, sans-serif' }}>
+          🔒 he4rtdevs.com.br/comunidade
+        </div>
+      </div>
+      <div style={{ flex: 1, padding: 60, fontFamily: 'Inter, sans-serif', display: 'flex', flexDirection: 'column', gap: 24 }}>
+        <div style={{ fontFamily: "'Russo One', sans-serif", fontSize: 56, color: '#1f2328', lineHeight: 1.05 }}>
+          A maior comunidade<br />
+          <span style={{ color: primary }}>dev do Brasil</span>
+        </div>
+        <div style={{ fontSize: 18, color: '#57606a', maxWidth: 600 }}>
+          Mais de 80 mil devs trocando código, carreira e cervejas no nosso Discord.
+        </div>
+        <div style={{ display: 'flex', gap: 12 }}>
+          <div style={{ background: primary, color: '#fff', padding: '14px 28px', borderRadius: 10, fontWeight: 700, fontSize: 16 }}>
+            Entrar no Discord
+          </div>
+          <div style={{ background: 'transparent', border: `2px solid ${primary}`, color: primary, padding: '12px 26px', borderRadius: 10, fontWeight: 700, fontSize: 16 }}>
+            GitHub
+          </div>
         </div>
       </div>
     </div>

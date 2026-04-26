@@ -10,31 +10,69 @@ interface LowerThirdProps {
 export function LowerThird({ config }: LowerThirdProps) {
   const { primary, accent, date, time } = config;
   return (
-    <div className="pointer-events-none absolute bottom-[30px] left-[30px] right-[480px] flex h-[110px] items-center gap-6">
+    <div style={{
+      position: 'absolute', left: 30, bottom: 30, right: 480,
+      height: 110,
+      display: 'flex', alignItems: 'center', gap: 24,
+      pointerEvents: 'none',
+    }}>
       {/* logo block */}
-      <div className="flex flex-col gap-2.5 rounded-[14px] border border-accent/30 bg-bg-deep/[0.78] px-6 py-3.5 backdrop-blur-[10px]">
+      <div style={{
+        display: 'flex', flexDirection: 'column', gap: 10,
+        background: 'rgba(11,4,24,0.78)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        border: `1px solid rgba(168,85,247,0.3)`,
+        borderRadius: 14,
+        padding: '14px 24px',
+      }}>
         <HeartLogo size={0.8} purple={accent} />
-        <div className="mt-0.5 flex items-center gap-4">
-          <div className="h-1 w-15 rounded-sm" style={{ background: `linear-gradient(90deg, ${primary}, ${accent})` }} />
-          <div className="flex items-center gap-2 font-heading text-base tracking-[0.04em] text-white">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 2 }}>
+          <div style={{
+            height: 4, width: 60,
+            background: `linear-gradient(90deg, ${primary}, ${accent})`,
+            borderRadius: 2,
+          }} />
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            fontFamily: "'Russo One', sans-serif", fontSize: 16, color: '#fff',
+            letterSpacing: '0.04em',
+          }}>
             <Clock /> {date}
           </div>
-          <div className="flex items-center gap-2 font-heading text-base tracking-[0.04em] text-white">
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            fontFamily: "'Russo One', sans-serif", fontSize: 16, color: '#fff',
+            letterSpacing: '0.04em',
+          }}>
             <Clock /> {time}
           </div>
         </div>
       </div>
 
-      {/* socials */}
-      <div className="flex flex-1 justify-end gap-3.5">
+      {/* socials block */}
+      <div style={{
+        flex: 1,
+        display: 'flex', justifyContent: 'flex-end', gap: 14,
+      }}>
         {[
-          { icon: "ig" as const, label: "@he4rtdevs" },
-          { icon: "in" as const, label: "/he4rt" },
-          { icon: "gh" as const, label: "/he4rt-developers" },
-          { icon: "x" as const, label: "@he4rtdevs" },
-          { icon: "yt" as const, label: "/@he4rtdevs" },
+          { icon: 'ig' as const, label: '@he4rtdevs' },
+          { icon: 'in' as const, label: '/he4rt' },
+          { icon: 'gh' as const, label: '/he4rt-developers' },
+          { icon: 'x' as const,  label: '@he4rtdevs' },
+          { icon: 'yt' as const, label: '/@he4rtdevs' },
         ].map((s, i) => (
-          <div key={i} className="flex items-center gap-2.5 rounded-[10px] border border-accent/25 bg-bg-deep/[0.78] px-3.5 py-2.5 font-body text-[13px] font-semibold text-white backdrop-blur-[10px]">
+          <div key={i} style={{
+            display: 'flex', alignItems: 'center', gap: 10,
+            background: 'rgba(11,4,24,0.78)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            border: `1px solid rgba(168,85,247,0.25)`,
+            borderRadius: 10,
+            padding: '10px 14px',
+            fontFamily: 'Inter, sans-serif', fontSize: 13,
+            color: '#fff', fontWeight: 600,
+          }}>
             <SocialIcon kind={s.icon} color={accent} />
             <span>{s.label}</span>
           </div>

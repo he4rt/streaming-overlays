@@ -12,19 +12,39 @@ interface EpisodeCardProps {
 
 export function EpisodeCard({ episodeNumber, episodeTitle, topic, date, time, primary, accent }: EpisodeCardProps) {
   return (
-    <div className="flex items-center gap-4.5 rounded-2xl border border-accent/25 bg-bg-deep/70 px-7 py-4.5 backdrop-blur-[14px]">
-      <div className="rounded-lg px-4 py-2 font-heading text-lg tracking-[0.06em] text-white"
-        style={{ background: `linear-gradient(135deg, ${primary}, ${accent})`, boxShadow: `0 8px 24px ${primary}55` }}>
-        {episodeNumber}
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 18,
+      background: 'rgba(11,4,24,0.7)',
+      backdropFilter: 'blur(14px)',
+      WebkitBackdropFilter: 'blur(14px)',
+      border: `1px solid ${accent}44`,
+      borderRadius: 16,
+      padding: '18px 28px',
+    }}>
+      <div style={{
+        background: `linear-gradient(135deg, ${primary}, ${accent})`,
+        padding: '8px 16px', borderRadius: 8,
+        fontFamily: "'Russo One', sans-serif",
+        fontSize: 18, color: '#fff', letterSpacing: '0.06em',
+      }}>{episodeNumber}</div>
+      <div style={{ textAlign: 'left' }}>
+        <div style={{
+          fontFamily: "'Russo One', sans-serif",
+          fontSize: 30, color: '#fff', lineHeight: 1.1,
+        }}>{episodeTitle}</div>
+        <div style={{
+          fontFamily: 'Inter, sans-serif', fontSize: 14, color: accent,
+          letterSpacing: '0.12em', marginTop: 6, fontWeight: 600,
+          textTransform: 'uppercase',
+        }}>{topic}</div>
       </div>
-      <div className="text-left">
-        <div className="font-heading text-[30px] leading-[1.1] text-white">{episodeTitle}</div>
-        <div className="mt-1.5 font-body text-sm font-semibold uppercase tracking-[0.12em]" style={{ color: accent }}>{topic}</div>
-      </div>
-      <div className="mx-2 h-12 w-px" style={{ background: `${accent}33` }} />
-      <div className="flex flex-col gap-1 font-body text-sm text-white">
-        <div className="flex items-center gap-2"><Clock /> {date}</div>
-        <div className="flex items-center gap-2"><Clock /> {time}</div>
+      <div style={{ width: 1, height: 50, background: `${accent}33`, margin: '0 8px' }} />
+      <div style={{
+        fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#fff',
+        display: 'flex', flexDirection: 'column', gap: 4,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}><Clock /> {date}</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}><Clock /> {time}</div>
       </div>
     </div>
   );

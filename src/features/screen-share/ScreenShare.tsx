@@ -14,29 +14,57 @@ interface ScreenShareProps {
 export function ScreenShare({ config, x, y, w, h }: ScreenShareProps) {
   const { accent, primary, screenContent, screenTitle } = config;
   return (
-    <div className="absolute" style={{ left: x, top: y, width: w, height: h }}>
-      <div className="absolute -inset-[3px] rounded-[18px] opacity-90"
-        style={{ background: `linear-gradient(135deg, ${accent} 0%, ${primary} 50%, ${accent} 100%)` }} />
-      <div className="absolute inset-0 flex flex-col overflow-hidden rounded-2xl bg-[#0d1117]"
-        style={{ boxShadow: "0 30px 80px rgba(0,0,0,0.6)" }}>
+    <div style={{ position: 'absolute', left: x, top: y, width: w, height: h }}>
+      <div style={{
+        position: 'absolute', inset: -3,
+        background: `linear-gradient(135deg, ${accent} 0%, ${primary} 50%, ${accent} 100%)`,
+        borderRadius: 18,
+        opacity: 0.9,
+      }} />
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: 16, overflow: 'hidden',
+        background: '#0d1117',
+        boxShadow: '0 30px 80px rgba(0,0,0,0.6)',
+        display: 'flex', flexDirection: 'column',
+      }}>
         {/* window chrome */}
-        <div className="flex h-[38px] items-center gap-2 border-b border-[#30363d] bg-[#161b22] px-4">
-          <div className="flex gap-1.5">
-            <span className="h-3 w-3 rounded-full bg-[#ff5f56]" />
-            <span className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
-            <span className="h-3 w-3 rounded-full bg-[#27c93f]" />
+        <div style={{
+          height: 38, background: '#161b22',
+          display: 'flex', alignItems: 'center', padding: '0 16px',
+          borderBottom: '1px solid #30363d',
+          gap: 8,
+        }}>
+          <div style={{ display: 'flex', gap: 6 }}>
+            <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#ff5f56' }} />
+            <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#ffbd2e' }} />
+            <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#27c93f' }} />
           </div>
-          <div className="flex-1 text-center font-body text-[13px] font-medium text-[#8b949e]">{screenTitle}</div>
-          <div className="flex items-center gap-1.5 rounded-md border px-2.5 py-1 font-body text-[11px] font-bold tracking-[0.1em]"
-            style={{ background: `rgba(168,85,247,0.15)`, borderColor: `${accent}66`, color: accent }}>
-            <span className="h-1.5 w-1.5 animate-[pulse_1.4s_ease-in-out_infinite] rounded-full" style={{ background: accent }} />
+          <div style={{
+            flex: 1, textAlign: 'center',
+            fontFamily: 'Inter, sans-serif', fontSize: 13,
+            color: '#8b949e', fontWeight: 500,
+          }}>
+            {screenTitle}
+          </div>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 6,
+            background: 'rgba(168,85,247,0.15)',
+            border: `1px solid ${accent}66`,
+            padding: '4px 10px', borderRadius: 6,
+            fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 700,
+            color: accent, letterSpacing: '0.1em',
+          }}>
+            <span style={{
+              width: 6, height: 6, borderRadius: '50%', background: accent,
+              animation: 'pulse 1.4s ease-in-out infinite',
+            }} />
             COMPARTILHANDO
           </div>
         </div>
         {/* content */}
-        {screenContent === "code" && <CodeMock accent={accent} primary={primary} />}
-        {screenContent === "browser" && <BrowserMock accent={accent} primary={primary} />}
-        {screenContent === "slides" && <SlidesMock accent={accent} primary={primary} />}
+        {screenContent === 'code' && <CodeMock accent={accent} primary={primary} />}
+        {screenContent === 'browser' && <BrowserMock accent={accent} primary={primary} />}
+        {screenContent === 'slides' && <SlidesMock accent={accent} primary={primary} />}
       </div>
     </div>
   );

@@ -5,19 +5,29 @@ interface SlidesMockProps {
 
 export function SlidesMock({ accent, primary }: SlidesMockProps) {
   return (
-    <div className="relative flex flex-1 items-center justify-center bg-bg-deep p-[60px]">
-      <div className="absolute left-6 top-6 font-body text-xs font-bold uppercase tracking-[0.2em]" style={{ color: accent }}>SLIDE 04 / 12</div>
-      <div className="flex max-w-[800px] flex-col gap-6">
-        <div className="h-1 w-20 rounded-sm" style={{ background: `linear-gradient(90deg, ${primary}, ${accent})` }} />
-        <div className="font-heading text-[64px] leading-[1.05] text-white">
+    <div style={{ flex: 1, background: '#0b0418', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 60, position: 'relative' }}>
+      <div style={{
+        position: 'absolute', top: 24, left: 24,
+        fontFamily: 'Inter, sans-serif', fontSize: 12,
+        color: accent, letterSpacing: '0.2em', fontWeight: 700,
+      }}>SLIDE 04 / 12</div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 800 }}>
+        <div style={{ height: 4, width: 80, background: `linear-gradient(90deg, ${primary}, ${accent})`, borderRadius: 2 }} />
+        <div style={{ fontFamily: "'Russo One', sans-serif", fontSize: 64, color: '#fff', lineHeight: 1.05 }}>
           Por que comunidade<br />importa em <span style={{ color: accent }}>2026?</span>
         </div>
-        <div className="font-body text-[22px] leading-[1.4] text-white/70">Networking, mentoria e oportunidades reais — não dá pra escalar sozinho.</div>
-        <div className="mt-4 flex gap-8">
-          {[{ n: "80K+", l: "membros" }, { n: "15K", l: "mensagens/dia" }, { n: "120+", l: "eventos/ano" }].map((s, i) => (
+        <div style={{ fontSize: 22, color: 'rgba(255,255,255,0.7)', fontFamily: 'Inter, sans-serif', lineHeight: 1.4 }}>
+          Networking, mentoria e oportunidades reais — não dá pra escalar sozinho.
+        </div>
+        <div style={{ display: 'flex', gap: 32, marginTop: 16 }}>
+          {[
+            { n: '80K+', l: 'membros' },
+            { n: '15K', l: 'mensagens/dia' },
+            { n: '120+', l: 'eventos/ano' },
+          ].map((s, i) => (
             <div key={i}>
-              <div className="font-heading text-[38px]" style={{ color: accent }}>{s.n}</div>
-              <div className="font-body text-[13px] font-semibold uppercase tracking-[0.1em] text-white/60">{s.l}</div>
+              <div style={{ fontFamily: "'Russo One', sans-serif", fontSize: 38, color: accent }}>{s.n}</div>
+              <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: 'rgba(255,255,255,0.6)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600 }}>{s.l}</div>
             </div>
           ))}
         </div>

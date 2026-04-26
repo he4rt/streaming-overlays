@@ -5,8 +5,16 @@ interface LiveBadgeProps {
 
 export function LiveBadge({ label = "LIVE", color = "#EF4444" }: LiveBadgeProps) {
   return (
-    <div className="inline-flex items-center gap-2 rounded-md px-4 py-2 font-body text-xs font-extrabold tracking-[0.15em] text-white" style={{ background: color }}>
-      <span className="h-2 w-2 animate-[pulse_1.4s_ease-in-out_infinite] rounded-full bg-white" />
+    <div style={{
+      display: 'inline-flex', alignItems: 'center', gap: 8,
+      background: color, padding: '6px 14px', borderRadius: 6,
+      fontFamily: 'Inter, sans-serif', fontSize: 12, fontWeight: 800,
+      color: '#fff', letterSpacing: '0.15em',
+    }}>
+      <span style={{
+        width: 7, height: 7, borderRadius: '50%', background: '#fff',
+        animation: 'pulse 1.4s ease-in-out infinite',
+      }} />
       {label}
     </div>
   );
