@@ -87,12 +87,14 @@ export function StartingV2({ config }: StartingV2Props) {
             position: "absolute", inset: 0,
             fontFamily: "'Russo One', sans-serif",
             fontSize: 320, lineHeight: 0.9, letterSpacing: "-0.02em",
+            fontVariantNumeric: "tabular-nums",
             color: "transparent", WebkitTextStroke: `2px ${accent}55`,
             transform: "translate(8px, 8px)",
           }}>{mm}:{ss}</div>
           <div style={{
             fontFamily: "'Russo One', sans-serif",
             fontSize: 320, lineHeight: 0.9, letterSpacing: "-0.02em",
+            fontVariantNumeric: "tabular-nums",
             color: "#fff",
             background: `linear-gradient(180deg, #fff 0%, ${accent} 100%)`,
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",

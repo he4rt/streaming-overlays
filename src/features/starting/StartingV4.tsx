@@ -93,6 +93,7 @@ export function StartingV4({ config }: StartingV4Props) {
           <div style={{
             fontFamily: "'Russo One', sans-serif",
             fontSize: 130, color: "#fff", lineHeight: 1, letterSpacing: "-0.02em",
+            fontVariantNumeric: "tabular-nums",
             display: "flex", alignItems: "baseline", gap: 6,
           }}>
             <span>{mm}</span>

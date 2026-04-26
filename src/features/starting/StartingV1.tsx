@@ -78,7 +78,7 @@ export function StartingV1({ config }: StartingV1Props) {
         <div style={{
           fontFamily: "'Russo One', sans-serif",
           fontSize: 220, color: "#fff", lineHeight: 1,
-          letterSpacing: "0.04em",
+          letterSpacing: "0.04em", fontVariantNumeric: "tabular-nums",
           textShadow: `0 0 60px ${accent}88, 0 0 120px ${primary}55`,
           display: "flex", alignItems: "center", gap: 30,
         }}>
