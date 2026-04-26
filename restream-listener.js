@@ -1,7 +1,12 @@
-const WebSocket = require("ws");
+import WebSocket from "ws";
 
-const WS_URL =
-  "wss://backend.chat.restream.io/ws/embed?token=54eceb28-9f1a-4117-bcfd-a84876a526d5";
+const token = process.env.RESTREAM_CHAT_TOKEN;
+if (!token) {
+  console.error("Missing RESTREAM_CHAT_TOKEN in .env");
+  process.exit(1);
+}
+
+const WS_URL = `wss://backend.chat.restream.io/ws/embed?token=${token}`;
 
 function connect() {
   const ws = new WebSocket(WS_URL, {

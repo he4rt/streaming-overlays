@@ -5,20 +5,22 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "restream": "node --env-file=.env restream-listener.js",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.5.0"
+    "react-router-dom": "^7.5.0",
+    "ws": "^8.20.0"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.1.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.4.1",
     "tailwindcss": "^4.1.0",
-    "@tailwindcss/vite": "^4.1.0",
     "typescript": "~5.7.2",
     "vite": "^6.3.0"
   }
