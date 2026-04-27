@@ -1,6 +1,7 @@
 export interface TweakConfig {
   showChat: boolean;
   showLowerThird: boolean;
+  showPartnersPanel: boolean;
   showTopBar: boolean;
   showCornerLogo: boolean;
   showTicker: boolean;
@@ -68,6 +69,13 @@ export interface TweakConfig {
   preshowOnlineStart: number;
   preshowHashtag: string;
   preshowGuestTeaser: string;
+  partners: Partner[];
+}
+
+export interface Partner {
+  name: string;
+  logoUrl: string;
+  monochrome?: boolean;
 }
 
 export interface PollOption {

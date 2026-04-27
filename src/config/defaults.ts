@@ -3,6 +3,7 @@ import type { TweakConfig } from "@/shared/types";
 export const DEFAULTS: TweakConfig = {
   showChat: true,
   showLowerThird: true,
+  showPartnersPanel: false,
   showTopBar: true,
   showCornerLogo: true,
   showTicker: true,
@@ -77,4 +78,5 @@ export const DEFAULTS: TweakConfig = {
   preshowOnlineStart: 1247,
   preshowHashtag: "#HE4RTTALKS",
   preshowGuestTeaser: "Daqui a pouco nosso convidado entra ao vivo…",
+  partners: [],
 };
