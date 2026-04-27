@@ -13,6 +13,7 @@ import { SectionBrb } from "./SectionBrb";
 import { SectionQuestion } from "./SectionQuestion";
 import { SectionPoll } from "./SectionPoll";
 import { SectionQuote } from "./SectionQuote";
+import { SectionPartners } from "./SectionPartners";
 import { SAMPLE_CHAT } from "@/shared/chat/sample-messages";
 import type { ChatMessage } from "@/shared/types";
 
@@ -269,6 +270,7 @@ export function AdminPanel() {
             {activeTab === "visuals" && (
               <div className="flex flex-col gap-4">
                 <SectionColors config={config} update={update} />
+                <SectionPartners config={config} update={update} />
               </div>
             )}
           </div>
