@@ -154,7 +154,7 @@ export function PreShowScene() {
             }}>{episodeTitle}<span style={{ color: accent }}>.</span></div>
             <div style={{
               fontFamily: 'Inter, sans-serif', fontSize: 18,
-              color: 'rgba(255,255,255,0.75)', marginTop: 16, lineHeight: 1.4,
+              color: 'rgba(255,255,255,0.75)', marginTop: 10, lineHeight: 1.4, marginBottom: 20,
               maxWidth: 720, fontWeight: 500,
               textShadow: '0 2px 12px rgba(0,0,0,0.6)',
             }}>{topic}</div>
