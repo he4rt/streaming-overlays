@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import type { TweakConfig } from "@/shared/types";
 import { DEFAULTS } from "@/config/defaults";
-import { saveOverlayConfig } from "@/hooks/useOverlayConfig";
+import { useOverlayConfig, saveOverlayConfig } from "@/hooks/useOverlayConfig";
 import { HeartLogo } from "@/shared/components/HeartLogo";
 import { SectionScene } from "./SectionScene";
 import { SectionEpisode } from "./SectionEpisode";
@@ -115,22 +115,15 @@ export function AdminPanel() {
       .catch(() => setLoaded(true));
   }, []);
 
-  // Sincroniza a cena ativa quando outra fonte (ex: /dev) muda via API
-  const configRef = useRef(config);
-  configRef.current = config;
+  // Sincroniza a cena quando alterada externamente (ex: /dev)
+  const liveConfig = useOverlayConfig();
+  const localSceneRef = useRef(config.scene);
+  localSceneRef.current = config.scene;
   useEffect(() => {
-    const id = setInterval(async () => {
-      try {
-        const res = await fetch("/api/config");
-        if (!res.ok) return;
-        const data: Partial<TweakConfig> = await res.json();
-        if (data.scene && data.scene !== configRef.current.scene) {
-          setConfig((prev) => ({ ...prev, scene: data.scene! }));
-        }
-      } catch { /* server not ready */ }
-    }, 300);
-    return () => clearInterval(id);
-  }, []);
+    if (liveConfig.scene !== localSceneRef.current) {
+      setConfig((prev) => ({ ...prev, scene: liveConfig.scene }));
+    }
+  }, [liveConfig.scene]);
 
   const [activeTab, setActiveTab] = useState<"config" | "episode" | "guests" | "visuals">(
     "config"
