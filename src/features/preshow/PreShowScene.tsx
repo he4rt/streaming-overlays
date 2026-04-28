@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Stage } from "@/features/stage/Stage";
 import { Overlay } from "@/features/overlay/Overlay";
 import { useOverlayConfig } from "@/hooks/useOverlayConfig";
+import { useSpotifyNowPlaying } from "@/hooks/useSpotifyNowPlaying";
+import { SpotifyNowPlayingCard } from "@/shared/components/SpotifyNowPlayingCard";
 
 function LiveCounter({ start = 1247, color, size = 56 }: { start?: number; color: string; size?: number }) {
   const [n, setN] = useState(start);
@@ -23,11 +25,12 @@ function LiveCounter({ start = 1247, color, size = 56 }: { start?: number; color
 
 export function PreShowScene() {
   const t = useOverlayConfig();
+  const { nowPlaying, configured, isLoading } = useSpotifyNowPlaying();
   const {
-    primary, accent, showCameraPlaceholders,
+    primary, accent, bgPanel, showCameraPlaceholders,
     preshowHostName, preshowHostHandle, preshowAgenda,
     preshowOnlineStart, preshowHashtag, preshowGuestTeaser,
-    episodeNumber, episodeTitle, topic,
+    episodeNumber, episodeTitle, topic, showChat, showSpotifyNowPlaying,
   } = t;
 
   return (
@@ -234,8 +237,31 @@ export function PreShowScene() {
             fontFamily: "'Russo One', sans-serif", fontSize: 14,
             color: accent, letterSpacing: '0.18em',
             opacity: 0.8,
-          }}>{preshowHashtag}</div>
+            }}>{preshowHashtag}</div>
+
         </div>
+
+        {/* BELOW CHAT — spotify now playing */}
+        {showChat && showSpotifyNowPlaying && (
+          <div
+            style={{
+              position: "absolute",
+              right: 30,
+              top: 804,
+              width: 420,
+              zIndex: 2,
+            }}
+          >
+            <SpotifyNowPlayingCard
+              nowPlaying={nowPlaying}
+              configured={configured}
+              isLoading={isLoading}
+              primary={primary}
+              accent={accent}
+              bgPanel={bgPanel}
+            />
+          </div>
+        )}
       </Overlay>
     </Stage>
   );

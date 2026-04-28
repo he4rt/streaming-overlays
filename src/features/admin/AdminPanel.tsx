@@ -246,7 +246,7 @@ export function AdminPanel() {
             {activeTab === "config" && (
               <div className="flex flex-col gap-4">
                 <SectionScene config={config} update={update} />
-                <SectionToggles config={config} update={update} />
+                <SectionToggles config={config} scene={config.scene} update={update} />
                 <SectionBrb config={config} update={update} />
                 <SectionQuestion config={config} update={update} />
                 <SectionPoll config={config} update={update} />

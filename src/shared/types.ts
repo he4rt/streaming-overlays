@@ -7,6 +7,9 @@ export interface TweakConfig {
   showTicker: boolean;
   showLiveBadge: boolean;
   showHeartParticles: boolean;
+  showSpotifyNowPlaying: boolean;
+  showBrbNowPlaying: boolean;
+  brbNowPlayingSource: "brb" | "spotify";
   scene: string;
   startingVariant: string;
   quoteVariant: string;
@@ -91,4 +94,21 @@ export interface ChatMessage {
   badge?: string;
   key?: number;
   provider?: "twitch" | "kick";
+}
+
+export interface SpotifyTrackInfo {
+  id: string;
+  name: string;
+  album: string;
+  artists: string;
+  coverUrl: string | null;
+  trackUrl: string | null;
+  durationMs: number;
+}
+
+export interface SpotifyNowPlaying {
+  isPlaying: boolean;
+  progressMs: number;
+  updatedAt: string;
+  track: SpotifyTrackInfo | null;
 }

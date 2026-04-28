@@ -1,13 +1,24 @@
 import { useState, useEffect } from "react";
 import { Stage } from "@/features/stage/Stage";
 import { useOverlayConfig } from "@/hooks/useOverlayConfig";
+import { useSpotifyNowPlaying } from "@/hooks/useSpotifyNowPlaying";
 import { HeartMark } from "@/shared/components/HeartMark";
 import { BigChatFeed } from "@/shared/chat/BigChatFeed";
+import { SpotifyNowPlayingCard } from "@/shared/components/SpotifyNowPlayingCard";
 import PartnersPanel from "@/shared/partners/PartnersPanel";
+import type { SpotifyNowPlaying } from "@/shared/types";
 
 export function BrbScene() {
   const t = useOverlayConfig();
-  const { primary, accent, bgDeep, brbTrack } = t;
+  const { nowPlaying, configured, isLoading } = useSpotifyNowPlaying();
+  const {
+    primary,
+    accent,
+    bgPanel,
+    bgDeep,
+    brbTrack,
+    brbNowPlayingSource,
+  } = t;
 
   const [elapsed, setElapsed] = useState(0);
 
@@ -18,6 +29,23 @@ export function BrbScene() {
 
   const mm = String(Math.floor(elapsed / 60)).padStart(2, "0");
   const ss = String(elapsed % 60).padStart(2, "0");
+  const manualTrackName = brbTrack.trim();
+  const brbManualCardData: SpotifyNowPlaying = {
+    isPlaying: Boolean(manualTrackName),
+    progressMs: 0,
+    updatedAt: "",
+    track: manualTrackName
+      ? {
+          id: "brb-manual-track",
+          name: manualTrackName,
+          album: "BRB Track",
+          artists: "Manual",
+          coverUrl: null,
+          trackUrl: null,
+          durationMs: 0,
+        }
+      : null,
+  };
 
   return (
     <Stage>
@@ -185,35 +213,28 @@ export function BrbScene() {
             </div>
           </div>
 
-          {/* now-playing strip */}
-          {brbTrack && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 14,
-                fontFamily: "Inter, sans-serif",
-                fontSize: 14,
-                color: "rgba(255,255,255,0.55)",
-              }}
-            >
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 4,
-                  color: accent,
-                  fontWeight: 700,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  fontSize: 12,
-                }}
-              >
-                ♪ TOCANDO
-              </span>
-              <span>{brbTrack}</span>
-            </div>
-          )}
+          <div style={{ marginTop: 4 }}>
+            {brbNowPlayingSource === "spotify" ? (
+              <SpotifyNowPlayingCard
+                nowPlaying={nowPlaying}
+                configured={configured}
+                isLoading={isLoading}
+                primary={primary}
+                accent={accent}
+                bgPanel={bgPanel}
+                width={520}
+              />
+            ) : (
+              <SpotifyNowPlayingCard
+                nowPlaying={brbManualCardData}
+                configured={true}
+                primary={primary}
+                accent={accent}
+                bgPanel={bgPanel}
+                width={520}
+              />
+            )}
+          </div>
         </div>
 
         {/* RIGHT — prominent chat with header */}

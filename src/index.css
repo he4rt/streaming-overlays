@@ -133,3 +133,12 @@ select option {
     transform: translateY(-6px);
   }
 }
+
+@keyframes vinylSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

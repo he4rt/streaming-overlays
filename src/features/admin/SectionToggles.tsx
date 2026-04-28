@@ -2,6 +2,7 @@ import type { TweakConfig } from "@/shared/types";
 
 interface SectionProps {
   config: TweakConfig;
+  scene: TweakConfig["scene"];
   update: (
     key: keyof TweakConfig,
     value: TweakConfig[keyof TweakConfig],
@@ -17,16 +18,24 @@ const toggleFields: { key: keyof TweakConfig; label: string }[] = [
   { key: "showLiveBadge", label: "Live Badge" },
   { key: "showHeartParticles", label: "Heart Particles" },
   { key: "showCameraPlaceholders", label: "Camera Placeholders" },
+  { key: "showSpotifyNowPlaying", label: "Spotify Now Playing" },
 ];
 
-export function SectionToggles({ config, update }: SectionProps) {
+const SPOTIFY_SCENES = new Set(["preshow", "two-cams", "screen-share"]);
+
+export function SectionToggles({ config, scene, update }: SectionProps) {
+  const visibleToggles = toggleFields.filter(({ key }) => {
+    if (key !== "showSpotifyNowPlaying") return true;
+    return SPOTIFY_SCENES.has(scene);
+  });
+
   return (
     <fieldset className="rounded-xl border border-white/10 p-4">
       <legend className="px-2 font-heading text-sm tracking-wider text-accent">
         TOGGLES
       </legend>
       <div className="flex flex-wrap gap-2">
-        {toggleFields.map(({ key, label }) => {
+        {visibleToggles.map(({ key, label }) => {
           const active = config[key] as boolean;
           return (
             <button
