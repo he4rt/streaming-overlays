@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import type { TweakConfig } from "@/shared/types";
 import { DEFAULTS } from "@/config/defaults";
 import { saveOverlayConfig } from "@/hooks/useOverlayConfig";
@@ -113,6 +113,23 @@ export function AdminPanel() {
         setLoaded(true);
       })
       .catch(() => setLoaded(true));
+  }, []);
+
+  // Sincroniza a cena ativa quando outra fonte (ex: /dev) muda via API
+  const configRef = useRef(config);
+  configRef.current = config;
+  useEffect(() => {
+    const id = setInterval(async () => {
+      try {
+        const res = await fetch("/api/config");
+        if (!res.ok) return;
+        const data: Partial<TweakConfig> = await res.json();
+        if (data.scene && data.scene !== configRef.current.scene) {
+          setConfig((prev) => ({ ...prev, scene: data.scene! }));
+        }
+      } catch { /* server not ready */ }
+    }, 300);
+    return () => clearInterval(id);
   }, []);
 
   const [activeTab, setActiveTab] = useState<"config" | "episode" | "guests" | "visuals">(

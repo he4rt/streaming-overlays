@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { SceneOrchestrator } from "@/features/scene-orchestrator/SceneOrchestrator";
 import { useOverlayConfig, saveOverlayConfig } from "@/hooks/useOverlayConfig";
-import { DEFAULTS } from "@/config/defaults";
 
 const SCENES = [
   { key: "1", value: "preshow", label: "Pré-Show", icon: "🎙" },
@@ -15,43 +14,24 @@ const SCENES = [
   { key: "9", value: "ending", label: "Ending", icon: "🎬" },
 ] as const;
 
-// Snapshot da config completa para preservar todos os campos ao trocar cena
-function useConfigSnapshot() {
-  const snapshotRef = useRef<Record<string, unknown>>({});
-
-  useEffect(() => {
-    async function sync() {
-      try {
-        const res = await fetch("/api/config");
-        if (!res.ok) return;
-        const data = await res.json();
-        snapshotRef.current = data;
-      } catch {
-        // server not ready
-      }
-    }
-    sync();
-    const id = setInterval(sync, 500);
-    return () => clearInterval(id);
-  }, []);
-
-  return snapshotRef;
-}
-
 export function DevMode() {
   const config = useOverlayConfig();
-  const snapshotRef = useConfigSnapshot();
+
+  // Espelha o config reativo em um ref para que switchScene leia sempre o
+  // valor mais recente sem precisar de polling paralelo.
+  const configRef = useRef(config);
+  configRef.current = config;
+
   const [hudVisible, setHudVisible] = useState(true);
   const [flash, setFlash] = useState<string | null>(null);
   const flashTimer = useRef<ReturnType<typeof setTimeout>>();
 
   const switchScene = useCallback(async (sceneValue: string) => {
-    const merged = { ...DEFAULTS, ...snapshotRef.current, scene: sceneValue };
-    await saveOverlayConfig(merged as Parameters<typeof saveOverlayConfig>[0]);
+    await saveOverlayConfig({ ...configRef.current, scene: sceneValue });
     setFlash(sceneValue);
     clearTimeout(flashTimer.current);
     flashTimer.current = setTimeout(() => setFlash(null), 600);
-  }, [snapshotRef]);
+  }, []);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -76,7 +56,6 @@ export function DevMode() {
     <>
       <SceneOrchestrator />
 
-      {/* HUD */}
       {hudVisible ? (
         <div
           style={{
@@ -91,7 +70,6 @@ export function DevMode() {
             gap: 8,
           }}
         >
-          {/* Cena atual */}
           <div
             style={{
               background: "rgba(11,4,24,0.75)",
@@ -110,7 +88,6 @@ export function DevMode() {
             <span style={{ color: "rgba(255,255,255,0.2)", marginLeft: 10 }}>H · ocultar</span>
           </div>
 
-          {/* Botões de cena */}
           <div
             style={{
               display: "flex",
@@ -181,7 +158,6 @@ export function DevMode() {
           </div>
         </div>
       ) : (
-        /* Indicador mínimo quando HUD oculto */
         <button
           onClick={() => setHudVisible(true)}
           style={{
