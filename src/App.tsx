@@ -11,6 +11,7 @@ import { QuoteScene } from "@/features/quote/QuoteScene";
 import { PreShowScene } from "@/features/preshow/PreShowScene";
 import { AdminPanel } from "@/features/admin/AdminPanel";
 import { SceneOrchestrator } from "@/features/scene-orchestrator/SceneOrchestrator";
+import { DevMode } from "@/features/dev/DevMode";
 
 export function App() {
   return (
@@ -31,6 +32,7 @@ export function App() {
           <Route path="/quote" element={<QuoteScene />} />
           <Route path="/preshow" element={<PreShowScene />} />
           <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/dev" element={<DevMode />} />
         </Routes>
       </ChatProvider>
     </BrowserRouter>
