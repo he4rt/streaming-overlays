@@ -10,24 +10,30 @@ import { PollScene } from "@/features/poll/PollScene";
 import { QuoteScene } from "@/features/quote/QuoteScene";
 import { PreShowScene } from "@/features/preshow/PreShowScene";
 import { AdminPanel } from "@/features/admin/AdminPanel";
+import { SceneOrchestrator } from "@/features/scene-orchestrator/SceneOrchestrator";
+import { DevMode } from "@/features/dev/DevMode";
 
 export function App() {
   return (
     <BrowserRouter>
       <ChatProvider>
-      <Routes>
-        <Route path="/" element={<TwoCamsScene />} />
-        <Route path="/two-cams" element={<TwoCamsScene />} />
-        <Route path="/screen-share" element={<ScreenShareScene />} />
-        <Route path="/starting" element={<StartingScene />} />
-        <Route path="/ending" element={<EndingScene />} />
-        <Route path="/brb" element={<BrbScene />} />
-        <Route path="/question" element={<QuestionScene />} />
-        <Route path="/poll" element={<PollScene />} />
-        <Route path="/quote" element={<QuoteScene />} />
-        <Route path="/preshow" element={<PreShowScene />} />
-        <Route path="/admin" element={<AdminPanel />} />
-      </Routes>
+        <Routes>
+          {/* OBS aponta para esta rota — troca de cena com transição */}
+          <Route path="/" element={<SceneOrchestrator />} />
+
+          {/* Rotas individuais para desenvolvimento isolado */}
+          <Route path="/two-cams" element={<TwoCamsScene />} />
+          <Route path="/screen-share" element={<ScreenShareScene />} />
+          <Route path="/starting" element={<StartingScene />} />
+          <Route path="/ending" element={<EndingScene />} />
+          <Route path="/brb" element={<BrbScene />} />
+          <Route path="/question" element={<QuestionScene />} />
+          <Route path="/poll" element={<PollScene />} />
+          <Route path="/quote" element={<QuoteScene />} />
+          <Route path="/preshow" element={<PreShowScene />} />
+          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/dev" element={<DevMode />} />
+        </Routes>
       </ChatProvider>
     </BrowserRouter>
   );

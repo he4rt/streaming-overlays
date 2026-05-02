@@ -1,7 +1,7 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import type { TweakConfig } from "@/shared/types";
 import { DEFAULTS } from "@/config/defaults";
-import { saveOverlayConfig } from "@/hooks/useOverlayConfig";
+import { useOverlayConfig, saveOverlayConfig } from "@/hooks/useOverlayConfig";
 import { HeartLogo } from "@/shared/components/HeartLogo";
 import { SectionScene } from "./SectionScene";
 import { SectionEpisode } from "./SectionEpisode";
@@ -114,6 +114,16 @@ export function AdminPanel() {
       })
       .catch(() => setLoaded(true));
   }, []);
+
+  // Sincroniza a cena quando alterada externamente (ex: /dev)
+  const liveConfig = useOverlayConfig();
+  const localSceneRef = useRef(config.scene);
+  localSceneRef.current = config.scene;
+  useEffect(() => {
+    if (liveConfig.scene !== localSceneRef.current) {
+      setConfig((prev) => ({ ...prev, scene: liveConfig.scene }));
+    }
+  }, [liveConfig.scene]);
 
   const [activeTab, setActiveTab] = useState<"config" | "episode" | "guests" | "visuals">(
     "config"

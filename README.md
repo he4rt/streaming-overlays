@@ -13,18 +13,20 @@ O dev server sobe em `http://localhost:5173`. Abra `/admin` no browser pra geren
 
 ## Cenas
 
-| Rota | Cena OBS | Descricao |
-|---|---|---|
-| `/preshow` | Pre-Show | Host solo antes do convidado entrar |
-| `/two-cams` | Two Cams | Duas cameras lado a lado (layout principal) |
-| `/screen-share` | Screen Share | Tela compartilhada + 2 mini cameras |
-| `/starting` | Starting | Countdown antes da live (4 variantes) |
-| `/ending` | Ending | Mural da comunidade com stats |
-| `/brb` | BRB | Intervalo com timer |
-| `/question` | Question | Pergunta da audiencia em destaque |
-| `/poll` | Poll | Enquete ao vivo com votos |
-| `/quote` | Quote | Citacao marcante (3 variantes) |
-| `/admin` | - | Painel de controle (nao vai pro OBS) |
+| Rota            | Cena OBS     | Descricao                                                                               |
+| --------------- | ------------ | --------------------------------------------------------------------------------------- |
+| `/preshow`      | Pre-Show     | Host solo antes do convidado entrar                                                     |
+| `/two-cams`     | Two Cams     | Duas cameras lado a lado (layout principal)                                             |
+| `/screen-share` | Screen Share | Tela compartilhada + 2 mini cameras                                                     |
+| `/starting`     | Starting     | Countdown antes da live (4 variantes)                                                   |
+| `/ending`       | Ending       | Mural da comunidade com stats                                                           |
+| `/brb`          | BRB          | Intervalo com timer                                                                     |
+| `/question`     | Question     | Pergunta da audiencia em destaque                                                       |
+| `/poll`         | Poll         | Enquete ao vivo com votos                                                               |
+| `/quote`        | Quote        | Citacao marcante (3 variantes)                                                          |
+| `/admin`        | -            | Painel de controle (nao vai pro OBS)                                                    |
+| `/dev`          | -            | Mostra tela que está indo pro obs, com botões de navegação entre cenas(nao vai pro OBS) |
+| `/`             | -            | Mostra o que está indo para o OBS com base no que está selecionado em /admin ou /dev    |
 
 ## Admin Panel
 
@@ -51,6 +53,7 @@ Todas as alteracoes sao sincronizadas via HTTP API (`/api/config`) — funciona 
 ### Setup Manual
 
 Pra cada cena, crie uma Browser Source com:
+
 - **URL:** `http://localhost:5173/{rota}`
 - **Width:** 1920
 - **Height:** 1080
