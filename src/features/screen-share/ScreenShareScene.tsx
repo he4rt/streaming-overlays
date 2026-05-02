@@ -3,9 +3,12 @@ import { Overlay } from "@/features/overlay/Overlay";
 import { ScreenShare } from "./ScreenShare";
 import { MiniCamera } from "@/shared/components/MiniCamera";
 import { useOverlayConfig } from "@/hooks/useOverlayConfig";
+import { useSpotifyNowPlaying } from "@/hooks/useSpotifyNowPlaying";
+import { SpotifyNowPlayingCard } from "@/shared/components/SpotifyNowPlayingCard";
 
 export function ScreenShareScene() {
   const t = useOverlayConfig();
+  const { nowPlaying, configured, isLoading } = useSpotifyNowPlaying();
   const camAreaLeft = 30;
   const camAreaTop = 130;
   const camAreaRight = t.showChat ? 480 : 30;
@@ -20,6 +23,27 @@ export function ScreenShareScene() {
           <MiniCamera name={t.guest1Name} role={t.guest1Role} side="left" primary={t.primary} accent={t.accent} showPlaceholder={t.showCameraPlaceholders} />
           <MiniCamera name={t.guest2Name} role={t.guest2Role} side="right" primary={t.primary} accent={t.accent} showPlaceholder={t.showCameraPlaceholders} />
         </div>
+
+        {t.showChat && t.showSpotifyNowPlaying && (
+          <div
+            style={{
+              position: "absolute",
+              right: 30,
+              top: 804,
+              width: 420,
+              zIndex: 2,
+            }}
+          >
+            <SpotifyNowPlayingCard
+              nowPlaying={nowPlaying}
+              configured={configured}
+              isLoading={isLoading}
+              primary={t.primary}
+              accent={t.accent}
+              bgPanel={t.bgPanel}
+            />
+          </div>
+        )}
       </Overlay>
     </Stage>
   );

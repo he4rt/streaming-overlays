@@ -95,10 +95,11 @@ src/
 
 ### Sync Admin -> OBS
 
-O Vite dev server inclui um plugin com dois endpoints in-memory:
+O Vite dev server inclui um plugin com endpoints in-memory:
 
 - `GET/POST /api/config` — configuracao da overlay
 - `GET/POST /api/chat` — mensagens de chat
+- `GET /api/spotify/now-playing` — faixa atual do Spotify
 
 O admin (Chrome) faz POST quando algo muda. As overlays (OBS Browser Sources) fazem GET polling. Isso resolve o problema do browser do OBS ser isolado e nao compartilhar localStorage nem WebSocket com o Chrome.
 
@@ -107,6 +108,26 @@ O admin (Chrome) faz POST quando algo muda. As overlays (OBS Browser Sources) fa
 O chat integra com Restream via WebSocket, recebendo mensagens de Twitch e Kick com deduplicacao por `eventIdentifier`. Configurar o token em `src/hooks/useRestreamChat.ts`.
 
 No OBS, o WebSocket pode nao funcionar no browser embarcado. O ChatProvider faz fallback automatico: se o WebSocket nao produz mensagens, ele faz polling de `/api/chat` (alimentado pelo Chrome onde o WebSocket funciona).
+
+### Spotify Now Playing
+
+O pre-show inclui um card de "Now Playing" abaixo do chat com:
+
+- disco de vinil animado
+- capa no centro
+- nome da faixa, album e artistas
+
+O card usa o hook `useSpotifyNowPlaying`, que faz polling do endpoint local `/api/spotify/now-playing`.
+
+Configure as credenciais no `.env` (veja `.env.example`):
+
+```bash
+SPOTIFY_CLIENT_ID=...
+SPOTIFY_CLIENT_SECRET=...
+SPOTIFY_REFRESH_TOKEN=...
+```
+
+O refresh token deve vir de um fluxo Authorization Code com scope `user-read-currently-playing`.
 
 ## Tech Stack
 
