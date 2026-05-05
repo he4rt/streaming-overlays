@@ -9,9 +9,7 @@ const SCENES = [
   { key: "4", value: "starting", label: "Starting", icon: "⏳" },
   { key: "5", value: "brb", label: "BRB", icon: "☕" },
   { key: "6", value: "question", label: "Pergunta", icon: "❓" },
-  { key: "7", value: "poll", label: "Enquete", icon: "📊" },
-  { key: "8", value: "quote", label: "Quote", icon: "💬" },
-  { key: "9", value: "ending", label: "Ending", icon: "🎬" },
+  { key: "7", value: "ending", label: "Ending", icon: "🎬" },
 ] as const;
 
 export function DevMode() {
