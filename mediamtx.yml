@@ -1,0 +1,29 @@
+# Heart Talks — MediaMTX
+# OBS publica via WHIP em /heart, MediaMTX serve WHEP pro /admin
+# e (opcionalmente) relaya pra Twitch via RTMP.
+
+webrtcAdditionalHosts: [127.0.0.1]
+
+paths:
+  heart:
+    # Quando OBS começa a publicar:
+    #   RELAY_TWITCH=1  → ffmpeg republica pra Twitch (vídeo copy, áudio Opus→AAC)
+    #   RELAY_TWITCH≠1  → só log, sem relay
+    runOnReady: >
+      sh -c '
+        if [ "$RELAY_TWITCH" = "1" ]; then
+          if [ -z "$TWITCH_STREAM_KEY" ]; then
+            echo "[heart] RELAY_TWITCH=1 mas TWITCH_STREAM_KEY vazio — skip" >&2;
+            exit 0;
+          fi;
+          echo "[heart] relaying to Twitch";
+          exec ffmpeg -hide_banner -loglevel warning -nostdin
+            -i rtsp://localhost:8554/$MTX_PATH
+            -c:v copy
+            -c:a aac -b:a 160k -ar 48000 -ac 2
+            -f flv rtmp://live.twitch.tv/app/$TWITCH_STREAM_KEY;
+        else
+          echo "[heart] Twitch relay disabled (set RELAY_TWITCH=1 to enable)";
+        fi
+      '
+    runOnReadyRestart: yes

@@ -1,0 +1,12 @@
+services:
+  mediamtx:
+    image: bluenviron/mediamtx:latest-ffmpeg
+    container_name: heart-mediamtx
+    restart: unless-stopped
+    ports:
+      - "8889:8889"      # WHIP ingest + WHEP playback (HTTP)
+      - "8189:8189/udp"  # WebRTC ICE (UDP)
+    env_file:
+      - .env
+    volumes:
+      - ./mediamtx.yml:/mediamtx.yml:ro

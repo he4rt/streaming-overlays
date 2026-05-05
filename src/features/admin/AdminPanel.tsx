@@ -9,6 +9,7 @@ import { SectionToggles } from "./SectionToggles";
 import { SectionChat } from "./SectionChat";
 import { SectionLaravel } from "./SectionLaravel";
 import { BottomDock } from "./BottomDock";
+import { OBSPreview } from "./OBSPreview";
 
 const SCENES = [
   { value: "preshow", label: "Pré-Show" },
@@ -299,6 +300,7 @@ function SectionContent({
       return (
         <Page title="Resumo" subtitle="Visão geral da live">
           <SectionToggles config={config} update={update} />
+          <OBSPreview />
         </Page>
       );
     case "episode":
