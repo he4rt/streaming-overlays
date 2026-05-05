@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "obs": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "obs-mcp@latest"
+      ],
+      "env": {
+        "OBS_WEBSOCKET_PASSWORD": "123456"
+      }
+    }
+  }
+}
