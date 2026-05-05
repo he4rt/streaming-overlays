@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import type { ComponentType } from "react";
 import { useOverlayConfig } from "@/hooks/useOverlayConfig";
+import { useObs } from "@/hooks/ObsProvider";
 import { TwoCamsScene } from "@/features/two-cams/TwoCamsScene";
 import { ScreenShareScene } from "@/features/screen-share/ScreenShareScene";
 import { StartingScene } from "@/features/starting/StartingScene";
 import { EndingScene } from "@/features/ending/EndingScene";
 import { BrbScene } from "@/features/brb/BrbScene";
 import { QuestionScene } from "@/features/question/QuestionScene";
-import { PollScene } from "@/features/poll/PollScene";
-import { QuoteScene } from "@/features/quote/QuoteScene";
 import { PreShowScene } from "@/features/preshow/PreShowScene";
 
 const SCENE_MAP: Record<string, ComponentType> = {
@@ -18,15 +17,16 @@ const SCENE_MAP: Record<string, ComponentType> = {
   starting: StartingScene,
   brb: BrbScene,
   question: QuestionScene,
-  poll: PollScene,
-  quote: QuoteScene,
   ending: EndingScene,
 };
 
 const TRANSITION_MS = 500;
 
 export function SceneOrchestrator() {
-  const { scene: targetScene } = useOverlayConfig();
+  const { scene: configScene } = useOverlayConfig();
+  const { connected: obsConnected, scene: obsScene } = useObs();
+  // OBS é fonte da verdade quando conectado; senão cai no config interno
+  const targetScene = obsConnected && obsScene ? obsScene : configScene;
 
   // back: cena estável — nunca toca durante a transição
   const [backScene, setBackScene] = useState(targetScene);

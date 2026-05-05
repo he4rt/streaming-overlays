@@ -1,14 +1,36 @@
 import { Stage } from "@/features/stage/Stage";
 import { Overlay } from "@/features/overlay/Overlay";
 import { ScreenShare } from "./ScreenShare";
+import { ScreenShareV2 } from "./ScreenShareV2";
 import { MiniCamera } from "@/shared/components/MiniCamera";
 import { useOverlayConfig } from "@/hooks/useOverlayConfig";
+import { useObs } from "@/hooks/ObsProvider";
 import { useSpotifyNowPlaying } from "@/hooks/useSpotifyNowPlaying";
 import { SpotifyNowPlayingCard } from "@/shared/components/SpotifyNowPlayingCard";
 
 export function ScreenShareScene() {
-  const t = useOverlayConfig();
+  const baseConfig = useOverlayConfig();
+  const obs = useObs();
   const { nowPlaying, configured, isLoading } = useSpotifyNowPlaying();
+
+  // Aspect priority: ?aspect=URL → OBS active scene aspect → config default
+  const aspectParam = new URLSearchParams(window.location.search).get("aspect");
+  const urlAspect: "16:9" | "16:10" | null =
+    aspectParam === "16:9" || aspectParam === "16:10" ? aspectParam : null;
+  const obsAspect = obs.connected ? obs.aspect : null;
+  const aspectOverride = urlAspect ?? obsAspect;
+  const t = aspectOverride
+    ? { ...baseConfig, screenShareAspect: aspectOverride }
+    : baseConfig;
+
+  if (t.screenShareVariant === "v2") {
+    return (
+      <Stage>
+        <ScreenShareV2 config={t} />
+      </Stage>
+    );
+  }
+
   const camAreaLeft = 30;
   const camAreaTop = 130;
   const camAreaRight = t.showChat ? 480 : 30;

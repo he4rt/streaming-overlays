@@ -1,13 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ChatProvider } from "@/hooks/ChatProvider";
+import { ObsProvider } from "@/hooks/ObsProvider";
 import { TwoCamsScene } from "@/features/two-cams/TwoCamsScene";
 import { ScreenShareScene } from "@/features/screen-share/ScreenShareScene";
 import { StartingScene } from "@/features/starting/StartingScene";
 import { EndingScene } from "@/features/ending/EndingScene";
 import { BrbScene } from "@/features/brb/BrbScene";
 import { QuestionScene } from "@/features/question/QuestionScene";
-import { PollScene } from "@/features/poll/PollScene";
-import { QuoteScene } from "@/features/quote/QuoteScene";
 import { PreShowScene } from "@/features/preshow/PreShowScene";
 import { AdminPanel } from "@/features/admin/AdminPanel";
 import { SceneOrchestrator } from "@/features/scene-orchestrator/SceneOrchestrator";
@@ -16,8 +15,9 @@ import { DevMode } from "@/features/dev/DevMode";
 export function App() {
   return (
     <BrowserRouter>
-      <ChatProvider>
-        <Routes>
+      <ObsProvider>
+        <ChatProvider>
+          <Routes>
           {/* OBS aponta para esta rota — troca de cena com transição */}
           <Route path="/" element={<SceneOrchestrator />} />
 
@@ -28,13 +28,12 @@ export function App() {
           <Route path="/ending" element={<EndingScene />} />
           <Route path="/brb" element={<BrbScene />} />
           <Route path="/question" element={<QuestionScene />} />
-          <Route path="/poll" element={<PollScene />} />
-          <Route path="/quote" element={<QuoteScene />} />
           <Route path="/preshow" element={<PreShowScene />} />
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/dev" element={<DevMode />} />
-        </Routes>
-      </ChatProvider>
+          </Routes>
+        </ChatProvider>
+      </ObsProvider>
     </BrowserRouter>
   );
 }
