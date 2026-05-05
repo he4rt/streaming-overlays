@@ -4,6 +4,7 @@
     { "name": "[HT] Pre-Show" },
     { "name": "[HT] Two Cams" },
     { "name": "[HT] Screen Share" },
+    { "name": "[HT] Lower Thirds" },
     { "name": "[HT] Starting" },
     { "name": "[HT] Ending" },
     { "name": "[HT] BRB" },
@@ -46,6 +47,18 @@
         "height": 1080,
         "fps": 30,
         "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }"
+      }
+    },
+    {
+      "name": "[HT] Lower Thirds Overlay",
+      "versioned_id": "browser_source",
+      "id": "browser_source",
+      "settings": {
+        "url": "http://localhost:5173/lower-thirds",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "css": "html, body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }"
       }
     },
     {
@@ -166,6 +179,24 @@
         "items": [
           {
             "name": "[HT] Screen Share Overlay",
+            "id": 1,
+            "visible": true,
+            "pos": { "x": 0.0, "y": 0.0 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[HT] Lower Thirds",
+      "versioned_id": "scene",
+      "id": "scene",
+      "settings": {
+        "id_counter": 1,
+        "custom_size": false,
+        "items": [
+          {
+            "name": "[HT] Lower Thirds Overlay",
             "id": 1,
             "visible": true,
             "pos": { "x": 0.0, "y": 0.0 },

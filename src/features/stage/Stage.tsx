@@ -3,13 +3,14 @@ import { useStageScale } from "@/hooks/useStageScale";
 
 interface StageProps {
   children: ReactNode;
+  background?: string;
 }
 
-export function Stage({ children }: StageProps) {
+export function Stage({ children, background = "#000" }: StageProps) {
   const scale = useStageScale();
   return (
     <div style={{
-      position: 'fixed', inset: 0, background: '#000',
+      position: 'fixed', inset: 0, background,
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       overflow: 'hidden',
     }}>

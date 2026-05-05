@@ -17,6 +17,7 @@ const SCENES = [
   { value: "preshow", label: "Pré-Show" },
   { value: "starting", label: "Starting" },
   { value: "screen-share", label: "Screen Share" },
+  { value: "lower-thirds", label: "Lower Thirds" },
 ] as const;
 
 type SectionId = "overview" | "episode" | "guests" | "schedule" | "laravel" | "chat";
