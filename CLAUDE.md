@@ -30,6 +30,14 @@ Heart Talks is a streaming overlay system for OBS. Each OBS scene is a separate 
 - `src/hooks/` — custom hooks (useStageScale, useOverlayConfig, useRestreamChat, useCountdown)
 - `src/config/` — centralized defaults and theme (colors, fonts)
 
+## OBS integration
+
+Quando o MCP do OBS estiver disponível (`mcp__obs__*`), **leia também `obs-state.json`** na raiz do repo antes de propor mudanças nas cenas. O arquivo é um snapshot da config atual do OBS local (cenas, sources, transforms, mapeamento cena→rota, stream service) e evita ter que consultar tudo via MCP a cada sessão.
+
+Se mudanças forem feitas nas cenas via MCP (ou pelo usuário no OBS) e for pertinente, peça confirmação e atualize `obs-state.json` repetindo o dump (`obs-get-scene-list` + `obs-get-scene-items` por cena + `obs-get-input-settings` por input). O arquivo é apenas contexto pro Claude — não é importável pelo OBS.
+
+Setup do preview WebRTC + relay Twitch via MediaMTX está em `docs/obs-preview.md`.
+
 ## Tech Stack
 
 Vite 6, React 18, TypeScript (strict), Tailwind CSS v4, React Router v7

@@ -1,0 +1,59 @@
+{
+  "_comment": "Snapshot da configuração do OBS local. Gerado via MCP em 2026-05-05. Re-gerar com: peça pro Claude rodar dump das scenes via mcp__obs__*. Não é importável direto pelo OBS — use só como contexto pro Claude entender o estado atual sem precisar consultar.",
+  "obsVersion": "32.1.2",
+  "obsWebSocketVersion": "5.7.3",
+  "snapshotAt": "2026-05-05",
+  "currentScene": "[HT] Pre-Show",
+  "scenes": [
+    {
+      "name": "[HT] Pre-Show",
+      "items": [
+        { "id": 1, "source": "[HT] Pre-Show Overlay", "kind": "browser_source", "enabled": true, "transform": { "x": 0, "y": 0, "w": 1920, "h": 1080 } }
+      ]
+    },
+    {
+      "name": "[HT] Screen Share · 16:9",
+      "items": [
+        { "id": 1, "source": "[HT] Screen Share 16:9 Overlay", "kind": "browser_source", "enabled": true, "transform": { "x": 0, "y": 0, "w": 1920, "h": 1080 } }
+      ]
+    },
+    {
+      "name": "[HT] Screen Share · 16:10",
+      "items": [
+        { "id": 1, "source": "[HT] Screen Share 16:10 Overlay", "kind": "browser_source", "enabled": true, "transform": { "x": 0, "y": 0, "w": 1920, "h": 1080 } },
+        { "id": 2, "source": "Logitech BRIO (test)", "kind": "v4l2_input", "enabled": true, "transform": { "x": 1447, "y": 0, "w": 473, "h": 266, "scaleX": 0.7391, "scaleY": 0.7389 }, "_note": "input criado pra teste do Move plugin — pode remover" }
+      ]
+    },
+    {
+      "name": "[HT] Starting",
+      "items": [
+        { "id": 1, "source": "[HT] Starting Overlay", "kind": "browser_source", "enabled": true, "transform": { "x": 0, "y": 0, "w": 1920, "h": 1080 } }
+      ]
+    },
+    {
+      "name": "Cena",
+      "items": [],
+      "_note": "cena default vazia do OBS, ignorar"
+    }
+  ],
+  "inputs": [
+    { "name": "Áudio do desktop", "kind": "pulse_output_capture" },
+    { "name": "Mic/Aux", "kind": "pulse_input_capture" },
+    { "name": "[HT] Pre-Show Overlay", "kind": "browser_source", "settings": { "url": "http://localhost:5173/preshow", "width": 1920, "height": 1080, "fps": 30, "fps_custom": true } },
+    { "name": "[HT] Starting Overlay", "kind": "browser_source", "settings": { "url": "http://localhost:5173/starting", "width": 1920, "height": 1080, "fps": 30, "fps_custom": true } },
+    { "name": "[HT] Screen Share 16:9 Overlay", "kind": "browser_source", "settings": { "url": "http://localhost:5173/screen-share?aspect=16:9", "width": 1920, "height": 1080, "fps": 30, "fps_custom": true } },
+    { "name": "[HT] Screen Share 16:10 Overlay", "kind": "browser_source", "settings": { "url": "http://localhost:5173/screen-share?aspect=16:10", "width": 1920, "height": 1080, "fps": 30, "fps_custom": true } },
+    { "name": "Logitech BRIO (test)", "kind": "v4l2_input", "settings": { "device_id": "/dev/video0" } }
+  ],
+  "sceneToRouteMap": {
+    "[HT] Pre-Show": "/preshow",
+    "[HT] Starting": "/starting",
+    "[HT] Screen Share · 16:9": "/screen-share?aspect=16:9",
+    "[HT] Screen Share · 16:10": "/screen-share?aspect=16:10"
+  },
+  "streamService": {
+    "type": "whip_custom",
+    "server": "http://localhost:8889/heart/whip",
+    "_note": "configurado pra MediaMTX local (docker-compose.yml). Veja docs/obs-preview.md."
+  }
+}
