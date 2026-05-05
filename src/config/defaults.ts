@@ -13,7 +13,7 @@ export const DEFAULTS: TweakConfig = {
   showBrbNowPlaying: true,
   brbNowPlayingSource: "brb",
   scene: "two-cams",
-  startingVariant: "v2",
+  startingVariant: "v5",
   quoteVariant: "editorial",
   quoteText:
     "A melhor tecnologia é aquela que some — você só percebe que ela existe quando para de funcionar.",

@@ -87,6 +87,15 @@ export interface PollOption {
   color: string;
 }
 
+export type ChatPart =
+  | { type: "text"; value: string }
+  | { type: "emote"; url: string; alt: string };
+
+export interface ChatBadge {
+  imageUrl: string;
+  title: string;
+}
+
 export interface ChatMessage {
   user: string;
   color: string;
@@ -94,6 +103,8 @@ export interface ChatMessage {
   badge?: string;
   key?: number;
   provider?: "twitch" | "kick";
+  parts?: ChatPart[];
+  badges?: ChatBadge[];
 }
 
 export interface SpotifyTrackInfo {

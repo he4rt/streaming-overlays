@@ -1,5 +1,59 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import type { ChatMessage } from "@/shared/types";
+import type { ChatBadge, ChatMessage, ChatPart } from "@/shared/types";
+
+interface RestreamReplace {
+  from: number;
+  to: number;
+  type: string;
+  payload?: { url?: string };
+}
+
+// Twitch v1 URLs are PNG-only (static frame even for animated emotes).
+// v2 `/default/` serves WebP that animates when the emote is animated, PNG otherwise.
+// `https://static-cdn.jtvnw.net/emoticons/v1/<id>/3.0`
+//   → `https://static-cdn.jtvnw.net/emoticons/v2/<id>/default/dark/1.0`
+function toAnimatedUrl(url: string): string {
+  const v1 = url.match(
+    /^https:\/\/static-cdn\.jtvnw\.net\/emoticons\/v1\/([^/]+)\/[\d.]+\/?$/,
+  );
+  if (v1) {
+    return `https://static-cdn.jtvnw.net/emoticons/v2/${v1[1]}/default/dark/1.0`;
+  }
+  // Already v2 — just normalize the size
+  return url.replace(/\/[\d.]+\/?$/, "/1.0");
+}
+
+function buildParts(text: string, replaces: RestreamReplace[] | undefined): ChatPart[] {
+  const imageReplaces = (replaces ?? [])
+    .filter((r) => r.type === "imageUrl" && r.payload?.url && r.from < r.to)
+    .sort((a, b) => a.from - b.from);
+
+  if (imageReplaces.length === 0) return [{ type: "text", value: text }];
+
+  const chars = Array.from(text); // safe for surrogate pairs
+  const parts: ChatPart[] = [];
+  let cursor = 0;
+
+  for (const r of imageReplaces) {
+    if (r.from < cursor) continue; // overlap — skip
+    if (r.from > cursor) {
+      const slice = chars.slice(cursor, r.from).join("");
+      if (slice) parts.push({ type: "text", value: slice });
+    }
+    // `to` is inclusive in Restream payloads — slice end is to + 1
+    const end = r.to + 1;
+    const alt = chars.slice(r.from, end).join("").trim() || "emote";
+    const url = toAnimatedUrl(r.payload!.url!);
+    parts.push({ type: "emote", url, alt });
+    cursor = end;
+  }
+
+  if (cursor < chars.length) {
+    const tail = chars.slice(cursor).join("");
+    if (tail) parts.push({ type: "text", value: tail });
+  }
+  return parts;
+}
 
 const WS_URL =
   "wss://backend.chat.restream.io/ws/embed?token=54eceb28-9f1a-4117-bcfd-a84876a526d5";
@@ -54,12 +108,22 @@ export function useRestreamChat(maxMessages = 12) {
           ? (author?.color || pickColor(username))
           : pickColor(username);
 
+        const parts = buildParts(eventPayload.text, eventPayload.replaces);
+        const badges: ChatBadge[] = Array.isArray(author?.badges)
+          ? author.badges
+              .filter((b: any) => b?.imageUrl)
+              .slice(0, 3)
+              .map((b: any) => ({ imageUrl: b.imageUrl, title: b.title ?? "" }))
+          : [];
+
         const msg: ChatMessage = {
           user: username,
           color,
           msg: eventPayload.text,
           key: Date.now(),
           provider: isTwitch ? "twitch" : "kick",
+          parts,
+          badges,
         };
 
         setMessages((prev) => [...prev.slice(-(maxMessages - 1)), msg]);

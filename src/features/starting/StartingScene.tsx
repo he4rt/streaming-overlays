@@ -5,6 +5,7 @@ import { StartingV1 } from "./StartingV1";
 import { StartingV2 } from "./StartingV2";
 import { StartingV3 } from "./StartingV3";
 import { StartingV4 } from "./StartingV4";
+import { StartingV5 } from "./StartingV5";
 
 export function StartingScene() {
   const t = useOverlayConfig();
@@ -17,7 +18,9 @@ export function StartingScene() {
         ? StartingV3
         : variant === "v4"
           ? StartingV4
-          : StartingV1;
+          : variant === "v5"
+            ? StartingV5
+            : StartingV1;
 
   return (
     <Stage>
