@@ -1,76 +1,38 @@
 export interface TweakConfig {
-  showChat: boolean;
-  showLowerThird: boolean;
-  showPartnersPanel: boolean;
-  showTopBar: boolean;
-  showCornerLogo: boolean;
-  showTicker: boolean;
-  showLiveBadge: boolean;
-  showHeartParticles: boolean;
-  showSpotifyNowPlaying: boolean;
-  showBrbNowPlaying: boolean;
-  brbNowPlayingSource: "brb" | "spotify";
+  /** Cena ativa quando OBS estiver offline (fallback do orchestrator) */
   scene: string;
+
+  /** Toggles globais */
+  showChat: boolean;
+  showCameraPlaceholders: boolean;
+
+  /** Variantes / opções de cena */
   startingVariant: string;
   screenShareVariant: string;
   screenShareAspect: "16:9" | "16:10";
   preshowVariant: string;
-  questionAuthor: string;
-  questionAuthorBadge: string;
-  questionText: string;
-  questionFrom: string;
-  questionQueue: number;
-  pollQuestion: string;
-  pollTotalVotes: number;
-  pollTimeLeft: string;
-  pollOptions?: PollOption[];
-  brbDuration: number;
-  brbTrack: string;
-  screenContent: "code" | "browser" | "slides";
-  screenTitle: string;
-  startCountdown: number;
-  endMessage: string;
-  startingTitle: string;
-  startingSubtitle: string;
   startingCountdownSeconds: number;
-  endingTitle: string;
-  endingSubtitle: string;
-  nextEpisodeNumber: string;
-  nextEpisodeTitle: string;
-  nextEpisodeGuest: string;
-  nextEpisodeDate: string;
-  endStatViewers: number;
-  endStatMessages: number;
-  endStatSubs: number;
-  endStatQuestions: number;
-  primary: string;
-  primaryDeep: string;
-  accent: string;
-  bgDeep: string;
-  bgPanel: string;
-  panelOpacity: number;
+  startingSubtitle: string;
+
+  /** Info do evento — herdado por todas as cenas */
+  episodeTitle: string;
+  episodeNumber: string;
+  topic: string;
+  date: string;
+  time: string;
+
+  /** Convidados (usados pelo nameplate da câmera no Screen Share) */
   guest1Name: string;
   guest1Role: string;
   guest1Handle: string;
   guest2Name: string;
   guest2Role: string;
   guest2Handle: string;
-  episodeTitle: string;
-  episodeNumber: string;
-  topic: string;
-  date: string;
-  time: string;
-  tickerText: string;
-  chatTitle: string;
+
+  /** Chat externo */
   useLiveChat: boolean;
-  showCameraPlaceholders: boolean;
-  preshowHostName: string;
-  preshowHostHandle: string;
-  preshowAgenda: string[];
-  preshowOnlineStart: number;
-  preshowHashtag: string;
-  preshowGuestTeaser: string;
-  partners: Partner[];
+
+  /** Tema Laravel */
   laravel: LaravelConfig;
 }
 
@@ -84,18 +46,6 @@ export interface LaravelConfig {
   chatFooterRight: string;
   bgImage: string;
   preshowBgImage: string;
-}
-
-export interface Partner {
-  name: string;
-  logoUrl: string;
-  monochrome?: boolean;
-}
-
-export interface PollOption {
-  label: string;
-  votes: number;
-  color: string;
 }
 
 export type ChatPart =
@@ -116,21 +66,4 @@ export interface ChatMessage {
   provider?: "twitch" | "kick";
   parts?: ChatPart[];
   badges?: ChatBadge[];
-}
-
-export interface SpotifyTrackInfo {
-  id: string;
-  name: string;
-  album: string;
-  artists: string;
-  coverUrl: string | null;
-  trackUrl: string | null;
-  durationMs: number;
-}
-
-export interface SpotifyNowPlaying {
-  isPlaying: boolean;
-  progressMs: number;
-  updatedAt: string;
-  track: SpotifyTrackInfo | null;
 }

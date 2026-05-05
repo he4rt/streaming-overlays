@@ -63,16 +63,6 @@ export function SectionEpisode({ config, update }: SectionProps) {
             />
           </label>
         </div>
-
-        <label className="flex flex-col gap-1 text-xs text-white/60">
-          Ticker Text
-          <input
-            type="text"
-            value={config.tickerText}
-            onChange={(e) => update("tickerText", e.target.value)}
-            className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-accent"
-          />
-        </label>
       </div>
     </fieldset>
   );

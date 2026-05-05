@@ -3,7 +3,17 @@ import type { ReactNode } from "react";
 import type { ChatMessage } from "@/shared/types";
 import { useOverlayConfig } from "./useOverlayConfig";
 import { useRestreamChat } from "./useRestreamChat";
-import { SAMPLE_CHAT } from "@/shared/chat/sample-messages";
+
+const SAMPLE_CHAT: ChatMessage[] = [
+  { user: "ana_dev", color: "#ff2d20", msg: "tô esperando esse Laravel Day!" },
+  { user: "joao", color: "#22d3ee", msg: "primeira vez no canal :)" },
+  { user: "mariadb", color: "#f59e0b", msg: "vai falar de queues hj?" },
+  { user: "phpninja", color: "#84cc16", msg: "MAGIC!", badge: "sub" },
+  { user: "lala_codes", color: "#a855f7", msg: "salveee" },
+  { user: "diego", color: "#ec4899", msg: "Eloquent é vida" },
+  { user: "rafa.dev", color: "#06b6d4", msg: "qual versão do Laravel?" },
+  { user: "carla", color: "#ef4444", msg: "boa noite galera" },
+];
 
 const ChatContext = createContext<ChatMessage[]>([]);
 

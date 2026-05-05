@@ -11,15 +11,9 @@ export function SectionChat({ config, update }: SectionProps) {
     <fieldset className="rounded-xl border border-white/10 p-4">
       <legend className="px-2 font-heading text-sm tracking-wider text-accent">CHAT</legend>
       <div className="flex flex-col gap-3">
-        <label className="flex flex-col gap-1 text-xs text-white/60">
-          Chat Title
-          <input
-            type="text"
-            value={config.chatTitle}
-            onChange={(e) => update("chatTitle", e.target.value)}
-            className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-accent"
-          />
-        </label>
+        <p className="text-[11px] text-white/40">
+          Os textos do chat (título, subtítulo, footer) ficam na aba 🟥 Laravel.
+        </p>
         <div className="flex items-center justify-between">
           <div>
             <div className="font-body text-xs font-bold text-white/70">Fonte do chat</div>

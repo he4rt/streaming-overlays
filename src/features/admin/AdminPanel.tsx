@@ -3,41 +3,20 @@ import type { TweakConfig } from "@/shared/types";
 import { DEFAULTS } from "@/config/defaults";
 import { useOverlayConfig, saveOverlayConfig } from "@/hooks/useOverlayConfig";
 import { useObs, obsToInternal } from "@/hooks/ObsProvider";
-import { HeartLogo } from "@/shared/components/HeartLogo";
-import { SectionScene } from "./SectionScene";
 import { SectionEpisode } from "./SectionEpisode";
 import { SectionGuests } from "./SectionGuests";
-import { SectionColors } from "./SectionColors";
 import { SectionToggles } from "./SectionToggles";
 import { SectionChat } from "./SectionChat";
-import { SectionBrb } from "./SectionBrb";
-import { SectionQuestion } from "./SectionQuestion";
-import { SectionPoll } from "./SectionPoll";
-import { SectionPartners } from "./SectionPartners";
 import { SectionLaravel } from "./SectionLaravel";
 import { BottomDock } from "./BottomDock";
 
 const SCENES = [
   { value: "preshow", label: "Pré-Show" },
-  { value: "two-cams", label: "2 Cams" },
-  { value: "screen-share", label: "Screen Share" },
   { value: "starting", label: "Starting" },
-  { value: "brb", label: "BRB" },
-  { value: "question", label: "Pergunta" },
-  { value: "ending", label: "Ending" },
+  { value: "screen-share", label: "Screen Share" },
 ] as const;
 
-type SectionId =
-  | "overview"
-  | "episode"
-  | "guests"
-  | "laravel"
-  | "visual"
-  | "scenes"
-  | "brb"
-  | "question"
-  | "poll"
-  | "chat";
+type SectionId = "overview" | "episode" | "guests" | "laravel" | "chat";
 
 interface NavItem {
   id: SectionId;
@@ -68,17 +47,12 @@ const NAV: NavGroup[] = [
     title: "Tema",
     items: [
       { id: "laravel", label: "Laravel Edition", description: "Cor, tags, chat, backgrounds" },
-      { id: "visual", label: "Visual (legado)", description: "Cores roxo, partners" },
     ],
   },
   {
-    title: "Dados das cenas",
+    title: "Outros",
     items: [
-      { id: "scenes", label: "Starting / Screen / Ending (V1)", description: "Campos das cenas legadas" },
-      { id: "brb", label: "BRB", description: "Tempo + faixa" },
-      { id: "question", label: "Pergunta", description: "Texto da pergunta no ar" },
-      { id: "poll", label: "Poll widget", description: "Dados da enquete (overlay no chat)" },
-      { id: "chat", label: "Chat", description: "Configurações do chat" },
+      { id: "chat", label: "Chat", description: "Fonte (live ou sample)" },
     ],
   },
 ];
@@ -157,8 +131,11 @@ export function AdminPanel() {
     : SCENES;
 
   const openScene = () => {
-    const path = activeInternalScene === "two-cams" ? "/" : `/${activeInternalScene}`;
-    window.open(path, `scene-${activeInternalScene}`, "width=1920,height=1080");
+    window.open(
+      `/${activeInternalScene}`,
+      `scene-${activeInternalScene}`,
+      "width=1920,height=1080",
+    );
   };
 
   const switchScene = (internal: string) => {
@@ -179,8 +156,13 @@ export function AdminPanel() {
       {/* TOP BAR */}
       <header className="flex shrink-0 items-center justify-between border-b border-white/10 bg-[#0e0820] px-6 py-3">
         <div className="flex items-center gap-3">
-          <HeartLogo size={0.4} />
-          <div className="font-heading text-base text-white">Heart Talks</div>
+          <span
+            className="flex h-7 w-7 items-center justify-center rounded font-heading text-sm font-bold text-white"
+            style={{ background: "#ff2d20" }}
+          >
+            L
+          </span>
+          <div className="font-heading text-base text-white">Laravel Day</div>
           <span className="rounded bg-white/5 px-2 py-0.5 font-body text-[10px] uppercase tracking-widest text-white/40">
             Admin
           </span>
@@ -316,7 +298,7 @@ function SectionContent({
     case "overview":
       return (
         <Page title="Resumo" subtitle="Visão geral da live">
-          <SectionToggles config={config} scene={config.scene} update={update} />
+          <SectionToggles config={config} update={update} />
         </Page>
       );
     case "episode":
@@ -333,50 +315,13 @@ function SectionContent({
       );
     case "laravel":
       return (
-        <Page
-          title="Laravel Edition"
-          subtitle="Tema das cenas Pré-Show V2, Starting V5 e Screen Share V2"
-        >
+        <Page title="Laravel Edition" subtitle="Tema das cenas Pré-Show, Starting e Screen Share">
           <SectionLaravel config={config} update={update} />
-        </Page>
-      );
-    case "visual":
-      return (
-        <Page title="Visual (legado)" subtitle="Tema das cenas V1 (roxo / partners)">
-          <SectionColors config={config} update={update} />
-          <SectionPartners config={config} update={update} />
-        </Page>
-      );
-    case "scenes":
-      return (
-        <Page title="Cenas legadas (V1)" subtitle="Starting / Screen Share / Ending — versões anteriores">
-          <SectionScene config={config} update={update} />
-        </Page>
-      );
-    case "brb":
-      return (
-        <Page title="BRB" subtitle="Cena de pausa">
-          <SectionBrb config={config} update={update} />
-        </Page>
-      );
-    case "question":
-      return (
-        <Page title="Pergunta" subtitle="Pergunta destacada da audiência">
-          <SectionQuestion config={config} update={update} />
-        </Page>
-      );
-    case "poll":
-      return (
-        <Page
-          title="Poll widget"
-          subtitle="Dados da enquete (a renderizar como overlay no chat)"
-        >
-          <SectionPoll config={config} update={update} />
         </Page>
       );
     case "chat":
       return (
-        <Page title="Chat" subtitle="Configurações do chat">
+        <Page title="Chat" subtitle="Fonte do chat (live ou sample)">
           <SectionChat config={config} update={update} />
         </Page>
       );

@@ -2,22 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import type { ComponentType } from "react";
 import { useOverlayConfig } from "@/hooks/useOverlayConfig";
 import { useObs } from "@/hooks/ObsProvider";
-import { TwoCamsScene } from "@/features/two-cams/TwoCamsScene";
 import { ScreenShareScene } from "@/features/screen-share/ScreenShareScene";
 import { StartingScene } from "@/features/starting/StartingScene";
-import { EndingScene } from "@/features/ending/EndingScene";
-import { BrbScene } from "@/features/brb/BrbScene";
-import { QuestionScene } from "@/features/question/QuestionScene";
 import { PreShowScene } from "@/features/preshow/PreShowScene";
 
 const SCENE_MAP: Record<string, ComponentType> = {
   preshow: PreShowScene,
-  "two-cams": TwoCamsScene,
   "screen-share": ScreenShareScene,
   starting: StartingScene,
-  brb: BrbScene,
-  question: QuestionScene,
-  ending: EndingScene,
 };
 
 const TRANSITION_MS = 500;
@@ -72,8 +64,8 @@ export function SceneOrchestrator() {
     };
   }, [targetScene]);
 
-  const BackScene = SCENE_MAP[backScene] ?? TwoCamsScene;
-  const FrontScene = SCENE_MAP[frontScene] ?? TwoCamsScene;
+  const BackScene = SCENE_MAP[backScene] ?? PreShowScene;
+  const FrontScene = SCENE_MAP[frontScene] ?? PreShowScene;
 
   return (
     <div style={{ position: "fixed", inset: 0 }}>

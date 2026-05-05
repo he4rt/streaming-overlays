@@ -4,12 +4,8 @@ import { useOverlayConfig, saveOverlayConfig } from "@/hooks/useOverlayConfig";
 
 const SCENES = [
   { key: "1", value: "preshow", label: "Pré-Show", icon: "🎙" },
-  { key: "2", value: "two-cams", label: "2 Cams", icon: "👥" },
+  { key: "2", value: "starting", label: "Starting", icon: "⏳" },
   { key: "3", value: "screen-share", label: "Screen", icon: "🖥" },
-  { key: "4", value: "starting", label: "Starting", icon: "⏳" },
-  { key: "5", value: "brb", label: "BRB", icon: "☕" },
-  { key: "6", value: "question", label: "Pergunta", icon: "❓" },
-  { key: "7", value: "ending", label: "Ending", icon: "🎬" },
 ] as const;
 
 export function DevMode() {
