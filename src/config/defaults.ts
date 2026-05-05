@@ -14,12 +14,9 @@ export const DEFAULTS: TweakConfig = {
   brbNowPlayingSource: "brb",
   scene: "two-cams",
   startingVariant: "v5",
-  quoteVariant: "editorial",
-  quoteText:
-    "A melhor tecnologia é aquela que some — você só percebe que ela existe quando para de funcionar.",
-  quoteAuthor: "Marina Costa",
-  quoteAuthorRole: "Senior Frontend Engineer",
-  quoteContext: "Sobre design de APIs",
+  screenShareVariant: "v2",
+  screenShareAspect: "16:9",
+  preshowVariant: "v2",
   questionAuthor: "jpcoder",
   questionAuthorBadge: "SUB",
   questionText:
@@ -82,4 +79,15 @@ export const DEFAULTS: TweakConfig = {
   preshowHashtag: "#HE4RTTALKS",
   preshowGuestTeaser: "Daqui a pouco nosso convidado entra ao vivo…",
   partners: [],
+  laravel: {
+    accent: "#ff2d20",
+    tags: ["Laravel", "3Pontos", "PHPSP", "He4rt Devs", "FIAP + Alura"],
+    chatTitle: "CHAT",
+    chatSubtitle: "Manda um oi aí",
+    chatLivePill: "AO VIVO",
+    chatFooterLeft: "#LARAVELDAYSP",
+    chatFooterRight: "twitch.tv/he4rt",
+    bgImage: "/laravel-bg.png",
+    preshowBgImage: "/preshow-bg.png",
+  },
 };

@@ -4,6 +4,7 @@ import { Overlay } from "@/features/overlay/Overlay";
 import { useOverlayConfig } from "@/hooks/useOverlayConfig";
 import { useSpotifyNowPlaying } from "@/hooks/useSpotifyNowPlaying";
 import { SpotifyNowPlayingCard } from "@/shared/components/SpotifyNowPlayingCard";
+import { PreShowV2 } from "./PreShowV2";
 
 function LiveCounter({ start = 1247, color, size = 56 }: { start?: number; color: string; size?: number }) {
   const [n, setN] = useState(start);
@@ -26,6 +27,15 @@ function LiveCounter({ start = 1247, color, size = 56 }: { start?: number; color
 export function PreShowScene() {
   const t = useOverlayConfig();
   const { nowPlaying, configured, isLoading } = useSpotifyNowPlaying();
+
+  if (t.preshowVariant === "v2") {
+    return (
+      <Stage>
+        <PreShowV2 config={t} />
+      </Stage>
+    );
+  }
+
   const {
     primary, accent, bgPanel, showCameraPlaceholders,
     preshowHostName, preshowHostHandle, preshowAgenda,

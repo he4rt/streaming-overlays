@@ -12,11 +12,9 @@ export interface TweakConfig {
   brbNowPlayingSource: "brb" | "spotify";
   scene: string;
   startingVariant: string;
-  quoteVariant: string;
-  quoteText: string;
-  quoteAuthor: string;
-  quoteAuthorRole: string;
-  quoteContext: string;
+  screenShareVariant: string;
+  screenShareAspect: "16:9" | "16:10";
+  preshowVariant: string;
   questionAuthor: string;
   questionAuthorBadge: string;
   questionText: string;
@@ -73,6 +71,19 @@ export interface TweakConfig {
   preshowHashtag: string;
   preshowGuestTeaser: string;
   partners: Partner[];
+  laravel: LaravelConfig;
+}
+
+export interface LaravelConfig {
+  accent: string;
+  tags: string[];
+  chatTitle: string;
+  chatSubtitle: string;
+  chatLivePill: string;
+  chatFooterLeft: string;
+  chatFooterRight: string;
+  bgImage: string;
+  preshowBgImage: string;
 }
 
 export interface Partner {
