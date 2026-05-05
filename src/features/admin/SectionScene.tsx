@@ -8,37 +8,11 @@ interface SectionProps {
 export function SectionScene({ config, update }: SectionProps) {
   return (
     <fieldset className="rounded-xl border border-white/10 p-4">
-      <legend className="px-2 font-heading text-sm tracking-wider text-accent">SCENE</legend>
+      <legend className="px-2 font-heading text-sm tracking-wider text-accent">CENAS (V1 LEGADO)</legend>
+      <p className="mb-3 text-[11px] text-white/40">
+        Variantes Laravel (Starting V5, Screen V2, Pre-Show V2) ficam na aba 🟥 Laravel.
+      </p>
       <div className="flex flex-col gap-4">
-        <div className="grid grid-cols-2 gap-4">
-          <label className="flex flex-col gap-1 text-xs text-white/60">
-            Starting Variant
-            <select
-              value={config.startingVariant}
-              onChange={(e) => update("startingVariant", e.target.value)}
-              className="appearance-none rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-accent"
-            >
-              <option value="v1">V1 · Splash circular</option>
-              <option value="v2">V2 · Neon grid</option>
-              <option value="v3">V3 · Poster + portraits</option>
-              <option value="v4">V4 · Tipografia + marquee</option>
-            </select>
-          </label>
-
-          <label className="flex flex-col gap-1 text-xs text-white/60">
-            Quote Variant
-            <select
-              value={config.quoteVariant}
-              onChange={(e) => update("quoteVariant", e.target.value)}
-              className="appearance-none rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-accent"
-            >
-              <option value="editorial">editorial</option>
-              <option value="serif">serif</option>
-              <option value="minimal">minimal</option>
-            </select>
-          </label>
-        </div>
-
         <div className="grid grid-cols-2 gap-4">
           <label className="flex flex-col gap-1 text-xs text-white/60">
             Screen Content

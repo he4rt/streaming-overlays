@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import type { TweakConfig } from "@/shared/types";
 import { DEFAULTS } from "@/config/defaults";
 import { useOverlayConfig, saveOverlayConfig } from "@/hooks/useOverlayConfig";
+import { useObs, obsToInternal } from "@/hooks/ObsProvider";
 import { HeartLogo } from "@/shared/components/HeartLogo";
 import { SectionScene } from "./SectionScene";
 import { SectionEpisode } from "./SectionEpisode";
@@ -12,83 +13,75 @@ import { SectionChat } from "./SectionChat";
 import { SectionBrb } from "./SectionBrb";
 import { SectionQuestion } from "./SectionQuestion";
 import { SectionPoll } from "./SectionPoll";
-import { SectionQuote } from "./SectionQuote";
 import { SectionPartners } from "./SectionPartners";
-import { SAMPLE_CHAT } from "@/shared/chat/sample-messages";
-import type { ChatMessage } from "@/shared/types";
+import { SectionLaravel } from "./SectionLaravel";
+import { BottomDock } from "./BottomDock";
 
 const SCENES = [
-  { value: "preshow", label: "Pré-Show", icon: "🎙" },
-  { value: "two-cams", label: "2 Cams", icon: "👥" },
-  { value: "screen-share", label: "Screen", icon: "🖥" },
-  { value: "starting", label: "Starting", icon: "⏳" },
-  { value: "brb", label: "BRB", icon: "☕" },
-  { value: "question", label: "Pergunta", icon: "❓" },
-  { value: "poll", label: "Enquete", icon: "📊" },
-  { value: "quote", label: "Quote", icon: "💬" },
-  { value: "ending", label: "Ending", icon: "🎬" },
+  { value: "preshow", label: "Pré-Show" },
+  { value: "two-cams", label: "2 Cams" },
+  { value: "screen-share", label: "Screen Share" },
+  { value: "starting", label: "Starting" },
+  { value: "brb", label: "BRB" },
+  { value: "question", label: "Pergunta" },
+  { value: "ending", label: "Ending" },
 ] as const;
 
-function LiveChatSidebar() {
-  const [messages, setMessages] = useState<ChatMessage[]>(SAMPLE_CHAT.slice(0, 8));
+type SectionId =
+  | "overview"
+  | "episode"
+  | "guests"
+  | "laravel"
+  | "visual"
+  | "scenes"
+  | "brb"
+  | "question"
+  | "poll"
+  | "chat";
 
-  useEffect(() => {
-    const id = setInterval(() => {
-      setMessages((prev) => {
-        const next = SAMPLE_CHAT[prev.length % SAMPLE_CHAT.length]!;
-        return [...prev.slice(-12), { ...next, key: Date.now() }];
-      });
-    }, 2400);
-    return () => clearInterval(id);
-  }, []);
-
-  return (
-    <div className="flex h-full flex-col border-l border-white/10 bg-[#0e0820]">
-      {/* chat header */}
-      <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
-        <div className="flex items-center gap-2">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
-          <span className="font-body text-xs font-bold uppercase tracking-widest text-white/70">
-            Chat ao vivo
-          </span>
-        </div>
-        <span className="font-body text-[10px] text-white/30">discord.app/he4rt</span>
-      </div>
-
-      {/* messages */}
-      <div className="flex flex-1 flex-col gap-2 overflow-y-auto p-3">
-        {messages.map((m, i) => (
-          <div key={(m.key ?? 0) + "-" + i} className="flex items-start gap-2">
-            <div
-              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white"
-              style={{ background: m.color }}
-            >
-              {m.user[0]!.toUpperCase()}
-            </div>
-            <div className="min-w-0">
-              <span className="font-body text-xs font-bold" style={{ color: m.color }}>
-                {m.user}
-              </span>
-              {m.badge && (
-                <span className="ml-1 rounded bg-accent/30 px-1 py-px text-[9px] font-bold uppercase text-accent">
-                  {m.badge}
-                </span>
-              )}
-              <p className="font-body text-xs leading-relaxed text-white/80">{m.msg}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* input */}
-      <div className="border-t border-white/10 p-3">
-        <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 font-body text-xs text-white/30">
-          envie sua mensagem…
-        </div>
-      </div>
-    </div>
-  );
+interface NavItem {
+  id: SectionId;
+  label: string;
+  description: string;
 }
+
+interface NavGroup {
+  title: string;
+  items: NavItem[];
+}
+
+const NAV: NavGroup[] = [
+  {
+    title: "Ao vivo",
+    items: [
+      { id: "overview", label: "Resumo", description: "Cena atual e overlays" },
+    ],
+  },
+  {
+    title: "Evento",
+    items: [
+      { id: "episode", label: "Episódio", description: "Título, número, data, tema" },
+      { id: "guests", label: "Convidados", description: "Hosts e convidados" },
+    ],
+  },
+  {
+    title: "Tema",
+    items: [
+      { id: "laravel", label: "Laravel Edition", description: "Cor, tags, chat, backgrounds" },
+      { id: "visual", label: "Visual (legado)", description: "Cores roxo, partners" },
+    ],
+  },
+  {
+    title: "Dados das cenas",
+    items: [
+      { id: "scenes", label: "Starting / Screen / Ending (V1)", description: "Campos das cenas legadas" },
+      { id: "brb", label: "BRB", description: "Tempo + faixa" },
+      { id: "question", label: "Pergunta", description: "Texto da pergunta no ar" },
+      { id: "poll", label: "Poll widget", description: "Dados da enquete (overlay no chat)" },
+      { id: "chat", label: "Chat", description: "Configurações do chat" },
+    ],
+  },
+];
 
 export function AdminPanel() {
   useEffect(() => {
@@ -125,9 +118,8 @@ export function AdminPanel() {
     }
   }, [liveConfig.scene]);
 
-  const [activeTab, setActiveTab] = useState<"config" | "episode" | "guests" | "visuals">(
-    "config"
-  );
+  const [section, setSection] = useState<SectionId>("overview");
+  const obs = useObs();
 
   const update = useCallback(
     (key: keyof TweakConfig, value: TweakConfig[keyof TweakConfig]) => {
@@ -141,6 +133,7 @@ export function AdminPanel() {
   );
 
   const reset = useCallback(() => {
+    if (!confirm("Resetar todas as configurações pro default?")) return;
     setConfig(DEFAULTS);
     saveOverlayConfig(DEFAULTS);
   }, []);
@@ -149,148 +142,263 @@ export function AdminPanel() {
     if (loaded) saveOverlayConfig(config);
   }, [loaded]);
 
-  const currentScene = SCENES.find((s) => s.value === config.scene) ?? SCENES[0];
+  // Cena ativa: OBS é fonte da verdade quando conectado
+  const activeInternalScene = obs.connected && obs.scene ? obs.scene : config.scene;
+  const currentScene =
+    SCENES.find((s) => s.value === activeInternalScene) ?? SCENES[0];
+
+  // No switcher do sidebar: quando OBS conectado, mostra só cenas que existem lá;
+  // offline mostra a lista completa pra dev local.
+  const obsInternalScenes = obs.connected
+    ? new Set(obs.sceneList.map((n) => obsToInternal(n)?.scene).filter(Boolean) as string[])
+    : null;
+  const visibleScenes = obsInternalScenes
+    ? SCENES.filter((s) => obsInternalScenes.has(s.value))
+    : SCENES;
+
+  const openScene = () => {
+    const path = activeInternalScene === "two-cams" ? "/" : `/${activeInternalScene}`;
+    window.open(path, `scene-${activeInternalScene}`, "width=1920,height=1080");
+  };
+
+  const switchScene = (internal: string) => {
+    // Atualiza config interno (fallback offline)
+    update("scene", internal);
+    if (!obs.connected) return;
+    // Acha cena OBS cuja forma mapeada bate com o internal pedido
+    const match = obs.sceneList.find((name) => obsToInternal(name)?.scene === internal);
+    if (match) {
+      obs.setScene(match);
+    } else {
+      console.warn(`[admin] nenhuma cena OBS bate com "${internal}". sceneList:`, obs.sceneList);
+    }
+  };
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-[#0b0418] text-white">
-      {/* ─── TOP NAV BAR ─── */}
-      <header className="flex shrink-0 items-center justify-between border-b border-white/10 bg-[#0e0820] px-5 py-2.5">
-        <div className="flex items-center gap-4">
-          <HeartLogo size={0.45} />
-          <div className="h-5 w-px bg-white/10" />
-          <span className="font-body text-[11px] font-bold uppercase tracking-[0.3em] text-white/40">
-            Stream Manager
+    <div className="flex h-screen flex-col overflow-hidden bg-[#0a0612] text-white">
+      {/* TOP BAR */}
+      <header className="flex shrink-0 items-center justify-between border-b border-white/10 bg-[#0e0820] px-6 py-3">
+        <div className="flex items-center gap-3">
+          <HeartLogo size={0.4} />
+          <div className="font-heading text-base text-white">Heart Talks</div>
+          <span className="rounded bg-white/5 px-2 py-0.5 font-body text-[10px] uppercase tracking-widest text-white/40">
+            Admin
           </span>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 rounded-full bg-green-500/15 px-3 py-1">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500" />
-            <span className="font-body text-[10px] font-bold uppercase tracking-wider text-green-400">
-              Ao vivo
-            </span>
+        <div className="flex items-center gap-2">
+          {/* OBS connection status */}
+          <div
+            className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 font-body text-[11px] font-bold ${
+              obs.connected
+                ? "bg-green-500/15 text-green-400"
+                : "bg-red-500/15 text-red-400"
+            }`}
+            title={obs.connected ? "OBS conectado em ws://localhost:4455" : "OBS desconectado"}
+          >
+            <span
+              className={`h-1.5 w-1.5 rounded-full ${
+                obs.connected ? "bg-green-400 animate-pulse" : "bg-red-400"
+              }`}
+            />
+            OBS {obs.connected ? "ON" : "OFF"}
           </div>
+          {obs.streaming && (
+            <span className="rounded-md bg-red-500/20 px-2 py-1 font-body text-[10px] font-bold uppercase tracking-wider text-red-400">
+              ● LIVE
+            </span>
+          )}
+          {obs.recording && (
+            <span className="rounded-md bg-orange-500/20 px-2 py-1 font-body text-[10px] font-bold uppercase tracking-wider text-orange-400">
+              ● REC
+            </span>
+          )}
+          <span className="font-body text-[11px] text-white/40">cena:</span>
+          <span className="rounded-md bg-accent/15 px-3 py-1 font-body text-xs font-bold text-accent">
+            {currentScene.label}
+          </span>
+          <button
+            onClick={openScene}
+            className="rounded-md border border-white/10 px-3 py-1 font-body text-xs text-white/60 transition hover:border-accent/50 hover:text-accent"
+          >
+            Abrir preview
+          </button>
           <button
             onClick={reset}
-            className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1.5 font-body text-[10px] font-bold uppercase tracking-wider text-red-400 transition hover:bg-red-500/20"
+            className="rounded-md border border-red-500/20 px-3 py-1 font-body text-xs text-red-400 transition hover:bg-red-500/10"
           >
             Reset
           </button>
         </div>
       </header>
 
-      {/* ─── SCENE SWITCHER BAR ─── */}
-      <div className="flex shrink-0 items-center gap-1 border-b border-white/10 bg-[#0d071c] px-4 py-2">
-        <span className="mr-3 font-body text-[10px] font-bold uppercase tracking-widest text-white/30">
-          Cena:
-        </span>
-        {SCENES.map((scene) => {
-          const active = config.scene === scene.value;
-          return (
-            <button
-              key={scene.value}
-              onClick={() => update("scene", scene.value)}
-              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-body text-xs font-semibold transition ${
-                active
-                  ? "bg-accent/20 text-accent shadow-[0_0_12px_rgba(168,85,247,0.2)]"
-                  : "text-white/40 hover:bg-white/5 hover:text-white/70"
-              }`}
-            >
-              <span className="text-sm">{scene.icon}</span>
-              {scene.label}
-            </button>
-          );
-        })}
-        <div className="ml-auto flex items-center gap-3">
-          <div className="flex items-center gap-2 rounded-lg bg-accent/10 px-3 py-1.5">
-            <span className="text-sm">{currentScene.icon}</span>
-            <span className="font-body text-xs font-bold text-accent">{currentScene.label}</span>
-          </div>
-          <button
-            onClick={() => {
-              const url = `/${config.scene === "two-cams" ? "" : config.scene}`;
-              window.open(url, `scene-${config.scene}`, "width=1920,height=1080,menubar=no,toolbar=no,location=no,status=no");
-            }}
-            className="flex items-center gap-1.5 rounded-lg border border-accent/30 bg-accent/10 px-3 py-1.5 font-body text-xs font-bold text-accent transition hover:bg-accent/20"
-          >
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" y1="14" x2="21" y2="3" />
-            </svg>
-            Abrir Scene
-          </button>
-        </div>
-      </div>
-
-      {/* ─── MAIN LAYOUT: sidebar tabs + content + chat ─── */}
+      {/* MAIN: sidebar + content */}
       <div className="flex min-h-0 flex-1">
-        {/* Left tab nav */}
-        <nav className="flex w-14 shrink-0 flex-col items-center gap-1 border-r border-white/10 bg-[#0d071c] pt-3">
-          {(
-            [
-              { tab: "config" as const, icon: "⚙️", label: "Config" },
-              { tab: "episode" as const, icon: "🎙", label: "Episódio" },
-              { tab: "guests" as const, icon: "👤", label: "Guests" },
-              { tab: "visuals" as const, icon: "🎨", label: "Visual" },
-            ] as const
-          ).map(({ tab, icon, label }) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              title={label}
-              className={`flex h-10 w-10 items-center justify-center rounded-lg text-base transition ${
-                activeTab === tab
-                  ? "bg-accent/20 shadow-[0_0_8px_rgba(168,85,247,0.15)]"
-                  : "text-white/30 hover:bg-white/5 hover:text-white/60"
-              }`}
-            >
-              {icon}
-            </button>
+        {/* SIDEBAR */}
+        <nav className="flex w-72 shrink-0 flex-col gap-1 overflow-y-auto border-r border-white/10 bg-[#0d071c] px-4 py-5">
+          {/* Sticky scene picker */}
+          <div className="mb-3 rounded-xl border border-white/10 bg-[#15092e] p-3">
+            <div className="mb-2 font-body text-[10px] font-bold uppercase tracking-widest text-white/40">
+              Trocar cena
+            </div>
+            <div className="grid grid-cols-2 gap-1.5">
+              {visibleScenes.map((s) => {
+                const active = activeInternalScene === s.value;
+                return (
+                  <button
+                    key={s.value}
+                    onClick={() => switchScene(s.value)}
+                    className={`rounded-md px-2 py-1.5 text-left font-body text-xs font-semibold transition ${
+                      active
+                        ? "bg-accent/25 text-accent"
+                        : "bg-white/3 text-white/55 hover:bg-white/8 hover:text-white"
+                    }`}
+                  >
+                    {s.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {NAV.map((group) => (
+            <div key={group.title} className="mb-2">
+              <div className="px-2 py-2 font-body text-[10px] font-bold uppercase tracking-widest text-white/35">
+                {group.title}
+              </div>
+              {group.items.map((item) => {
+                const active = section === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setSection(item.id)}
+                    className={`flex w-full flex-col gap-0.5 rounded-lg px-3 py-2 text-left transition ${
+                      active
+                        ? "bg-accent/15 text-white shadow-[inset_2px_0_0_rgb(168_85_247)]"
+                        : "text-white/65 hover:bg-white/5 hover:text-white"
+                    }`}
+                  >
+                    <span className="font-body text-sm font-semibold">{item.label}</span>
+                    <span className="font-body text-[11px] text-white/35">
+                      {item.description}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           ))}
         </nav>
 
-        {/* Center content */}
-        <main className="flex-1 overflow-y-auto p-5">
-          <div className="mx-auto max-w-2xl">
-            {activeTab === "config" && (
-              <div className="flex flex-col gap-4">
-                <SectionScene config={config} update={update} />
-                <SectionToggles config={config} scene={config.scene} update={update} />
-                <SectionBrb config={config} update={update} />
-                <SectionQuestion config={config} update={update} />
-                <SectionPoll config={config} update={update} />
-                <SectionQuote config={config} update={update} />
-                <SectionChat config={config} update={update} />
-              </div>
-            )}
-
-            {activeTab === "episode" && (
-              <div className="flex flex-col gap-4">
-                <SectionEpisode config={config} update={update} />
-              </div>
-            )}
-
-            {activeTab === "guests" && (
-              <div className="flex flex-col gap-4">
-                <SectionGuests config={config} update={update} />
-              </div>
-            )}
-
-            {activeTab === "visuals" && (
-              <div className="flex flex-col gap-4">
-                <SectionColors config={config} update={update} />
-                <SectionPartners config={config} update={update} />
-              </div>
-            )}
+        {/* CONTENT */}
+        <main className="flex-1 overflow-y-auto">
+          <div className="mx-auto max-w-3xl px-8 py-8">
+            <SectionContent section={section} config={config} update={update} />
           </div>
         </main>
-
-        {/* Right chat sidebar */}
-        <aside className="w-72 shrink-0">
-          <LiveChatSidebar />
-        </aside>
       </div>
+
+      {/* BOTTOM DOCK — OBS interactions */}
+      <BottomDock />
+    </div>
+  );
+}
+
+function SectionContent({
+  section,
+  config,
+  update,
+}: {
+  section: SectionId;
+  config: TweakConfig;
+  update: (key: keyof TweakConfig, value: TweakConfig[keyof TweakConfig]) => void;
+}) {
+  switch (section) {
+    case "overview":
+      return (
+        <Page title="Resumo" subtitle="Visão geral da live">
+          <SectionToggles config={config} scene={config.scene} update={update} />
+        </Page>
+      );
+    case "episode":
+      return (
+        <Page title="Episódio" subtitle="Informações compartilhadas entre todas as cenas">
+          <SectionEpisode config={config} update={update} />
+        </Page>
+      );
+    case "guests":
+      return (
+        <Page title="Convidados" subtitle="Host e convidados da live">
+          <SectionGuests config={config} update={update} />
+        </Page>
+      );
+    case "laravel":
+      return (
+        <Page
+          title="Laravel Edition"
+          subtitle="Tema das cenas Pré-Show V2, Starting V5 e Screen Share V2"
+        >
+          <SectionLaravel config={config} update={update} />
+        </Page>
+      );
+    case "visual":
+      return (
+        <Page title="Visual (legado)" subtitle="Tema das cenas V1 (roxo / partners)">
+          <SectionColors config={config} update={update} />
+          <SectionPartners config={config} update={update} />
+        </Page>
+      );
+    case "scenes":
+      return (
+        <Page title="Cenas legadas (V1)" subtitle="Starting / Screen Share / Ending — versões anteriores">
+          <SectionScene config={config} update={update} />
+        </Page>
+      );
+    case "brb":
+      return (
+        <Page title="BRB" subtitle="Cena de pausa">
+          <SectionBrb config={config} update={update} />
+        </Page>
+      );
+    case "question":
+      return (
+        <Page title="Pergunta" subtitle="Pergunta destacada da audiência">
+          <SectionQuestion config={config} update={update} />
+        </Page>
+      );
+    case "poll":
+      return (
+        <Page
+          title="Poll widget"
+          subtitle="Dados da enquete (a renderizar como overlay no chat)"
+        >
+          <SectionPoll config={config} update={update} />
+        </Page>
+      );
+    case "chat":
+      return (
+        <Page title="Chat" subtitle="Configurações do chat">
+          <SectionChat config={config} update={update} />
+        </Page>
+      );
+  }
+}
+
+function Page({
+  title,
+  subtitle,
+  children,
+}: {
+  title: string;
+  subtitle: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-1 border-b border-white/10 pb-4">
+        <h1 className="font-heading text-2xl text-white">{title}</h1>
+        <p className="font-body text-sm text-white/50">{subtitle}</p>
+      </div>
+      <div className="flex flex-col gap-4">{children}</div>
     </div>
   );
 }
