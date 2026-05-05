@@ -1,5 +1,7 @@
 import { useObs, obsToInternal } from "@/hooks/ObsProvider";
 import type { ObsAudioInput } from "@/hooks/ObsProvider";
+import { useOverlayConfig, saveOverlayConfig } from "@/hooks/useOverlayConfig";
+import { guestAvatarUrl } from "@/shared/types";
 import { Slider } from "@/shared/components/Slider";
 
 const VOL_MIN_DB = -60;
@@ -23,7 +25,7 @@ function ScenesPanel() {
       {!obs.connected && <Empty msg="OBS desconectado" />}
       {obs.connected && obs.sceneList.length === 0 && <Empty msg="Sem cenas" />}
       {obs.connected && (
-        <div className="grid grid-cols-2 gap-1.5 overflow-y-auto pr-1">
+        <div className="grid h-full auto-rows-max grid-cols-2 gap-1.5 overflow-y-auto pr-1">
           {obs.sceneList.map((name) => {
             const active = obs.obsScene === name;
             const mapped = obsToInternal(name);
@@ -140,37 +142,153 @@ function AudioMeter({ input }: { input: ObsAudioInput }) {
 }
 
 /* ────────────────────────── PANEL: INTERAÇÕES ────────────────────────── */
-const INTERACTIONS = [
-  { id: "vote", label: "Votação", desc: "Abrir poll widget no chat" },
-  { id: "challenge", label: "Desafio", desc: "Disparar desafio" },
-  { id: "goal", label: "Meta", desc: "Mostrar meta da live" },
-  { id: "shoutout", label: "Shoutout", desc: "Destacar viewer" },
-];
-
 function InteractionsPanel() {
   return (
     <PanelShell title="Interações">
-      <div className="grid grid-cols-2 gap-1.5 overflow-y-auto pr-1">
-        {INTERACTIONS.map((it) => (
-          <button
-            key={it.id}
-            onClick={() => console.log("[interaction]", it.id)}
-            className="flex flex-col gap-0.5 rounded-lg bg-white/5 px-3 py-2 text-left transition hover:bg-white/10"
-            title={it.desc}
-          >
-            <span className="font-body text-xs font-semibold text-white/85">{it.label}</span>
-            <span className="font-body text-[10px] text-white/35">{it.desc}</span>
-          </button>
-        ))}
+      <div className="flex h-full flex-col gap-3 overflow-y-auto pr-1">
+        <GuestLTToggles />
+        <ScheduleLTToggles />
       </div>
     </PanelShell>
+  );
+}
+
+function ScheduleLTToggles() {
+  const config = useOverlayConfig();
+  const { schedule, lowerThird } = config;
+
+  if (schedule.length === 0) return null;
+
+  const isActive = (id: string) =>
+    lowerThird?.kind === "schedule" && lowerThird.scheduleId === id;
+
+  const toggle = (id: string) => {
+    const next = isActive(id) ? null : ({ kind: "schedule", scheduleId: id } as const);
+    saveOverlayConfig({ ...config, lowerThird: next });
+  };
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <div className="font-body text-[10px] font-bold uppercase tracking-widest text-white/40">
+        Cronograma
+      </div>
+      {schedule.map((s) => {
+        const active = isActive(s.id);
+        return (
+          <button
+            key={s.id}
+            onClick={() => toggle(s.id)}
+            className={`flex items-center gap-3 rounded-lg px-2.5 py-1.5 text-left transition ${
+              active
+                ? "bg-accent/25 ring-1 ring-accent/60"
+                : "bg-white/5 hover:bg-white/10"
+            }`}
+            title={active ? "Tirar do ar" : `Mostrar "${s.title}" na overlay`}
+          >
+            <span className="w-12 shrink-0 font-mono text-[11px] font-bold text-white/85 tabular-nums">
+              {s.time}
+            </span>
+            <div className="flex min-w-0 flex-1 flex-col">
+              <span className="truncate font-body text-xs font-bold text-white/90">
+                {s.title}
+              </span>
+              {s.details && (
+                <span className="truncate font-body text-[10px] text-white/45">
+                  {s.details}
+                </span>
+              )}
+            </div>
+            <span
+              className={`font-body text-[10px] font-bold uppercase tracking-wider ${
+                active ? "text-accent" : "text-white/30"
+              }`}
+            >
+              {active ? "▶ no ar" : "off"}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function GuestLTToggles() {
+  const config = useOverlayConfig();
+  const { guests, lowerThird } = config;
+
+  if (guests.length === 0) {
+    return (
+      <p className="font-body text-[11px] text-white/30">
+        Nenhum convidado cadastrado.
+      </p>
+    );
+  }
+
+  const isActive = (id: string) =>
+    lowerThird?.kind === "guest" && lowerThird.guestId === id;
+
+  const toggle = (id: string) => {
+    const next = isActive(id) ? null : ({ kind: "guest", guestId: id } as const);
+    saveOverlayConfig({ ...config, lowerThird: next });
+  };
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <div className="font-body text-[10px] font-bold uppercase tracking-widest text-white/40">
+        Lower-third de palestrantes
+      </div>
+      {guests.map((g) => {
+        const active = isActive(g.id);
+        return (
+          <button
+            key={g.id}
+            onClick={() => toggle(g.id)}
+            className={`flex items-center gap-3 rounded-lg px-2.5 py-2 text-left transition ${
+              active
+                ? "bg-accent/25 ring-1 ring-accent/60"
+                : "bg-white/5 hover:bg-white/10"
+            }`}
+            title={active ? "Tirar do ar" : `Mostrar ${g.name} na overlay`}
+          >
+            {/* avatar */}
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded border border-white/10 bg-black/30">
+              {g.githubHandle ? (
+                <img
+                  src={guestAvatarUrl(g.githubHandle)}
+                  alt={g.name}
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.visibility = "hidden";
+                  }}
+                />
+              ) : null}
+            </div>
+            <div className="flex min-w-0 flex-1 flex-col">
+              <span className="truncate font-body text-xs font-bold text-white/90">
+                {g.name}
+              </span>
+              <span className="truncate font-body text-[10px] text-white/45">
+                {g.talk || "—"}
+              </span>
+            </div>
+            <span
+              className={`font-body text-[10px] font-bold uppercase tracking-wider ${
+                active ? "text-accent" : "text-white/30"
+              }`}
+            >
+              {active ? "▶ no ar" : "off"}
+            </span>
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
 /* ────────────────────────── HELPERS ────────────────────────── */
 function PanelShell({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="flex min-h-0 flex-col rounded-xl border border-white/10 bg-[#0d071c] p-3">
+    <section className="flex min-h-0 flex-col overflow-hidden rounded-xl border border-white/10 bg-[#0d071c] p-3">
       <header className="mb-2 flex shrink-0 items-center justify-between">
         <h3 className="font-body text-xs font-bold uppercase tracking-widest text-white/65">
           {title}

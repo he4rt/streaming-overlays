@@ -10,9 +10,12 @@ const SIDEBAR_WIDTH = 472;
 const CAM_HEIGHT = 290;
 
 export function ScreenShareV2({ config }: ScreenShareV2Props) {
-  const { episodeTitle, guest1Name, guest1Role, showCameraPlaceholders, screenShareAspect, laravel } = config;
+  const { episodeTitle, guests, activeSpeakerId, showCameraPlaceholders, screenShareAspect, laravel } = config;
   const RED = laravel.accent;
   const TAGS = laravel.tags;
+  const speaker = guests.find((g) => g.id === activeSpeakerId) ?? guests[0];
+  const speakerName = speaker?.name ?? "";
+  const speakerTalk = speaker?.talk ?? "";
 
   const heroLeft = 60;
   const heroRight = SIDEBAR_WIDTH + 40;
@@ -163,13 +166,13 @@ export function ScreenShareV2({ config }: ScreenShareV2Props) {
               fontFamily: "'Sedgwick Ave Display', 'Russo One', sans-serif",
               fontSize: 18, color: "#fdfdff", lineHeight: 1,
               letterSpacing: "0.02em",
-            }}>{guest1Name}</div>
+            }}>{speakerName}</div>
             <div style={{
               fontFamily: "Inter, sans-serif",
               fontSize: 10, color: RED,
               fontWeight: 800, letterSpacing: "0.18em",
               textTransform: "uppercase", marginTop: 2,
-            }}>{guest1Role}</div>
+            }}>{speakerTalk}</div>
           </div>
         </div>
       </div>

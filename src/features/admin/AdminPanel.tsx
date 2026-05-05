@@ -8,8 +8,10 @@ import { SectionGuests } from "./SectionGuests";
 import { SectionToggles } from "./SectionToggles";
 import { SectionChat } from "./SectionChat";
 import { SectionLaravel } from "./SectionLaravel";
+import { SectionSchedule } from "./SectionSchedule";
 import { BottomDock } from "./BottomDock";
 import { OBSPreview } from "./OBSPreview";
+import { AdminChatRail } from "./AdminChatRail";
 
 const SCENES = [
   { value: "preshow", label: "Pré-Show" },
@@ -17,7 +19,7 @@ const SCENES = [
   { value: "screen-share", label: "Screen Share" },
 ] as const;
 
-type SectionId = "overview" | "episode" | "guests" | "laravel" | "chat";
+type SectionId = "overview" | "episode" | "guests" | "schedule" | "laravel" | "chat";
 
 interface NavItem {
   id: SectionId;
@@ -42,6 +44,7 @@ const NAV: NavGroup[] = [
     items: [
       { id: "episode", label: "Episódio", description: "Título, número, data, tema" },
       { id: "guests", label: "Convidados", description: "Hosts e convidados" },
+      { id: "schedule", label: "Cronograma", description: "Blocos do evento (lower-third)" },
     ],
   },
   {
@@ -278,6 +281,12 @@ export function AdminPanel() {
             <SectionContent section={section} config={config} update={update} />
           </div>
         </main>
+
+        {/* RIGHT CHAT RAIL */}
+        <AdminChatRail
+          lowerThird={config.lowerThird}
+          setLowerThird={(lt) => update("lowerThird", lt)}
+        />
       </div>
 
       {/* BOTTOM DOCK — OBS interactions */}
@@ -313,6 +322,15 @@ function SectionContent({
       return (
         <Page title="Convidados" subtitle="Host e convidados da live">
           <SectionGuests config={config} update={update} />
+        </Page>
+      );
+    case "schedule":
+      return (
+        <Page
+          title="Cronograma"
+          subtitle="Blocos do evento — cada um pode ser disparado como lower-third"
+        >
+          <SectionSchedule config={config} update={update} />
         </Page>
       );
     case "laravel":
