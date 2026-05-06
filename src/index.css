@@ -142,3 +142,82 @@ select option {
     transform: rotate(360deg);
   }
 }
+
+@keyframes tabFade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Admin panel scrollbars — subtle and themed */
+.admin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
+}
+.admin-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.admin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.admin-scroll::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.25);
+  border-radius: 999px;
+}
+.admin-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.45);
+}
+
+.admin-scroll-x {
+  scrollbar-width: none;
+}
+.admin-scroll-x::-webkit-scrollbar {
+  display: none;
+}
+
+/* Universal focus-visible polish for the admin surface */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline-offset: 2px;
+}
+
+/* Respect users who prefer reduced motion — scoped to admin so OBS overlays keep their animations */
+@media (prefers-reduced-motion: reduce) {
+  .admin-scroll,
+  .admin-scroll *,
+  .admin-scroll-x,
+  .admin-scroll-x * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
