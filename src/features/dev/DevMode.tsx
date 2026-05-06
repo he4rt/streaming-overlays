@@ -6,6 +6,7 @@ const SCENES = [
   { key: "1", value: "preshow", label: "Pré-Show", icon: "🎙" },
   { key: "2", value: "starting", label: "Starting", icon: "⏳" },
   { key: "3", value: "screen-share", label: "Screen", icon: "🖥" },
+  { key: "4", value: "lower-thirds", label: "Lower 3rds", icon: "▰" },
 ] as const;
 
 export function DevMode() {

@@ -18,6 +18,7 @@ O dev server sobe em `http://localhost:5173`. Abra `/admin` no browser pra geren
 | `/preshow`      | Pre-Show     | Host solo antes do convidado entrar                                                     |
 | `/two-cams`     | Two Cams     | Duas cameras lado a lado (layout principal)                                             |
 | `/screen-share` | Screen Share | Tela compartilhada + 2 mini cameras                                                     |
+| `/lower-thirds` | Lower Thirds | Somente lower-thirds e destaques, com fundo transparente para compor sobre outras fontes |
 | `/starting`     | Starting     | Countdown antes da live (4 variantes)                                                   |
 | `/ending`       | Ending       | Mural da comunidade com stats                                                           |
 | `/brb`          | BRB          | Intervalo com timer                                                                     |
@@ -72,6 +73,7 @@ src/
     preshow/         # host solo
     two-cams/        # duas cameras
     screen-share/    # compartilhamento de tela
+    lower-thirds/    # lower-thirds e destaques com fundo transparente
     starting/        # countdown (v1-v4)
     ending/          # mural + stats
     brb/             # intervalo

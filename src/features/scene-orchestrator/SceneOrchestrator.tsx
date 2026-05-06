@@ -5,11 +5,13 @@ import { useObs } from "@/hooks/ObsProvider";
 import { ScreenShareScene } from "@/features/screen-share/ScreenShareScene";
 import { StartingScene } from "@/features/starting/StartingScene";
 import { PreShowScene } from "@/features/preshow/PreShowScene";
+import { LowerThirdsScene } from "@/features/lower-thirds/LowerThirdsScene";
 
 const SCENE_MAP: Record<string, ComponentType> = {
   preshow: PreShowScene,
   "screen-share": ScreenShareScene,
   starting: StartingScene,
+  "lower-thirds": LowerThirdsScene,
 };
 
 const TRANSITION_MS = 500;
