@@ -84,6 +84,8 @@ export const DEFAULTS: TweakConfig = {
     },
   ],
 
+  questions: [],
+
   useLiveChat: false,
   lowerThird: null,
 

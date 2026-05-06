@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import type { TweakConfig } from "@/shared/types";
+import { QUESTION_LT_DURATION_MS } from "@/shared/types";
 import { DEFAULTS } from "@/config/defaults";
 import { useOverlayConfig, saveOverlayConfig } from "@/hooks/useOverlayConfig";
 import { useObs, obsToInternal } from "@/hooks/ObsProvider";
@@ -9,6 +10,7 @@ import { SectionToggles } from "./SectionToggles";
 import { SectionChat } from "./SectionChat";
 import { SectionLaravel } from "./SectionLaravel";
 import { SectionSchedule } from "./SectionSchedule";
+import { SectionQuestions } from "./SectionQuestions";
 import { BottomDock } from "./BottomDock";
 import { OBSPreview } from "./OBSPreview";
 import { AdminChatRail } from "./AdminChatRail";
@@ -19,7 +21,14 @@ const SCENES = [
   { value: "screen-share", label: "Screen Share" },
 ] as const;
 
-type SectionId = "overview" | "episode" | "guests" | "schedule" | "laravel" | "chat";
+type SectionId =
+  | "overview"
+  | "episode"
+  | "guests"
+  | "schedule"
+  | "questions"
+  | "laravel"
+  | "chat";
 
 interface NavItem {
   id: SectionId;
@@ -45,6 +54,7 @@ const NAV: NavGroup[] = [
       { id: "episode", label: "Episódio", description: "Título, número, data, tema" },
       { id: "guests", label: "Convidados", description: "Hosts e convidados" },
       { id: "schedule", label: "Cronograma", description: "Blocos do evento (lower-third)" },
+      { id: "questions", label: "Perguntas", description: "Fila de perguntas (lower-third)" },
     ],
   },
   {
@@ -110,6 +120,17 @@ export function AdminPanel() {
     []
   );
 
+  // Atualiza várias chaves do config em uma única chamada — evita múltiplos
+  // POSTs (e estados intermediários no overlay) quando uma ação muda mais de
+  // um campo (ex: trigger de pergunta atualiza `questions` + `lowerThird`).
+  const updateMany = useCallback((patch: Partial<TweakConfig>) => {
+    setConfig((prev) => {
+      const next = { ...prev, ...patch };
+      saveOverlayConfig(next);
+      return next;
+    });
+  }, []);
+
   const reset = useCallback(() => {
     if (!confirm("Resetar todas as configurações pro default?")) return;
     setConfig(DEFAULTS);
@@ -119,6 +140,39 @@ export function AdminPanel() {
   useEffect(() => {
     if (loaded) saveOverlayConfig(config);
   }, [loaded]);
+
+  // Auto-clear: lower-third de pergunta sai sozinho QUESTION_LT_DURATION_MS
+  // após o triggeredAt. Observa o estado do servidor pra funcionar independente
+  // de quem disparou (SectionQuestions, BottomDock, AdminChatRail…).
+  // Dep no `key` (id+triggeredAt) pra: (a) não reiniciar timer com mudanças
+  // não-relacionadas; (b) reiniciar quando re-disparar a mesma pergunta.
+  const liveQKey =
+    liveConfig.lowerThird?.kind === "question"
+      ? `${liveConfig.lowerThird.questionId}@${liveConfig.lowerThird.triggeredAt}`
+      : null;
+  const liveConfigRef = useRef(liveConfig);
+  liveConfigRef.current = liveConfig;
+  useEffect(() => {
+    if (!liveQKey || liveConfig.lowerThird?.kind !== "question") return;
+    const target = liveConfig.lowerThird;
+    const remaining = Math.max(
+      0,
+      target.triggeredAt + QUESTION_LT_DURATION_MS - Date.now(),
+    );
+    const timer = setTimeout(() => {
+      const current = liveConfigRef.current;
+      if (
+        current.lowerThird?.kind === "question" &&
+        current.lowerThird.questionId === target.questionId &&
+        current.lowerThird.triggeredAt === target.triggeredAt
+      ) {
+        const next = { ...current, lowerThird: null };
+        saveOverlayConfig(next);
+        setConfig((prev) => ({ ...prev, lowerThird: null }));
+      }
+    }, remaining);
+    return () => clearTimeout(timer);
+  }, [liveQKey]);
 
   // Cena ativa: OBS é fonte da verdade quando conectado
   const activeInternalScene = obs.connected && obs.scene ? obs.scene : config.scene;
@@ -278,7 +332,12 @@ export function AdminPanel() {
         {/* CONTENT */}
         <main className="flex-1 overflow-y-auto">
           <div className="mx-auto max-w-3xl px-8 py-8">
-            <SectionContent section={section} config={config} update={update} />
+            <SectionContent
+              section={section}
+              config={config}
+              update={update}
+              updateMany={updateMany}
+            />
           </div>
         </main>
 
@@ -286,11 +345,13 @@ export function AdminPanel() {
         <AdminChatRail
           lowerThird={config.lowerThird}
           setLowerThird={(lt) => update("lowerThird", lt)}
+          questions={config.questions}
+          setQuestions={(qs) => update("questions", qs)}
         />
       </div>
 
       {/* BOTTOM DOCK — OBS interactions */}
-      <BottomDock />
+      <BottomDock setLowerThird={(lt) => update("lowerThird", lt)} />
     </div>
   );
 }
@@ -299,10 +360,12 @@ function SectionContent({
   section,
   config,
   update,
+  updateMany,
 }: {
   section: SectionId;
   config: TweakConfig;
   update: (key: keyof TweakConfig, value: TweakConfig[keyof TweakConfig]) => void;
+  updateMany: (patch: Partial<TweakConfig>) => void;
 }) {
   switch (section) {
     case "overview":
@@ -331,6 +394,15 @@ function SectionContent({
           subtitle="Blocos do evento — cada um pode ser disparado como lower-third"
         >
           <SectionSchedule config={config} update={update} />
+        </Page>
+      );
+    case "questions":
+      return (
+        <Page
+          title="Perguntas"
+          subtitle="Fila de perguntas — admin dispara cada uma como lower-third quando for ler"
+        >
+          <SectionQuestions config={config} update={update} updateMany={updateMany} />
         </Page>
       );
     case "laravel":

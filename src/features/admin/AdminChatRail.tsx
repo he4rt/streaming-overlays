@@ -1,13 +1,20 @@
 import { useEffect, useRef } from "react";
-import type { ChatMessage, LowerThird } from "@/shared/types";
+import type { ChatMessage, LowerThird, Question } from "@/shared/types";
 import { useChatMessages } from "@/hooks/ChatProvider";
 
 interface AdminChatRailProps {
   lowerThird: LowerThird;
   setLowerThird: (lt: LowerThird) => void;
+  questions: Question[];
+  setQuestions: (qs: Question[]) => void;
 }
 
-export function AdminChatRail({ lowerThird, setLowerThird }: AdminChatRailProps) {
+export function AdminChatRail({
+  lowerThird,
+  setLowerThird,
+  questions,
+  setQuestions,
+}: AdminChatRailProps) {
   const messages = useChatMessages();
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -27,6 +34,23 @@ export function AdminChatRail({ lowerThird, setLowerThird }: AdminChatRailProps)
     }
     const withKey: ChatMessage = m.key !== undefined ? m : { ...m, key: Date.now() + idx };
     setLowerThird({ kind: "chat", message: withKey });
+  };
+
+  const isQueued = (m: ChatMessage) =>
+    !!m.key && questions.some((q) => q.id === `chat-${m.key}`);
+
+  const addToQuestions = (m: ChatMessage, idx: number) => {
+    const key = m.key ?? Date.now() + idx;
+    const id = `chat-${key}`;
+    if (questions.some((q) => q.id === id)) return; // já tá na fila
+    const q: Question = {
+      id,
+      user: m.user,
+      color: m.color,
+      text: m.msg,
+      badges: m.badges,
+    };
+    setQuestions([...questions, q]);
   };
 
   // banner da LT atual: pode ser chat ou guest, mostramos label correto
@@ -88,11 +112,20 @@ export function AdminChatRail({ lowerThird, setLowerThird }: AdminChatRailProps)
         )}
         {messages.map((m, i) => {
           const active = isHighlighted(m);
+          const queued = isQueued(m);
           return (
-            <button
+            <div
               key={(m.key ?? 0) + "-" + i}
+              role="button"
+              tabIndex={0}
               onClick={() => handleClick(m, i)}
-              className={`flex items-start gap-2 rounded-md px-2 py-1.5 text-left transition ${
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleClick(m, i);
+                }
+              }}
+              className={`group relative flex cursor-pointer items-start gap-2 rounded-md px-2 py-1.5 text-left transition ${
                 active
                   ? "bg-accent/20 ring-1 ring-accent/40"
                   : "hover:bg-white/5"
@@ -128,8 +161,37 @@ export function AdminChatRail({ lowerThird, setLowerThird }: AdminChatRailProps)
                   {m.msg}
                 </p>
               </div>
-              {active && <span className="text-xs text-accent">▶</span>}
-            </button>
+              <div className="flex shrink-0 flex-col items-end gap-1">
+                {active && (
+                  <span className="text-xs leading-none text-accent" aria-label="No ar">
+                    ▶
+                  </span>
+                )}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addToQuestions(m, i);
+                  }}
+                  disabled={queued}
+                  title={
+                    queued
+                      ? "Já está na fila de perguntas"
+                      : "Adicionar à fila de perguntas"
+                  }
+                  aria-label={
+                    queued ? "Pergunta já na fila" : "Adicionar à fila de perguntas"
+                  }
+                  className={`flex h-5 w-5 items-center justify-center rounded font-body text-xs font-bold transition focus:opacity-100 focus:outline-none focus:ring-1 focus:ring-accent/60 ${
+                    queued
+                      ? "bg-accent/30 text-accent cursor-default opacity-100"
+                      : "bg-white/10 text-white/50 opacity-40 hover:bg-accent/30 hover:text-accent hover:opacity-100 group-hover:opacity-100"
+                  }`}
+                >
+                  {queued ? "✓" : "+"}
+                </button>
+              </div>
+            </div>
           );
         })}
       </div>
