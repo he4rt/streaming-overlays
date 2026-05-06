@@ -30,6 +30,9 @@ export interface TweakConfig {
   /** Cronograma do evento — cada item pode ser disparado como lower-third */
   schedule: ScheduleItem[];
 
+  /** Fila de perguntas da audiência — cada uma pode ser disparada como lower-third */
+  questions: Question[];
+
   /** Chat externo */
   useLiveChat: boolean;
 
@@ -62,10 +65,23 @@ export interface ScheduleItem {
   details: string;  // "Mateus Guimarães — Defensive Laravel"
 }
 
+export interface Question {
+  id: string;
+  user: string;          // nome de exibição (do chat ou manual)
+  color: string;         // cor do chat — usada no avatar (inicial)
+  text: string;          // pergunta
+  badges?: ChatBadge[];  // badges do chat (sub, etc), opcional
+  askedAt?: string;      // hora "HH:MM" no momento do disparo
+}
+
+/** Duração (ms) que a lower-third de pergunta fica no ar antes de auto-limpar. */
+export const QUESTION_LT_DURATION_MS = 30_000;
+
 export type LowerThird =
   | { kind: "chat"; message: ChatMessage }
   | { kind: "guest"; guestId: string }
   | { kind: "schedule"; scheduleId: string }
+  | { kind: "question"; questionId: string; triggeredAt: number }
   | null;
 
 export interface LaravelConfig {
